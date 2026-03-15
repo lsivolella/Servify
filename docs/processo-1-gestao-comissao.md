@@ -1,67 +1,95 @@
 ### 3.3.1 Processo 1 – Gestão de Comissão
 
-_Apresente aqui o nome e as oportunidades de melhoria para o processo 1. 
-Em seguida, apresente o modelo do processo 1, descrito no padrão BPMN._
+O **processo de Gestão de Comissão** tem como objetivo permitir que o usuário visualize, cadastre, edite e exclua comissões dentro do sistema. Inicialmente, o sistema apresenta a listagem das comissões existentes, permitindo ao usuário visualizar os registros disponíveis. A partir dessa visualização, o usuário pode decidir realizar uma das ações disponíveis: cadastrar uma nova comissão, editar uma comissão existente ou excluir uma comissão.
 
-![Exemplo de um Modelo BPMN do PROCESSO 1](images/gestao-comissao.png "Modelo BPMN do Processo 1.")
+Após a execução de qualquer uma dessas ações, o sistema retorna à listagem atualizada de comissões. O usuário pode repetir o ciclo de gerenciamento quantas vezes desejar até decidir finalizar o processo.
 
-#### Detalhamento das atividades
+#### Oportunidades de melhoria
 
-_Descreva aqui cada uma das propriedades das atividades do processo 1. 
-Devem estar relacionadas com o modelo de processo apresentado anteriormente._
+Algumas oportunidades de melhoria identificadas no processo são:
 
-_Os tipos de dados a serem utilizados são:_
+- Implementação de **validações automáticas** para evitar cadastro de comissões duplicadas.
+- Inclusão de **confirmação antes da exclusão** de uma comissão.
+- Possibilidade de **filtros e busca na listagem de comissões** para facilitar a navegação.
+- Registro de **histórico de alterações** para auditoria.
+- Feedback visual ao usuário após operações de cadastro, edição ou exclusão.
 
-_* **Área de texto** - campo texto de múltiplas linhas_
+Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
 
-_* **Caixa de texto** - campo texto de uma linha_
+![Modelo BPMN do Processo 1](images/gestao-comissao.png "Modelo BPMN do Processo 1.")
 
-_* **Número** - campo numérico_
+---
 
-_* **Data** - campo do tipo data (dd-mm-aaaa)_
+## Detalhamento das atividades
 
-_* **Hora** - campo do tipo hora (hh:mm:ss)_
+### Listar comissões
 
-_* **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)_
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| filtroNome | Caixa de texto | opcional | |
+| statusComissao | Seleção única | Ativa / Inativa | Ativa |
 
-_* **Imagem** - campo contendo uma imagem_
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| visualizar | Exibir comissões | default |
 
-_* **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (tradicional radio button ou combobox)_
+---
 
-_* **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (tradicional checkbox ou listbox)_
+### Exibir comissões
 
-_* **Arquivo** - campo de upload de documento_
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| listaComissoes | Tabela | exibe todas as comissões cadastradas | |
 
-_* **Link** - campo que armazena uma URL_
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| cadastrar comissão | 1 - Cadastrar comissão | default |
+| editar comissão | 3 - Editar comissão | |
+| deletar comissão | 2 - Deletar comissão | |
+| finalizar | Fim do Processo 1 | cancel |
 
-_* **Tabela** - campo formado por uma matriz de valores_
+---
 
+### 1 - Cadastrar comissão
 
-**Nome da atividade 1**
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| nomeComissao | Caixa de texto | obrigatório | |
+| descricao | Área de texto | opcional | |
+| percentual | Número | mínimo 0 máximo 100 | |
+| dataCriacao | Data | preenchido automaticamente | data atual |
 
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-| ***Exemplo:***  |                  |                |                   |
-| login           | Caixa de Texto   | formato de e-mail |                |
-| senha           | Caixa de Texto   | mínimo de 8 caracteres |           |
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| salvar | Listar comissões | default |
+| cancelar | Exibir comissões | cancel |
 
-| **Comandos**         |  **Destino**                   | **Tipo** |
-| ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel  ) |
-| ***Exemplo:***       |                                |                   |
-| entrar               | Fim do Processo 1              | default           |
-| cadastrar            | Início do proceso de cadastro  |                   |
+---
 
+### 2 - Deletar comissão
 
-**Nome da atividade 2**
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| idComissao | Número | obrigatório | |
+| confirmacao | Seleção única | Sim / Não | Não |
 
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-|                 |                  |                |                   |
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| confirmar exclusão | Listar comissões | default |
+| cancelar | Exibir comissões | cancel |
 
-| **Comandos**         |  **Destino**                   | **Tipo**          |
-| ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  ) |
-|                      |                                |                   |
+---
+
+### 3 - Editar comissão
+
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| idComissao | Número | obrigatório | |
+| nomeComissao | Caixa de texto | obrigatório | valor atual |
+| descricao | Área de texto | opcional | valor atual |
+| percentual | Número | mínimo 0 máximo 100 | valor atual |
+
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| salvar alterações | Listar comissões | default |
+| cancelar | Exibir comissões | cancel |
