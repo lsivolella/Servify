@@ -1,4 +1,4 @@
-### 3.3.1 Processo 1 – Gestão de Comissão
+### 3.3.1 Processo 1 – GESTÃO DE COMISSÃO
 
 O **processo de Gestão de Comissão** tem como objetivo permitir que o usuário visualize, cadastre, edite e exclua comissões dentro do sistema. Inicialmente, o sistema apresenta a listagem das comissões existentes, permitindo ao usuário visualizar os registros disponíveis. A partir dessa visualização, o usuário pode decidir realizar uma das ações disponíveis: cadastrar uma nova comissão, editar uma comissão existente ou excluir uma comissão.
 

@@ -1,4 +1,4 @@
-## 3.3.2 Processo 2 – GESTÃO DE COLABORADOR
+### 3.3.2 Processo 2 – GESTÃO DE COLABORADOR
 
 O processo de **Gestão de Colaborador** tem como objetivo permitir o cadastro e manutenção das informações dos colaboradores da empresa, garantindo maior organização dos dados, rastreabilidade e apoio aos demais processos do sistema, como agendamento, prestação de serviços e cálculo de comissão.
 
