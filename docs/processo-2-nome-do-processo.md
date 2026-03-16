@@ -1,67 +1,97 @@
-### 3.3.2 Processo 2 – NOME DO PROCESSO
+## 3.3.2 Processo 2 – GESTÃO DE COLABORADOR
 
-_Apresente aqui o nome e as oportunidades de melhoria para o processo 2. 
-Em seguida, apresente o modelo do processo 2, descrito no padrão BPMN._
+O processo de **Gestão de Colaborador** tem como objetivo permitir o cadastro e manutenção das informações dos colaboradores da empresa, garantindo maior organização dos dados, rastreabilidade e apoio aos demais processos do sistema, como agendamento, prestação de serviços e cálculo de comissão.
 
-![Exemplo de um Modelo BPMN do PROCESSO 2](images/process.png "Modelo BPMN do Processo 2.")
+Atualmente, em muitos pequenos negócios, o controle de colaboradores é feito de maneira informal ou por meio de planilhas, o que pode gerar inconsistências cadastrais, retrabalho e dificuldade de integração com outros processos da operação. Com a informatização desse processo, será possível centralizar as informações dos profissionais, melhorar a confiabilidade dos dados e aumentar a eficiência administrativa do negócio.
 
+#### Oportunidades de melhoria
 
-#### Detalhamento das atividades
+A informatização do processo de Gestão de Colaborador traz as seguintes oportunidades de melhoria:
 
-_Descreva aqui cada uma das propriedades das atividades do processo 2. 
-Devem estar relacionadas com o modelo de processo apresentado anteriormente._
+• centralização das informações cadastrais em um único sistema;
 
-_Os tipos de dados a serem utilizados são:_
+• redução de erros decorrentes de controles manuais;
 
-_* **Área de texto** - campo texto de múltiplas linhas_
+• facilidade para localizar e atualizar dados dos profissionais;
 
-_* **Caixa de texto** - campo texto de uma linha_
+• integração com processos de agendamento e comissão;
 
-_* **Número** - campo numérico_
+• maior segurança no acesso às informações;
 
-_* **Data** - campo do tipo data (dd-mm-aaaa)_
+• melhor rastreabilidade das alterações realizadas no cadastro.
 
-_* **Hora** - campo do tipo hora (hh:mm:ss)_
+---
 
-_* **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)_
+Em seguida, apresenta-se o modelo do processo de Gestão de Colaborador, descrito no padrão BPMN:
 
-_* **Imagem** - campo contendo uma imagem_
+![Exemplo de um Modelo BPMN do PROCESSO 2](images/modelagemDoProcesso2_gestãoDeColaborador.png "Modelo BPMN do Processo 2.") 
 
-_* **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (tradicional radio button ou combobox)_
+---
 
-_* **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (tradicional checkbox ou listbox)_
+## Detalhamento das atividades
 
-_* **Arquivo** - campo de upload de documento_
+### Exibir colaboradores
 
-_* **Link** - campo que armazena uma URL_
+| **Campo**                  | **Tipo**           | **Restrições**             | **Valor padrão**           |
+| ---------------------- | -------------- | ---------------------- | ---------------------- |
+| lista de colaboradores | Tabela         | somente leitura        | carregada pelo sistema |
+| campo de busca         | Caixa de texto | preenchimento opcional | vazio                  |
+| filtro de status       | Seleção única  | ativo / inativo        | todos                  |
 
-_* **Tabela** - campo formado por uma matriz de valores_
+| **Comandos**           | **Destino**                          | **Tipo**     |
+| --------------------- | --------------------------------- | -------- |
+| cadastrar colaborador | Atividade "Cadastrar colaborador" | padrão   |
+| alterar colaborador   | Atividade "Alterar colaborador"   | padrão   |
+| excluir colaborador   | Atividade "Excluir colaborador"   | padrão   |
+| voltar                | Fim do processo                   | cancelar |
 
-**Nome da atividade 1**
+---
 
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-| ***Exemplo:***  |                  |                |                   |
-| login           | Caixa de Texto   | formato de e-mail |                |
-| senha           | Caixa de Texto   | mínimo de 8 caracteres |           |
+### Cadastrar colaborador
 
-| **Comandos**         |  **Destino**                   | **Tipo** |
-| ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel  ) |
-| ***Exemplo:***       |                                |                   |
-| entrar               | Fim do Processo 1              | default           |
-| cadastrar            | Início do proceso de cadastro  |                   |
+| **Campo**                  | **Tipo**           | **Restrições**             | **Valor padrão**           |
+| ------------------- | -------------- | ------------------- | ------------ |
+| nome completo       | Caixa de texto | obrigatório         | vazio        |
+| CPF                 | Caixa de texto | obrigatório e único | vazio        |
+| endereço            | Área de texto  | obrigatório         | vazio        |
+| data de nascimento  | Data           | obrigatório         | vazio        |
+| telefone            | Caixa de texto | obrigatório         | vazio        |
+| e-mail              | Caixa de texto | obrigatório         | vazio        |
+| data de contratação | Data           | obrigatório         | data atual   |
 
+| **Comandos**           | **Destino**                          | **Tipo**     |
+| -------- | -------------------------------- | -------- |
+| salvar   | Atividade "Exibir colaboradores" | padrão   |
+| cancelar | Atividade "Exibir colaboradores" | cancelar |
 
-**Nome da atividade 2**
+---
 
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-|                 |                  |                |                   |
+### Alterar colaborador
 
-| **Comandos**         |  **Destino**                   | **Tipo**          |
-| ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  ) |
-|                      |                                |                   |
+| **Campo**                  | **Tipo**           | **Restrições**             | **Valor padrão**           |
+| ------------------- | -------------- | ------------------- | ------------ |
+| nome completo       | Caixa de texto | obrigatório         | valor atual  |
+| CPF                 | Caixa de texto | obrigatório e único | valor atual  |
+| endereço            | Área de texto  | obrigatório         | valor atual  |
+| telefone            | Caixa de texto | obrigatório         | valor atual  |
+| e-mail              | Caixa de texto | obrigatório         | valor atual  |
+| data de contratação | Data           | obrigatório         | valor atual  |
+
+| **Comandos**           | **Destino**                          | **Tipo**     |
+| ----------------- | -------------------------------- | -------- |
+| salvar alterações | Atividade "Exibir colaboradores" | padrão   |
+| cancelar          | Atividade "Exibir colaboradores" | cancelar |
+
+---
+
+### Excluir colaborador
+
+| **Campo**                  | **Tipo**           | **Restrições**             | **Valor padrão**           |
+| ----------------------- | -------------- | --------------- | ------------------- |
+| colaborador selecionado | Caixa de texto | somente leitura | nome do colaborador |
+| confirmação de exclusão | Seleção        | sim / não       | não                 |
+
+| **Comandos**           | **Destino**                          | **Tipo**     |
+| ------------------ | -------------------------------- | -------- |
+| confirmar exclusão | Atividade "Exibir colaboradores" | padrão   |
+| cancelar           | Atividade "Exibir colaboradores" | cancelar |
