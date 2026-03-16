@@ -24,7 +24,7 @@ A informatização do processo de Gestão de Colaborador traz as seguintes oport
 
 Em seguida, apresenta-se o modelo do processo de Gestão de Colaborador, descrito no padrão BPMN:
 
-![Exemplo de um Modelo BPMN do PROCESSO 2](images/modelagemDoProcesso2_gestãoDeColaborador.png "Modelo BPMN do Processo 2.") 
+![Exemplo de um Modelo BPMN do PROCESSO 2](images/bpmnProcesso2.jpg "Modelo BPMN do Processo 2.") 
 
 ---
 
