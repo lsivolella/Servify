@@ -190,13 +190,13 @@ _Apresente aqui uma descrição da sua proposta abordando seus limites e suas li
 
 ### 3.3. Modelagem dos processos
 
-[PROCESSO 1 - Nome do Processo](processo-1-gestao-comissao.md "Detalhamento do Processo 1.")
+[PROCESSO 1 - Gestão de Comissão](processo-1-gestao-comissao.md "Detalhamento do Processo 1.")
 
-[PROCESSO 2 - Nome do Processo](processo-2-nome-do-processo.md "Detalhamento do Processo 2.")
+[PROCESSO 2 - Gestão de Colaborador](processo-2-gestao-de-colaborador.md "Detalhamento do Processo 2.")
 
-[PROCESSO 3 - Nome do Processo](processo-3-nome-do-processo.md "Detalhamento do Processo 3.")
+[PROCESSO 3 - Gestão de Agendamento](processo-3-gestao-de-agendamento.md "Detalhamento do Processo 3.")
 
-[PROCESSO 4 - Nome do Processo](processo-4-nome-do-processo.md "Detalhamento do Processo 4.")
+[PROCESSO 4 - Gestão de Cliente](processo-4-gestao-de-cliente.md "Detalhamento do Processo 4.")
 
 ## 4. Projeto da solução
 
