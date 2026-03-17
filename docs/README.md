@@ -14,9 +14,9 @@
 
 Professores:
 
-** Prof. Cleia Marcia Gomes Amaral **
+**Prof. Cleia Marcia Gomes Amaral**
 
-** Prof. Joana Gabriela Ribeiro de Souza **
+**Prof. Joana Gabriela Ribeiro de Souza**
 
 ---
 
@@ -26,7 +26,7 @@ _Instituto de Informática e Ciências Exatas – Pontifícia Universidade Cató
 
 ---
 
-_**Resumo**. 
+**Resumo**
 
 Este trabalho apresenta o desenvolvimento de uma solução Web voltada à automação da gestão operacional e financeira de empresas do setor de serviços que utilizam remuneração baseada em comissão. O projeto surge a partir das dificuldades enfrentadas por pequenos negócios que realizam o controle de colaboradores, serviços, clientes, agendamentos e comissões por meio de planilhas e processos manuais. O objetivo principal é modelar e propor um sistema integrado que centralize essas informações, reduza erros operacionais e apoie a tomada de decisão gerencial. Como resultado, foram definidos e modelados processos de negócio utilizando o padrão BPMN, contemplando a gestão de serviços, clientes, colaboradores, agendamentos e comissões, evidenciando ganhos em organização, eficiência e confiabilidade das informações.
 
@@ -38,7 +38,7 @@ Este trabalho apresenta a proposta de desenvolvimento de uma solução Web chama
 
 ### 1.1 Contextualização
 
-O setor de serviços representa uma das principais forças da economia brasileira. Segundo dados do IBGE (2023), o setor de serviços corresponde a mais de 70% do PIB nacional, sendo responsável por grande parte da geração de empregos formais e informais no país. Dentro desse contexto, micro e pequenas empresas possuem papel fundamental, representando aproximadamente 99% dos negócios ativos no Brasil (SEBRAE, 2023).
+O setor de serviços representa uma das principais forças da economia brasileira. Segundo dados do IBGE (2023)<sup>[1.1]</sup>, o setor de serviços corresponde a mais de 70% do PIB nacional, sendo responsável por grande parte da geração de empregos formais e informais no país. Dentro desse contexto, micro e pequenas empresas possuem papel fundamental, representando aproximadamente 99% dos negócios ativos no Brasil (SEBRAE, 2023)<sup>[1.2]</sup>.
 
 Entre esses negócios estão barbearias, salões de beleza, estúdios de manicure e outros estabelecimentos que operam com prestação de serviços personalizados e remuneração baseada em comissão por serviço realizado. Apesar do crescimento desse segmento, muitos desses empreendedores ainda utilizam ferramentas não especializadas para controle do negócio, como planilhas eletrônicas (ex.: Microsoft Excel) ou anotações manuais.
 
@@ -56,7 +56,7 @@ Diante desse cenário, identificou-se uma oportunidade para o desenvolvimento de
 
 Empresas do setor de serviços que trabalham com comissão por atendimento enfrentam dificuldades na gestão e no controle das operações mensais. O cálculo manual das comissões pode gerar erros, retrabalho, conflitos internos e falta de transparência entre colaboradores e gestores.
 
-Além disso, o uso de planilhas não estruturadas dificulta:
+Além disso, o uso de planilhas não estruturadas dificulta:  
 ● O controle preciso dos serviços prestados por colaborador;  
 ● A organização da agenda de atendimentos;  
 ● A visualização consolidada do faturamento;  
@@ -119,7 +119,7 @@ Perfil:
 ● Conhecimento tecnológico: Básico a intermediário;  
 ● Perfil empreendedor, foco em gestão e crescimento.
 
-Responsabilidades no sistema:
+Responsabilidades no sistema:  
 ● Cadastro de serviços e definição de valores;  
 ● Cadastro e gestão de colaboradores;  
 ● Parametrização de percentuais de comissão;  
