@@ -45,31 +45,40 @@ _* **Link** - campo que armazena uma URL_
 
 _* **Tabela** - campo formado por uma matriz de valores_
 
-**Nome da atividade 1**
+**Exibir Agendamentos**
 
 | **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
 | ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-| ***Exemplo:***  |                  |                |                   |
-| login           | Caixa de Texto   | formato de e-mail |                |
-| senha           | Caixa de Texto   | mínimo de 8 caracteres |           |
+| calendario | Data  |                |                   |
+| agendamento | Hora |                |                |
+| serviço | Caixa de Texto   |                |           |
+| novoAgendamento | Link   |                |           |
 
 | **Comandos**         |  **Destino**                   | **Tipo** |
 | ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel  ) |
-| ***Exemplo:***       |                                |                   |
-| entrar               | Fim do Processo 1              | default           |
+| seletor de data | Atividade "Exibir Agendamento" em novas datas  |               |
+| agendamento               | Atividade "Exibir Detalhes do Agendamento" |            |
 | cadastrar            | Início do proceso de cadastro  |                   |
 
 
-**Nome da atividade 2**
+**Exibir Detalhes do Agendamento**
 
 | **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
 | ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-|                 |                  |                |                   |
+| serviço | Caixa de Texto |                |                   |
+| data | Data |                |                   |
+| horario | Hora |                |                   |
+| profissional | Caixa de Texto |                |                   |
+| valor | Número |                |                   |
 
 | **Comandos**         |  **Destino**                   | **Tipo**          |
 | ---                  | ---                            | ---               |
 | [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  ) |
 |                      |                                |                   |
+
+**Exibir Cancelamento de Agendamento**
+
+**Exibir Formulário de Agendamento**
+
+**Exibir Confirmação de Agendamento**
+
