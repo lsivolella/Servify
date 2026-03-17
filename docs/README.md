@@ -1,4 +1,4 @@
-# TITULO DO PROJETO
+# Servify
 
 **Arthur Henrique Figueiredo Cayres Burdignon, 1402037@sga.pucminas.br**
 
@@ -26,8 +26,8 @@ _Instituto de Informática e Ciências Exatas – Pontifícia Universidade Cató
 
 ---
 
-_**Resumo**. Escrever aqui o resumo. O resumo deve contextualizar rapidamente o trabalho, descrever seu objetivo e, ao final,
-mostrar algum resultado relevante do trabalho (até 10 linhas)._
+_**Resumo**. 
+Este trabalho apresenta o desenvolvimento de uma solução Web voltada à automação da gestão operacional e financeira de empresas do setor de serviços que utilizam remuneração baseada em comissão. O projeto surge a partir das dificuldades enfrentadas por pequenos negócios que realizam o controle de colaboradores, serviços, clientes, agendamentos e comissões por meio de planilhas e processos manuais. O objetivo principal é modelar e propor um sistema integrado que centralize essas informações, reduza erros operacionais e apoie a tomada de decisão gerencial. Como resultado, foram definidos e modelados processos de negócio utilizando o padrão BPMN, contemplando a gestão de serviços, clientes, colaboradores, agendamentos e comissões, evidenciando ganhos em organização, eficiência e confiabilidade das informações._
 
 ---
 
@@ -182,11 +182,28 @@ Restrições:
 
 ### 3.1. Análise da situação atual
 
-_Apresente uma descrição textual de como os sistemas atuais resolvem o problema que seu projeto se propõe a resolver. Caso sua proposta seja inovadora e não existam processos claramente definidos, **apresente como as tarefas que o seu sistema pretende implementar são executadas atualmente**, mesmo que não se utilize tecnologia computacional._
+_Atualmente, empresas do setor de serviços que trabalham com prestação de serviços e remuneração por comissão realizam seus controles operacionais e financeiros, em grande parte, por meio de planilhas, anotações manuais ou ferramentas não integradas. Esse modelo atende necessidades básicas, porém apresenta limitações importantes relacionadas à organização das informações, integração entre processos e confiabilidade dos dados.
+
+Na gestão de serviços, é comum que informações como descrição, valor e duração sejam mantidas de forma informal, o que dificulta a padronização dos atendimentos e o correto vínculo com os processos de agendamento e cálculo de comissão. Já na gestão de clientes, os dados cadastrais e o histórico de atendimentos geralmente não estão centralizados, dificultando o acompanhamento do relacionamento com o cliente e ações de fidelização.
+
+Em relação à gestão de colaboradores, os dados cadastrais costumam estar distribuídos em diferentes controles, o que gera retrabalho, dificuldade de atualização e pouca integração com os demais processos do negócio. Esse cenário impacta diretamente o controle da produtividade e o cálculo das comissões.
+
+No processo de gestão de comissões, a definição de percentuais e seus ajustes são realizados manualmente, muitas vezes sem validações automáticas ou histórico de alterações, aumentando o risco de erros, inconsistências e falta de transparência.
+Já a gestão de agendamento normalmente ocorre por meio de agendas físicas, planilhas ou aplicativos de mensagens, o que dificulta a visualização geral da agenda, pode gerar conflitos de horários e não permite integração com os processos financeiros e gerenciais.
+
+Dessa forma, o cenário atual é marcado por processos fragmentados, dependência de controles manuais e baixa integração entre informações, evidenciando a necessidade de uma solução que centralize e organize esses processos de forma integrada._
 
 ### 3.2. Descrição geral da proposta de solução
 
-_Apresente aqui uma descrição da sua proposta abordando seus limites e suas ligações com as estratégias do negócio e os objetivos geral e específicos do projeto. Apresente aqui as oportunidades de melhorias._
+_A proposta deste projeto é o desenvolvimento de uma solução Web integrada para apoiar a gestão operacional e financeira de empresas do setor de serviços que utilizam modelo de remuneração por comissão. O objetivo é centralizar informações, automatizar processos e reduzir a dependência de controles manuais.
+
+A solução contempla os processos de Gestão de Serviços, Gestão de Clientes, Gestão de Colaboradores, Gestão de Comissões e Gestão de Agendamentos, permitindo maior organização, integração entre dados e padronização das operações. Os processos são modelados utilizando o padrão BPMN, facilitando o entendimento dos fluxos de negócio e apoiando a implementação do sistema.
+
+Na Gestão de Serviços, o sistema permitirá o cadastro estruturado dos serviços, incluindo informações como valor e duração, que servirão de base para o agendamento e cálculo automático das comissões. A Gestão de Clientes possibilitará o cadastro centralizado e o acompanhamento do histórico de atendimentos, contribuindo para melhoria da experiência do cliente.
+
+A Gestão de Colaboradores permitirá manter os dados cadastrais organizados e integrados aos demais processos, enquanto a Gestão de Comissões possibilitará a parametrização de percentuais com validações automáticas e maior transparência nos cálculos. Já a Gestão de Agendamentos permitirá organizar os atendimentos conforme o perfil de acesso do usuário, evitando conflitos de horários e melhorando a gestão dos recursos do negócio.
+
+Como oportunidades de melhoria, a proposta contribui para a redução de erros operacionais, maior confiabilidade das informações, melhoria da experiência do cliente e apoio à tomada de decisão gerencial, além de permitir a escalabilidade da solução para diferentes tipos de negócios do setor de serviços._
 
 ### 3.3. Modelagem dos processos
 
@@ -228,15 +245,9 @@ _Verifique no link abaixo como devem ser as referências no padrão ABNT:_
 
 http://portal.pucminas.br/imagedb/documento/DOC_DSC_NOME_ARQUI20160217102425.pdf
 
-**[1.1]** - _ELMASRI, Ramez; NAVATHE, Sham. **Sistemas de banco de dados**. 7. ed. São Paulo: Pearson, c2019. E-book. ISBN 9788543025001._
+**[1.1]** - _BRASIL. Empresa Brasil de Comunicação. Setor de serviços cresce 1,2% em julho e mantém recuperação. Rio de Janeiro: Agência Brasil, 2024. Disponível em: <https://agenciabrasil.ebc.com.br/radioagencia-nacional/economia/audio/2024-09/setor-de-servicos-cresce-12-em-julho-e-mantem-recuperacao>. Acesso em: 16 mar. 2026._
 
-**[1.2]** - _COPPIN, Ben. **Inteligência artificial**. Rio de Janeiro, RJ: LTC, c2010. E-book. ISBN 978-85-216-2936-8._
-
-**[1.3]** - _CORMEN, Thomas H. et al. **Algoritmos: teoria e prática**. Rio de Janeiro, RJ: Elsevier, Campus, c2012. xvi, 926 p. ISBN 9788535236996._
-
-**[1.4]** - _SUTHERLAND, Jeffrey Victor. **Scrum: a arte de fazer o dobro do trabalho na metade do tempo**. 2. ed. rev. São Paulo, SP: Leya, 2016. 236, [4] p. ISBN 9788544104514._
-
-**[1.5]** - _RUSSELL, Stuart J.; NORVIG, Peter. **Inteligência artificial**. Rio de Janeiro: Elsevier, c2013. xxi, 988 p. ISBN 9788535237016._
+**[1.2]** - _SERVIÇO BRASILEIRO DE APOIO ÀS MICRO E PEQUENAS EMPRESAS (SEBRAE). Pequenos negócios em números. São Paulo: SEBRAE, 2023. Disponível em: <https://sebrae.com.br/sites/PortalSebrae/ufs/sp/sebraeaz/pequenos-negocios-em-numeros,12e8794363447510VgnVCM1000004c00210aRCRD>. Acesso em: 16 mar. 2026. [sebrae.com.br]_
 
 # APÊNDICES
 
