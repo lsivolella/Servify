@@ -28,11 +28,6 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Colaborador, descrit
 
 ---
 ## Detalhamento das atividades
-O Cliente ao acessar a aplicação web. Decisão: Verifica se já possui conta ou se precisa de se registar.
-Preenche os dados e o sistema grava o perfil automaticamente como 'CLIENTE'. Autenticação: Realiza o login [critério a definir]
-Redirecionamento: O sistema valida o perfil e carrega a Visão do Cliente (Serviços e agendamentos).
-
-## Detalhamento das atividades
 
 ---
  
@@ -210,3 +205,10 @@ O sistema solicita a confirmação do usuário antes de remover o registro do co
 | ------------------ | -------------------------------- | -------- |
 | confirmar exclusão | Atividade "Exibir tela de colaboradores" | padrão   |
 | cancelar           | Atividade "Exibir tela de colaboradores" | cancelar |
+
+
+### Fluxo textual inicial para os clientes
+
+O Cliente ao acessar a aplicação web. Decisão: Verifica se já possui conta ou se precisa de se registar.
+Preenche os dados e o sistema grava o perfil automaticamente como 'CLIENTE'. Autenticação: Realiza o login [critério a definir]
+Redirecionamento: O sistema valida o perfil e carrega a Visão do Cliente (Serviços e agendamentos).
