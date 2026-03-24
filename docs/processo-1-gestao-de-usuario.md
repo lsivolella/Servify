@@ -73,6 +73,7 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Colaborador, descrit
 | nome completo       | Caixa de texto | obrigatório         | valor atual  |
 | CPF                 | Caixa de texto | obrigatório e único | valor atual  |
 | endereço            | Área de texto  | obrigatório         | valor atual  |
+| data de nascimento  | Data           | obrigatório         | valor atual  |
 | telefone            | Caixa de texto | obrigatório         | valor atual  |
 | e-mail              | Caixa de texto | obrigatório         | valor atual  |
 | data de contratação | Data           | obrigatório         | valor atual  |
