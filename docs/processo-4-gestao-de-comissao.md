@@ -1,4 +1,4 @@
-### 3.3.1 Processo 1 – GESTÃO DE COMISSÃO
+### 3.3.4 Processo 4 – GESTÃO DE COMISSÃO
 
 O **processo de Gestão de Comissão** tem como objetivo permitir que o usuário visualize, cadastre, edite e exclua comissões dentro do sistema. Inicialmente, o sistema apresenta a listagem das comissões existentes, permitindo ao usuário visualizar os registros disponíveis. A partir dessa visualização, o usuário pode decidir realizar uma das ações disponíveis: cadastrar uma nova comissão, editar uma comissão existente ou excluir uma comissão.
 
@@ -16,7 +16,7 @@ Algumas oportunidades de melhoria identificadas no processo são:
 
 Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
 
-![Modelo BPMN do Processo 1](images/gestao-comissao.png "Modelo BPMN do Processo 1.")
+![Modelo BPMN do Processo 4](images/bpmn-gestao-de-comissao.png.png "Modelo BPMN do Processo 4.")
 
 ---
 

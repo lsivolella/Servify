@@ -212,13 +212,13 @@ Como oportunidades de melhoria, a proposta contribui para a redução de erros o
 
 ### 3.3. Modelagem dos processos
 
-[PROCESSO 1 - Gestão de Comissão](processo-1-gestao-comissao.md "Detalhamento do Processo 1.")
+[PROCESSO 1 - Gestão de Usuário](processo-1-gestao-de-usuario.md "Detalhamento do Processo 1.")
 
-[PROCESSO 2 - Gestão de Colaborador](processo-2-gestao-de-colaborador.md "Detalhamento do Processo 2.")
+[PROCESSO 2 - Gestão de Serviço](processo-2-gestao-de-servico.md "Detalhamento do Processo 2.")
 
 [PROCESSO 3 - Gestão de Agendamento](processo-3-gestao-de-agendamento.md "Detalhamento do Processo 3.")
 
-[PROCESSO 4 - Gestão de Cliente](processo-4-gestao-de-cliente.md "Detalhamento do Processo 4.")
+[PROCESSO 4 - Gestão de Comissão](processo-4-gestao-de-comissao.md "Detalhamento do Processo 4.")
 
 ## 4. Projeto da solução
 

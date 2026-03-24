@@ -1,4 +1,6 @@
-### 3.3.4 Processo 4 – GESTÃO DE CLIENTES
+### 3.3.X Processo X – GESTÃO DE CLIENTES
+
+[DEPRECIADO] -> Inserir as informações relevantes no Processo 1
 
 O processo de **Gestão de Clientes** tem como objetivo permitir o acesso à aplicação aos usuários a nível de cliente do estabelecimento.
 Para o cliente acessar é necessário cadastro, com a finalidade de identificar e utilizar desses dados para outras gestões do projeto.
@@ -9,7 +11,7 @@ Para o cliente acessar é necessário cadastro, com a finalidade de identificar 
 * Possibilidade de integração aos processos de agendamento e serviços;
 * Maior segurança e confiabilidade às informações aramazenadas.
 
-![Exemplo de um Modelo BPMN do PROCESSO 4](images/BPMN-Gestao-Clientes.png "Modelo BPMN do Processo 4.")
+![Exemplo de um Modelo BPMN do PROCESSO X](images/bpmn-gestao-de-cliente.png.png "Modelo BPMN do Processo X.")
 
 
 #### Detalhamento das atividades

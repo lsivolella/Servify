@@ -11,7 +11,7 @@ Usuários definidos com perfil de **Cliente** podem ver e alterar os seus própr
 - Melhora a **experiência do cliente**.
 - Facilita a **gestão de recursos** do estabelicimento.
 
-![Modelo BPMN do Processo 3](images/gestao-agendamento.png "Modelo BPMN do Processo 3.")
+![Modelo BPMN do Processo 3](images/bpmn-gestao-de-agendamento.png.png "Modelo BPMN do Processo 3.")
 
 
 #### Detalhamento das atividades

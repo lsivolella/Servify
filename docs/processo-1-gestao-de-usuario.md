@@ -1,4 +1,4 @@
-### 3.3.2 Processo 1 – GESTÃO DE USUÁRIO
+### 3.3.1 Processo 1 – GESTÃO DE USUÁRIO
 
 O processo de **Gestão de Usuário** tem como objetivo permitir o cadastro e manutenção das informações dos colaboradores da empresa, garantindo maior organização dos dados, rastreabilidade e apoio aos demais processos do sistema, como agendamento, prestação de serviços e cálculo de comissão.
 
@@ -24,7 +24,7 @@ A informatização do processo de Gestão de Colaborador traz as seguintes oport
 
 Em seguida, apresenta-se o modelo do processo de Gestão de Colaborador, descrito no padrão BPMN:
 
-![Exemplo de um Modelo BPMN do PROCESSO 2](images/bpmnProcesso2.jpg "Modelo BPMN do Processo 2.") 
+![Exemplo de um Modelo BPMN do PROCESSO 1](images/bpmn-gestao-de-usuario.jpg.jpg "Modelo BPMN do Processo 1.") 
 
 ---
 
