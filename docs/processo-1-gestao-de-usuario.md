@@ -22,9 +22,19 @@ A informatização do processo de Gestão de Colaborador traz as seguintes oport
 
 ---
 
-Em seguida, apresenta-se o modelo do processo de Gestão de Colaborador, descrito no padrão BPMN:
+Em seguida, apresenta-se os modelos do processo de Gestão de Colaborador, descritos no padrão BPMN:
 
-![Exemplo de um Modelo BPMN do PROCESSO 1](images/bpmn-gestao-de-usuario.jpg "Modelo BPMN do Processo 1.") 
+### Autenticação e Registro de Cliente
+![Autenticação e Registro de Cliente](images/bpmn-gestao-de-usuario-p1.png "Modelo BPMN do Processo 1 - Autenticação e Registro de Cliente.")
+
+### Subprocesso - Registro de Cliente
+![Subprocesso - Registro de Cliente](images/bpmn-gestao-de-usuario-p2.png "Modelo BPMN do Processo 1 - Subprocesso - Registro de Cliente.")
+
+### Criação de Convite para Admin e Colaborador
+![Criação de Convite para Admin e Colaborador](images/bpmn-gestao-de-usuario-p3.png "Modelo BPMN do Processo 1 - Criação de Convite para Admin e Colaborador")
+
+### Registro de Usuário Convidado
+![Registro de Usuário Convidado](images/bpmn-gestao-de-usuario-p4.png "Modelo BPMN do Processo 1 -Registro de Usuário Convidado.")
 
 ---
 ## Detalhamento das atividades
