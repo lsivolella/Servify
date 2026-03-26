@@ -16,7 +16,7 @@ Algumas oportunidades de melhoria identificadas no processo são:
 
 Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
 
-![Modelo BPMN do Processo 4](images/bpmn-gestao-de-comissao.png.png "Modelo BPMN do Processo 4.")
+![Modelo BPMN do Processo 4](images/bpmn-gestao-de-comissao.png "Modelo BPMN do Processo 4.")
 
 ---
 
