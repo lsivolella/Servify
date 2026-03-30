@@ -222,3 +222,22 @@ O sistema solicita a confirmação do usuário antes de remover o registro do co
 O Cliente ao acessar a aplicação web. Decisão: Verifica se já possui conta ou se precisa de se registar.
 Preenche os dados e o sistema grava o perfil automaticamente como 'CLIENTE'. Autenticação: Realiza o login [critério a definir]
 Redirecionamento: O sistema valida o perfil e carrega a Visão do Cliente (Serviços e agendamentos).
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+### Wireframe
+
+## Autenticação e Registro de Cliente
+![Tela Autenticação](images/Tela")
+
+## Subprocesso - Registro de Cliente
+![Tela Subprocesso - Registro de Cliente](images/Tela")
+
+## Criação de Convite para Admin e Colaborador
+![Tela Criação de Convite para Colaborador](images/Tela")
+
+## Registro de Usuário Convidado
+![Tela Registro de Usuário Convidado](images/Tela")
+
+
