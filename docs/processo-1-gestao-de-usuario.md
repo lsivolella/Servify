@@ -226,18 +226,18 @@ Redirecionamento: O sistema valida o perfil e carrega a Visão do Cliente (Servi
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
-### Wireframe
+## Wireframe
 
-## Autenticação e Registro de Cliente
-![Tela Autenticação](images/Tela")
+### Autenticação e Registro de Cliente
+![Tela Autenticação](images/wireframe/login%20-%20servify.png")
 
-## Subprocesso - Registro de Cliente
-![Tela Subprocesso - Registro de Cliente](images/Tela")
+### Subprocesso - Registro de Cliente
+![Tela Subprocesso - Registro de Cliente](images/wireframe/cadastro%20colaborador%20-%20servify.png")
 
-## Criação de Convite para Admin e Colaborador
-![Tela Criação de Convite para Colaborador](images/Tela")
+### Criação de Convite para Admin e Colaborador
+![Tela Criação de Convite para Colaborador](images/wireframe/invite%20colaboradores%20-%20servify.png")
 
-## Registro de Usuário Convidado
-![Tela Registro de Usuário Convidado](images/Tela")
+### Registro de Usuário Convidado
+![Tela Registro de Usuário Convidado](images/wireframe/listagem%20usuarios%20-%20servify.png")
 
 
