@@ -72,7 +72,7 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 
 ---
 
-## Subprocesso 1 – Autenticação e Registro de Cliente
+## Subprocesso 1 – Autenticação e Registro do Usuário
 
 ---
 
@@ -97,7 +97,7 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 
 ---
 
-## Processo 2 – Registro de Cliente
+## Subprocesso 2 – Registro de Cliente
 
 ---
 
@@ -132,7 +132,7 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 
 ---
 
-## Processo 3 – Registro de Usuários
+## Subprocesso 3 – Registro de Usuários
 
 ---
 
@@ -277,7 +277,7 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 
 ---
 
-## Processo 4 – Criação de Convite para Admin e Colaborador
+## Subprocesso 4 – Criação de Convite para Admin e Colaborador
 
 ---
 
@@ -341,10 +341,10 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 
 ---
 
-### Autenticação e Registro de Cliente
+### Autenticação e Registro de Usuário
 ![Tela Autenticação](images/wireframe/loginServify.png)
 
-### Subprocesso - Registro de Cliente
+### Registro de Cliente
 ![Tela Subprocesso - Registro de Cliente](images/wireframe/cadastroColaboradorServify.png)
 
 ### Criação de Convite para Admin e Colaborador
