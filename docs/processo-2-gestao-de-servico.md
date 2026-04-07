@@ -88,10 +88,10 @@ Em seguida, apresenta-se os modelos do processo de Gestão de Serviço, descrito
 ---
 
 ### Gerenciar Serviços
-![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico.jpeg)
+![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico.jpg)
 
 ### Cadastrar Serviço
-![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico.jpeg)
+![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico.jpg)
 
 ### Editar de Serviço
-![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_editar-servico.jpeg)
+![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_editar-servico.jpg)
