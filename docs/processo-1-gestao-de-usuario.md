@@ -76,21 +76,23 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 
 ---
 
-#### Acessar aplicação
+#### Abrir aplicação
 
 | **Campo** | **Tipo**       | **Restrições** | **Valor padrão** |
 | --------- | -------------- | -------------- | ---------------- |
-| e-mail    | Caixa de texto | obrigatório    | vazio            |
-| senha     | Caixa de texto | obrigatório    | vazio            |
+| Login    | Caixa de texto | obrigatório    | vazio            |
+| Senha     | Caixa de texto | obrigatório    | vazio            |
 
 | **Comandos** | **Destino**                        | **Tipo** |
 | ------------ | ---------------------------------- | -------- |
-| entrar       | Atividade "Validar credenciais"    | padrão   |
+| Entrar       | Atividade "Acessar meus agendamentos"    | padrão   |
 | Criar conta    | Atividade "Criar conta"       | padrão   |
 
 | **Resultado**       | **Destino**     |
 | ------------------- | --------------- |
-| Sessão criada       | Fim do processo |
+| Sessão criada (cliente)      | Atividade "Acessar meus agendamentos - Cliente" |
+| Sessão criada (colaborador)      | Atividade "Acessar meus agendamentos - Colaborador" |
+| Sessão criada (admi)      | Atividade "Registro de Usuário Convidado" |
 | Mensagem de erro    | "Credenciais inválidas. Tente novamente." |
 
 ---
@@ -104,88 +106,33 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | **Campo**          | **Tipo**       | **Restrições**       | **Valor padrão** |
 | ------------------ | -------------- | -------------------- | ---------------- |
 | Nome completo      | Caixa de texto | obrigatório          | vazio            |
-| E-mail             | Caixa de texto | obrigatório e único  | vazio            |
-| Telefone           | Caixa de texto | obrigatório          | vazio            |
+| E-mail             | Caixa de texto | obrigatório e único; deve ter formato válido  | vazio            |
+| Telefone           | Caixa de texto | obrigatório; deve ter formato válido          | vazio            |
+| Data de nascimento | Data           | obrigatório; deve ter formato válido         | vazio            |
 | CPF                | Caixa de texto | obrigatório e único  | vazio            |
-| CEP                | Caixa de texto | obrigatório          | vazio            |
+| CEP                | Caixa de texto | obrigatório; deve ter formato válido         | vazio            |
 | Logradouro         | Caixa de texto | obrigatório          | vazio            |
 | Número             | Caixa de texto | obrigatório          | vazio            |
 | Complemento        | Caixa de texto | obrigatório          | vazio            |
 | Bairro             | Caixa de texto | obrigatório          | vazio            |
 | Cidade             | Caixa de texto | obrigatório          | vazio            |
-| UF                 | Caixa de texto | obrigatório          | vazio            |
+| UF                 | Seleção única  | obrigatório          | vazio            |
 | Senha              | Caixa de texto | obrigatório          | vazio            |
 | Confirmar senha    | Caixa de texto | obrigatório; deve ser igual ao campo senha | vazio |
 
 | **Comandos**  | **Destino**                       | **Tipo** |
 | ------------- | --------------------------------- | -------- |
-| Cadastrar     | Atividade "Acessar aplicação"   | padrão   |
-| Fazer login   | Atividade "Acessar aplicação"     | padrão |
+| Cadastrar     | Atividade "Abrir aplicação"   | padrão   |
+| Fazer login   | Atividade "Abrir aplicação"     | padrão |
 
 | **Resultado**        | **Destino**                          |
 | -------------------- | ------------------------------------ |
-| Cadastro realizado  | Atividade "Acessar aplicação"   |
-| Mensagem de erro    | "Campo inválido. Tente novamente." |
+| Cadastro realizado  | Toast "Cadastro realizado com sucesso." e Atividade "Preencher formulário"  |
+| Mensagem de erro    | "Campo inválido" |
 
 ---
 
-## Processo 3 – Criação de Convite para Admin e Colaborador
-
----
-
-#### Convidar usuário
-
-| **Comandos**     | **Destino**                         | **Tipo** |
-| ---------------- | ----------------------------------- | -------- |
-| Convidar | Atividade "Exibir prompt de convite" | padrão  |
-
----
-
-#### Exibir prompt de convite
-
-| **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
-| ----------------- | -------------- | ------------------------------------- | ---------------- |
-| E-mail do colaborador            | Caixa de texto | obrigatório; deve ter formato válido  | vazio            |
-| Cargo  | Seleção única  | Admin / Colaborador                   | Colaborador      |
-
-| **Comandos**          | **Destino**                              | **Tipo** |
-| --------------------- | ---------------------------------------- | -------- |
-| Enviar Convite | Atividade "Exibir mensagem de convite enviado" | padrão |
-| Cancelar              | Fim do processo                          | cancelar |
-
-| **Resultado**        | **Destino**                          |
-| -------------------- | ------------------------------------ |
-| Convite enviado  | Atividade "Convite convite enviado com sucesso"   |
-| Mensagem | "Não foi possível enviar o convite. Tente novamente."   |
-
----
-
-#### Fechar prompt de convite
-
-| **Campo**          | **Tipo** | **Restrições**  | **Valor padrão**              |
-| ------------------ | -------- | --------------- | ----------------------------- |
-| prompt de convite  | Exibição | somente leitura | fechado automaticamente       |
-
-| **Resultado**     | **Destino**               |
-| ----------------- | ------------------------- |
-| prompt fechado    | Atividade "Enviar e-mail" |
-
----
-
-#### Enviar e-mail
-
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**                        |
-| ------------------- | -------- | --------------- | --------------------------------------- |
-| destinatário        | Interno  | somente leitura | e-mail informado pelo administrador     |
-| link do convite     | Interno  | somente leitura | gerado com o token de convite           |
-
-| **Resultado**    | **Destino**     |
-| ---------------- | --------------- |
-| e-mail enviado   | Fim do processo |
-
----
-
-## Processo 4 – Registro de Usuário Convidado
+## Processo 3 – Registro de Usuários
 
 ---
 
@@ -327,6 +274,66 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | **Resultado**    | **Destino**     |
 | ---------------- | --------------- |
 | login realizado  | Fim do processo |
+
+---
+
+## Processo 4 – Criação de Convite para Admin e Colaborador
+
+---
+
+#### Convidar usuário
+
+| **Comandos**     | **Destino**                         | **Tipo** |
+| ---------------- | ----------------------------------- | -------- |
+| Convidar | Atividade "Exibir prompt de convite" | padrão  |
+
+---
+
+#### Exibir prompt de convite
+
+| **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
+| ----------------- | -------------- | ------------------------------------- | ---------------- |
+| E-mail do usuário            | Caixa de texto | obrigatório; deve ter formato válido  | vazio            |
+| Cargo  | Seleção única  | Admin / Colaborador                   | Colaborador      |
+
+| **Comandos**          | **Destino**                              | **Tipo** |
+| --------------------- | ---------------------------------------- | -------- |
+| Enviar Convite | Atividade "Exibir mensagem de convite enviado" | padrão |
+| Cancelar              | Fim do processo                          | cancelar |
+
+| **Resultado**        | **Destino**                          |
+| -------------------- | ------------------------------------ |
+| Convite enviado  | Atividade "Convite convite enviado com sucesso"   |
+| Mensagem | "Não foi possível enviar o convite. Tente novamente."   |
+
+---
+
+#### Fechar prompt de convite
+
+| **Comandos**          | **Destino**                              | **Tipo** |
+| --------------------- | ---------------------------------------- | -------- |
+| "X" | Atividade "Exibir mensagem de convite enviado" | padrão |
+
+| **Campo**          | **Tipo** | **Restrições**  | **Valor padrão**              |
+| ------------------ | -------- | --------------- | ----------------------------- |
+| prompt de convite  | Exibição | somente leitura | fechado automaticamente       |
+
+| **Resultado**     | **Destino**               |
+| ----------------- | ------------------------- |
+| prompt fechado    | Atividade "Enviar e-mail" |
+
+---
+
+#### Enviar e-mail
+
+| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**                        |
+| ------------------- | -------- | --------------- | --------------------------------------- |
+| destinatário        | Interno  | somente leitura | e-mail informado pelo administrador     |
+| link do convite     | Interno  | somente leitura | gerado com o token de convite           |
+
+| **Resultado**    | **Destino**     |
+| ---------------- | --------------- |
+| e-mail enviado   | Fim do processo |
 
 ---
  
