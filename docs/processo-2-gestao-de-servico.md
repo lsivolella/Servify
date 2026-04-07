@@ -1,7 +1,14 @@
 ### 3.3.2 Processo 2 – GESTÃO DE SERVIÇO
 
-_Apresente aqui o nome e as oportunidades de melhoria para o processo 2.
-Em seguida, apresente o modelo do processo 2, descrito no padrão BPMN._
+O processo de **Gestão de Serviço** tem como objetivo permitir o cadastro e manutenção das informações relacionados aos serviços prestados pela empresa. O cadastro de serviços permite que eles sejam exibidos a todos os clientes com informações padronizadas e estruturadas, além de permitir que colaboradores tenham a facilidade de registrar o leque de serviços que estão aptos a prestar.
+
+#### Oportunidades de melhoria
+
+• padronização dos nomes, valores e tempo de execução dos serviços prestados no estabelicimento
+
+• facilitação na alteração, exclusão ou inclusão de serviços no sistema
+
+• facilitação na distribuição das informações dos serviços disponíveis para os clientes
 
 ![Exemplo de um Modelo BPMN do PROCESSO 2](images/process.png "Modelo BPMN do Processo 2.")
 
