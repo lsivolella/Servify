@@ -460,10 +460,10 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | login realizado  | Fim do processo |
 
 ---
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
 ## Wireframe
+
+---
 
 ### Autenticação e Registro de Cliente
 ![Tela Autenticação](images/wireframe/loginServify.png)
