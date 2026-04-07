@@ -52,56 +52,31 @@ Em seguida, apresenta-se os modelos do processo de Gestão de Colaborador, descr
 
 ---
 
-## Processo 1 – Autenticação e Registro de Cliente
+## Subprocesso 1 – Autenticação e Registro de Cliente
 
-O processo de **Autenticação e Registro de Cliente** tem como objetivo permitir que um cliente acesse o sistema por meio do cadastro de uma nova conta ou pela autenticação com credenciais já existentes. O processo garante que apenas usuários com credenciais válidas obtenham acesso ao sistema. O sistema inicia apresentando ao usuário as opções disponíveis: criar uma nova conta ou digitar credenciais de acesso já existentes. Caso o usuário acione a opção de criação de uma nova conta, o sistema redireciona para o subprocesso de cadastro responsável pelo preenchimento e validação dos dados cadastrais do novo cliente. Ao ser concluído com sucesso, o sistema redireciona o usuário para a tela de autenticação. O detalhamento interno deste subprocesso está descrito no **Processo 2 – Registro de Cliente**. O usuário insere suas credenciais de acesso ao sistema (e-mail e senha). Esta atividade é inicializada tanto pelo fluxo de login direto quanto após a conclusão do cadastro. Depois há uma atividade executada pelo sistema em que as credenciais informadas são verificadas em relação à existência do usuário e à correspondência da senha. Não há interação direta do usuário nesta etapa. Caso a validação invalide a entrada, o sistema exibe uma mensagem de erro informando que as credenciais inseridas são inválidas. Então o usuário é redirecionado para tentar novamente. Caso a validação das credenciais seja bem-sucedida, uma sessão autenticada é criada para o usuário, concedendo a ele acesso ao sistema.
+O processo de **Autenticação e Registro de Cliente** tem como objetivo permitir que um cliente acesse o sistema por meio do cadastro de uma nova conta ou pela autenticação com credenciais já existentes. O processo garante que apenas usuários com credenciais válidas obtenham acesso ao sistema. O processo se inicia com o usuário acessando a aplicação Web e apresentando a ele as opções disponíveis: criar uma nova conta ou digitar credenciais de acesso já existentes. Caso o usuário acione a opção de criação de uma nova conta, o sistema redireciona para o subprocesso de cadastro responsável pelo preenchimento e validação dos dados cadastrais do novo cliente. Ao ser concluído com sucesso, o sistema redireciona o usuário para a tela de autenticação. O detalhamento interno deste subprocesso está descrito no **Processo 2 – Registro de Cliente**. O usuário insere suas credenciais de acesso ao sistema (e-mail e senha). Esta atividade é inicializada tanto pelo fluxo de login direto quanto após a conclusão do cadastro. Depois há uma atividade executada pelo sistema em que as credenciais informadas são verificadas em relação à existência do usuário e à correspondência da senha. Não há interação direta do usuário nesta etapa. Caso a validação invalide a entrada, o sistema exibe uma mensagem de erro informando que as credenciais inseridas são inválidas. Então o usuário é redirecionado para tentar novamente. Caso a validação das credenciais seja bem-sucedida, uma sessão autenticada é criada para o usuário, concedendo a ele acesso ao sistema.
 
-## Processo 2 – Registro de Cliente
+## Subprocesso 2 – Registro de Cliente
 
 O processo de **Registro de Cliente** corresponde ao subprocesso de cadastro referenciado no Processo 1. Ele tem como objetivo coletar e validar as informações do novo cliente, efetuando seu login automaticamente ao final do cadastro bem-sucedido. O usuário preenche o formulário de cadastro com seus dados pessoais de acesso (esta é a única atividade de interação do usuário neste processo). Em seguida, há uma atividade executada pelo sistema em que os dados informados no formulário são verificados em relação ao cumprimento das restrições definidas (campos obrigatórios, e-mail único, correspondência de senha). Depois o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos. O usuário retorna ao formulário para efetuar os ajustes necessários. Após a validação bem-sucedida dos dados, o novo cadastro é registrado e uma sessão autenticada é criada automaticamente para o usuário encerrando o subprocesso.
 
-## Processo 3 – Criação de Convite para Admin e Colaborador
+## Subprocesso 3 – Criação de Convite para Admin e Colaborador
 
 O processo de **Criação de Convite para Admin e Colaborador** tem como objetivo permitir que um administrador convide novos usuários para o sistema definindo seu e-mail e perfil de acesso. O sistema valida as informações, gera um token de convite e envia o convite por e-mail ao destinatário. O processo se inicia com o administrador acionando a funcionalidade de convite de novo usuário. Em seguida, o sistema exibe o prompt de convite para preenchimento das informações e exibe o formulário de convite para que o administrador insira o e-mail e o perfil de acesso do usuário convidado. O administrador preenche o e-mail do destinatário e define o perfil de acesso que será atribuído ao usuário convidado. Depois disso, há uma atividade do sistema em que e-mail e o perfil de acesso informados são verificados quanto ao formato e preenchimento obrigatório. Caso encontre algum erro, o sistema exibe uma mensagem de erro informando quais campos estão incorretos. Seguido disso, o administrador retorna ao formulário para corrigir os dados. Uma vez corrigido os dados ou inseridos eles corretamente, um token único de convite é gerado e associado ao e-mail e perfil de acesso definidos pelo administrador. Este token será utilizado para autenticar o convite no momento do registro do usuário. Em seguida, o sistema fecha o formulário de convite e aciona o serviço de e-mail para envio do convite ao destinatário. Ao final, o convite contendo o link com o token gerado é enviado ao endereço de e-mail informado pelo administrador.
 
-## Processo 4 – Registro de Usuário Convidado
+## Subprocesso 4 – Registro de Usuário Convidado
 
 O processo de **Registro de Usuário Convidado** tem como objetivo permitir que um usuário que recebeu um convite por e-mail conclua seu cadastro no sistema. O processo valida o token do convite, identifica o tipo de usuário (Admin ou Colaborador), exibe o formulário de cadastro correspondente e, após validação dos dados, realiza o login automaticamente. O processo se inicia com o usuário acessando o link de convite recebido por e-mail. Em seguida, o sistema recebe o token embutido no link e inicia o processo de validação. Há uma atividade executada pelo sistema em que o token presente no link é recebido e encaminhado para validação. Depois disso, o token recebido é verificado quanto à sua existência, validade e prazo de expiração. De acordo com a falta de correspondência, o sistema exibe uma mensagem informando que o link do convite é inválido ou expirou e então o processo é encerrado. Se a correspondência é positiva e o sistema identifica o perfil de acesso associado ao token do convite, ele redireciona para a página de cadastro correspondente. Logo em seguida, o sistema exibe o formulário de cadastro para o perfil de administrador ou o formulário de cadastro para o perfil de colaborador a depender do acesso. Então o usuário preenche o formulário de cadastro exibido conforme seu perfil de acesso. Esta atividade é compartilhada pelos fluxos de admin e colaborador. Depois há uma atividade do sistema em que os dados preenchidos no formulário são verificados quanto ao cumprimento das restrições definidas. Em caso de negativa, o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos e o usuário retorna ao formulário para efetuar os ajustes. Em caso de validação bem-sucedida dos dados, o novo cadastro é efetuado, o token de convite é invalidado e uma sessão autenticada é criada automaticamente para o usuário.
 
-## Processos
+## Subprocessos
 
 ---
 
-## Processo 1 – Autenticação e Registro de Cliente
+## Subprocesso 1 – Autenticação e Registro de Cliente
 
 ---
 
-#### Ação (Gateway de decisão inicial)
-
-| **Comandos**        | **Destino**                        | **Tipo** |
-| ------------------- | ---------------------------------- | -------- |
-| criar nova conta    | Atividade "Criar nova conta"       | padrão   |
-| já tenho uma conta  | Atividade "Digitar credenciais"    | padrão   |
-
----
-
-#### Criar nova conta
-
-| **Comandos**     | **Destino**                      | **Tipo** |
-| ---------------- | -------------------------------- | -------- |
-| criar nova conta | Subprocesso "Realizar cadastro"  | padrão   |
-
----
-
-#### Realizar cadastro (subprocesso)
-
-| **Resultado**       | **Destino**                        |
-| ------------------- | ---------------------------------- |
-| cadastro concluído  | Atividade "Digitar credenciais"    |
-
----
-
-#### Digitar credenciais
+#### Acessar aplicação
 
 | **Campo** | **Tipo**       | **Restrições** | **Valor padrão** |
 | --------- | -------------- | -------------- | ---------------- |
@@ -111,44 +86,12 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | **Comandos** | **Destino**                        | **Tipo** |
 | ------------ | ---------------------------------- | -------- |
 | entrar       | Atividade "Validar credenciais"    | padrão   |
-
----
-
-#### Validar credenciais
-
-| **Campo** | **Tipo** | **Restrições**                              | **Valor padrão** |
-| --------- | -------- | ------------------------------------------- | ---------------- |
-| e-mail    | Interno  | deve corresponder a um cadastro existente   | —                |
-| senha     | Interno  | deve corresponder à senha do cadastro       | —                |
-
-| **Resultado**         | **Destino**                          |
-| --------------------- | ------------------------------------ |
-| credenciais válidas   | Atividade "Criar seção"              |
-| credenciais inválidas | Atividade "Exibir prompt de erro"    |
-
----
-
-#### Exibir prompt de erro
-
-| **Campo**          | **Tipo** | **Restrições**  | **Valor padrão**                        |
-| ------------------ | -------- | --------------- | --------------------------------------- |
-| mensagem de erro   | Exibição | somente leitura | "Credenciais inválidas. Tente novamente." |
-
-| **Comandos** | **Destino**                       | **Tipo** |
-| ------------ | --------------------------------- | -------- |
-| tentar novamente | Atividade "Digitar credenciais" | padrão   |
-
----
-
-#### Criar seção
-
-| **Campo**        | **Tipo** | **Restrições**  | **Valor padrão**               |
-| ---------------- | -------- | --------------- | ------------------------------ |
-| sessão do usuário | Interno | somente leitura | gerada automaticamente pelo sistema |
+| Criar conta    | Atividade "Criar conta"       | padrão   |
 
 | **Resultado**       | **Destino**     |
 | ------------------- | --------------- |
-| sessão criada       | Fim do processo |
+| Sessão criada       | Fim do processo |
+| Mensagem de erro    | "Credenciais inválidas. Tente novamente." |
 
 ---
 
@@ -160,55 +103,29 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 
 | **Campo**          | **Tipo**       | **Restrições**       | **Valor padrão** |
 | ------------------ | -------------- | -------------------- | ---------------- |
-| nome completo      | Caixa de texto | obrigatório          | vazio            |
-| e-mail             | Caixa de texto | obrigatório e único  | vazio            |
-| senha              | Caixa de texto | obrigatório          | vazio            |
-| confirmar senha    | Caixa de texto | obrigatório; deve ser igual ao campo senha | vazio |
+| Nome completo      | Caixa de texto | obrigatório          | vazio            |
+| E-mail             | Caixa de texto | obrigatório e único  | vazio            |
+| Telefone           | Caixa de texto | obrigatório          | vazio            |
+| CPF                | Caixa de texto | obrigatório e único  | vazio            |
+| CEP                | Caixa de texto | obrigatório          | vazio            |
+| Logradouro         | Caixa de texto | obrigatório          | vazio            |
+| Número             | Caixa de texto | obrigatório          | vazio            |
+| Complemento        | Caixa de texto | obrigatório          | vazio            |
+| Bairro             | Caixa de texto | obrigatório          | vazio            |
+| Cidade             | Caixa de texto | obrigatório          | vazio            |
+| UF                 | Caixa de texto | obrigatório          | vazio            |
+| Senha              | Caixa de texto | obrigatório          | vazio            |
+| Confirmar senha    | Caixa de texto | obrigatório; deve ser igual ao campo senha | vazio |
 
 | **Comandos**  | **Destino**                       | **Tipo** |
 | ------------- | --------------------------------- | -------- |
-| cadastrar     | Atividade "Validar informações"   | padrão   |
-| cancelar      | Fim do processo                   | cancelar |
-
----
-
-#### Validar informações
-
-| **Campo**       | **Tipo** | **Restrições**                              | **Valor padrão** |
-| --------------- | -------- | ------------------------------------------- | ---------------- |
-| nome completo   | Interno  | não pode ser vazio                          | —                |
-| e-mail          | Interno  | não pode ser vazio; deve ser único no sistema; deve ter formato válido | — |
-| senha           | Interno  | não pode ser vazia                          | —                |
-| confirmar senha | Interno  | deve ser igual ao campo senha               | —                |
+| Cadastrar     | Atividade "Acessar aplicação"   | padrão   |
+| Fazer login   | Atividade "Acessar aplicação"     | padrão |
 
 | **Resultado**        | **Destino**                          |
 | -------------------- | ------------------------------------ |
-| informações válidas  | Atividade "Realizar login usuário"   |
-| informações inválidas | Atividade "Exibir prompt de erro"   |
-
----
-
-#### Exibir prompt de erro
-
-| **Campo**        | **Tipo** | **Restrições**  | **Valor padrão**                          |
-| ---------------- | -------- | --------------- | ----------------------------------------- |
-| mensagem de erro | Exibição | somente leitura | descrição do(s) campo(s) com problema     |
-
-| **Comandos**  | **Destino**                        | **Tipo** |
-| ------------- | ---------------------------------- | -------- |
-| corrigir      | Atividade "Preencher formulário"   | padrão   |
-
----
-
-#### Realizar login usuário
-
-| **Campo**         | **Tipo** | **Restrições**  | **Valor padrão**                    |
-| ----------------- | -------- | --------------- | ----------------------------------- |
-| dados do cadastro | Interno  | somente leitura | dados validados na etapa anterior   |
-
-| **Resultado**         | **Destino**     |
-| --------------------- | --------------- |
-| login realizado       | Fim do processo |
+| Cadastro realizado  | Atividade "Acessar aplicação"   |
+| Mensagem de erro    | "Campo inválido. Tente novamente." |
 
 ---
 
@@ -220,74 +137,26 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 
 | **Comandos**     | **Destino**                         | **Tipo** |
 | ---------------- | ----------------------------------- | -------- |
-| convidar usuário | Atividade "Exibir prompt de convite" | padrão  |
+| Convidar | Atividade "Exibir prompt de convite" | padrão  |
 
 ---
 
 #### Exibir prompt de convite
 
-| **Campo**        | **Tipo** | **Restrições**  | **Valor padrão**           |
-| ---------------- | -------- | --------------- | -------------------------- |
-| prompt de convite | Exibição | somente leitura | exibido pelo sistema       |
+| **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
+| ----------------- | -------------- | ------------------------------------- | ---------------- |
+| E-mail do colaborador            | Caixa de texto | obrigatório; deve ter formato válido  | vazio            |
+| Cargo  | Seleção única  | Admin / Colaborador                   | Colaborador      |
 
 | **Comandos**          | **Destino**                              | **Tipo** |
 | --------------------- | ---------------------------------------- | -------- |
-| preencher informações | Atividade "Inserir e-mail e perfil de acesso" | padrão |
-| cancelar              | Fim do processo                          | cancelar |
-
----
-
-#### Inserir e-mail e perfil de acesso
-
-| **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
-| ----------------- | -------------- | ------------------------------------- | ---------------- |
-| e-mail            | Caixa de texto | obrigatório; deve ter formato válido  | vazio            |
-| perfil de acesso  | Seleção única  | Admin / Colaborador                   | Colaborador      |
-
-| **Comandos** | **Destino**                       | **Tipo** |
-| ------------ | --------------------------------- | -------- |
-| enviar       | Atividade "Validar informações"   | padrão   |
-| cancelar     | Atividade "Exibir prompt de convite" | cancelar |
-
----
-
-#### Validar informações
-
-| **Campo**        | **Tipo** | **Restrições**                              | **Valor padrão** |
-| ---------------- | -------- | ------------------------------------------- | ---------------- |
-| e-mail           | Interno  | não pode ser vazio; deve ter formato válido | —                |
-| perfil de acesso | Interno  | deve ser Admin ou Colaborador               | —                |
+| Enviar Convite | Atividade "Exibir mensagem de convite enviado" | padrão |
+| Cancelar              | Fim do processo                          | cancelar |
 
 | **Resultado**        | **Destino**                          |
 | -------------------- | ------------------------------------ |
-| informações válidas  | Atividade "Gerar token de convite"   |
-| informações inválidas | Atividade "Exibir prompt de erro"   |
-
----
-
-#### Exibir prompt de erro
-
-| **Campo**        | **Tipo** | **Restrições**  | **Valor padrão**                       |
-| ---------------- | -------- | --------------- | -------------------------------------- |
-| mensagem de erro | Exibição | somente leitura | descrição do(s) campo(s) com problema  |
-
-| **Comandos** | **Destino**                                   | **Tipo** |
-| ------------ | --------------------------------------------- | -------- |
-| corrigir     | Atividade "Inserir e-mail e perfil de acesso" | padrão   |
-
----
-
-#### Gerar token de convite
-
-| **Campo**          | **Tipo** | **Restrições**  | **Valor padrão**                    |
-| ------------------ | -------- | --------------- | ----------------------------------- |
-| token de convite   | Interno  | único; gerado automaticamente | —                     |
-| e-mail associado   | Interno  | somente leitura | e-mail informado pelo administrador |
-| perfil associado   | Interno  | somente leitura | perfil informado pelo administrador |
-
-| **Resultado**     | **Destino**                          |
-| ----------------- | ------------------------------------ |
-| token gerado      | Atividade "Fechar prompt de convite" |
+| Convite enviado  | Atividade "Convite convite enviado com sucesso"   |
+| Mensagem | "Não foi possível enviar o convite. Tente novamente."   |
 
 ---
 
