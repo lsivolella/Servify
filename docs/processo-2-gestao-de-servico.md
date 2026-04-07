@@ -43,6 +43,27 @@ _* **Link** - campo que armazena uma URL_
 
 _* **Tabela** - campo formado por uma matriz de valores_
 
+## Processos
+
+---
+
+## Processo 1 – Exibição do Painel de Serviços
+
+---
+
+#### Ação (Exibição do Painel de Serviços)
+
+| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
+| ---             | ---              | ---            | ---               |
+| exeibir detalhes | [tipo de dados]  |                |                   |
+
+| **Comandos**         |  **Destino**                   | **Tipo** |
+| ---                  | ---                            | ---               |
+| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel  ) |
+| ***Exemplo:***       |                                |                   |
+| entrar               | Fim do Processo 1              | default           |
+| cadastrar            | Início do proceso de cadastro  |                   |
+
 
 **Nome da atividade 1**
 
@@ -72,3 +93,18 @@ _* **Tabela** - campo formado por uma matriz de valores_
 | ---                  | ---                            | ---               |
 | [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  ) |
 |                      |                                |                   |
+
+---
+ 
+## Wireframe
+
+---
+
+### Dashboard de Serviços
+![Dashboard de Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_dashboard.jpeg)
+
+### Cadastro de Novo Serviço
+![Tela Cadastro de Novo Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastro-servico.jpeg)
+
+### Edição de Serviço
+![Tela Edição de Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_edicao-servico.jpeg)
