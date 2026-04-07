@@ -57,9 +57,11 @@ O processo de **Criação de Convite para Admin e Colaborador** tem como objetiv
 
 O processo de **Registro de Usuário Convidado** tem como objetivo permitir que um usuário que recebeu um convite por e-mail conclua seu cadastro no sistema. O processo valida o token do convite, identifica o tipo de usuário (Admin ou Colaborador), exibe o formulário de cadastro correspondente e, após validação dos dados, realiza o login automaticamente. O processo se inicia com o usuário acessando o link de convite recebido por e-mail. Em seguida, o sistema recebe o token embutido no link e inicia o processo de validação. Há uma atividade executada pelo sistema em que o token presente no link é recebido e encaminhado para validação. Depois disso, o token recebido é verificado quanto à sua existência, validade e prazo de expiração. De acordo com a falta de correspondência, o sistema exibe uma mensagem informando que o link do convite é inválido ou expirou e então o processo é encerrado. Se a correspondência é positiva e o sistema identifica o perfil de acesso associado ao token do convite, ele redireciona para a página de cadastro correspondente. Logo em seguida, o sistema exibe o formulário de cadastro para o perfil de administrador ou o formulário de cadastro para o perfil de colaborador a depender do acesso. Então o usuário preenche o formulário de cadastro exibido conforme seu perfil de acesso. Esta atividade é compartilhada pelos fluxos de admin e colaborador. Depois há uma atividade do sistema em que os dados preenchidos no formulário são verificados quanto ao cumprimento das restrições definidas. Em caso de negativa, o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos e o usuário retorna ao formulário para efetuar os ajustes. Em caso de validação bem-sucedida dos dados, o novo cadastro é efetuado, o token de convite é invalidado e uma sessão autenticada é criada automaticamente para o usuário.
 
-## Fluxo
-
 # Processos de Gestão de Usuário
+
+---
+
+## Processo 1 – Autenticação e Registro de Cliente
 
 ---
 
@@ -138,7 +140,6 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | sessão criada       | Fim do processo |
 
 ---
----
 
 ## Processo 2 – Registro de Cliente
 
@@ -198,7 +199,6 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | --------------------- | --------------- |
 | login realizado       | Fim do processo |
 
----
 ---
 
 ## Processo 3 – Criação de Convite para Admin e Colaborador
@@ -303,7 +303,6 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | ---------------- | --------------- |
 | e-mail enviado   | Fim do processo |
 
----
 ---
 
 ## Processo 4 – Registro de Usuário Convidado
