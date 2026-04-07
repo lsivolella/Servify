@@ -14,85 +14,52 @@ O processo de **Gestão de Serviço** tem como objetivo permitir o cadastro e ma
 
 #### Detalhamento das atividades
 
-_Descreva aqui cada uma das propriedades das atividades do processo 2.
-Devem estar relacionadas com o modelo de processo apresentado anteriormente._
+---
 
-_Os tipos de dados a serem utilizados são:_
+#### Gerenciar de Serviços
 
-_* **Área de texto** - campo texto de múltiplas linhas_
+| **Campo**       | **Tipo**       | **Restrições**                               | **Valor default**  |
+| ---             | ---            | ---                                          | ---                |
+| buscar_servicos | Caixa de texto | máximo de 30 caracteres                      | Buscar Serviços    |
+| lista_servicos  | Tabela         | colunas: nome, valor, duração, status, ações | carregado do banco |
 
-_* **Caixa de texto** - campo texto de uma linha_
-
-_* **Número** - campo numérico_
-
-_* **Data** - campo do tipo data (dd-mm-aaaa)_
-
-_* **Hora** - campo do tipo hora (hh:mm:ss)_
-
-_* **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)_
-
-_* **Imagem** - campo contendo uma imagem_
-
-_* **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (tradicional radio button ou combobox)_
-
-_* **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (tradicional checkbox ou listbox)_
-
-_* **Arquivo** - campo de upload de documento_
-
-_* **Link** - campo que armazena uma URL_
-
-_* **Tabela** - campo formado por uma matriz de valores_
-
-## Processos
+| **Comandos**   |  **Destino**      | **Tipo** |
+| ---            | ---               | ---      |
+| novo_servico   | Cadastrar Serviço | default  |
+| editar_servico | Editar Serviço    | default  |
+| voltar         | Tela anterior     | cancel   |
 
 ---
 
-## Processo 1 – Exibição do Painel de Serviços
+#### Cadastrar Serviço
 
----
+| **Campo**    | **Tipo**       | **Restrições**                       | **Valor default**  |
+| ---          | ---            | ---                                  | ---                |
+| nome_servico | Caixa de texto | obrigatório, máximo de 30 caracteres | vazio              |
+| valor        | Número         | obrigatório, >= 0                    | 0,00               |
+| duracao      | Caixa de texto | obrigatório                          | vazio              |
+| status       | Seleção única  | valores: Ativo, Inativo              | Ativo              |
 
-#### Ação (Exibição do Painel de Serviços)
-
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| exeibir detalhes | [tipo de dados]  |                |                   |
-
-| **Comandos**         |  **Destino**                   | **Tipo** |
-| ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel  ) |
-| ***Exemplo:***       |                                |                   |
-| entrar               | Fim do Processo 1              | default           |
-| cadastrar            | Início do proceso de cadastro  |                   |
+| **Comandos** |  **Destino**       | **Tipo** |
+| ---          | ---                | ---      |
+| salvar       | Gerenciar Serviços | default  |
+| cancelar     | Gerenciar Serviços | default  |
 
 
-**Nome da atividade 1**
+#### Editar Serviço
 
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-| ***Exemplo:***  |                  |                |                   |
-| login           | Caixa de Texto   | formato de e-mail |                |
-| senha           | Caixa de Texto   | mínimo de 8 caracteres |           |
+| **Campo**    | **Tipo**       | **Restrições**                       | **Valor default**  |
+| ---          | ---            | ---                                  | ---                |
+| nome_servico | Caixa de texto | obrigatório, máximo de 30 caracteres | valor existente    |
+| valor        | Número         | obrigatório, >= 0                    | valor existente    |
+| duracao      | Caixa de texto | obrigatório                          | valor existente    |
+| status       | Seleção única  | valores: Ativo, Inativo              | valor existente    |
 
-| **Comandos**         |  **Destino**                   | **Tipo** |
-| ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel  ) |
-| ***Exemplo:***       |                                |                   |
-| entrar               | Fim do Processo 1              | default           |
-| cadastrar            | Início do proceso de cadastro  |                   |
-
-
-**Nome da atividade 2**
-
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-|                 |                  |                |                   |
-
-| **Comandos**         |  **Destino**                   | **Tipo**          |
-| ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  ) |
-|                      |                                |                   |
+| **Comandos**      |  **Destino**       | **Tipo** |
+| ---               | ---                | ---      |
+| salvar_alteracoes | Gerenciar Serviços | default  |
+| excluir           | Prompt Confirmação | default  |
+| cancelar          | Gerenciar Serviços | cancel   |
 
 ---
  
@@ -100,11 +67,11 @@ _* **Tabela** - campo formado por uma matriz de valores_
 
 ---
 
-### Dashboard de Serviços
-![Dashboard de Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_dashboard.jpeg)
+### Gerenciar Serviços
+![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico.jpeg)
 
-### Cadastro de Novo Serviço
-![Tela Cadastro de Novo Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastro-servico.jpeg)
+### Cadastrar Serviço
+![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico.jpeg)
 
-### Edição de Serviço
-![Tela Edição de Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_edicao-servico.jpeg)
+### Editar de Serviço
+![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_editar-servico.jpeg)
