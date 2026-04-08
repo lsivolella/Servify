@@ -351,7 +351,7 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 ![Tela Criação de Convite para Colaborador](images/wireframe/inviteColaboradoresServify.png)
 
 ### Registro de Colaboradores e Cliente
-![Tela Registro de Usuário Convidado](images/wireframe/listagemClientesServify.png.png)
+![Tela Registro de Usuário Convidado](images/wireframe/listagemClientesServify.png)
 ![Tela Registro de Usuário Convidado](images/wireframe/listagemColaboradoresServify.png)
 
 
