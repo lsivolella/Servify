@@ -35,16 +35,16 @@ A informatização do processo de Gestão de Colaborador traz as seguintes oport
 Em seguida, apresenta-se os modelos do processo de Gestão de Colaborador, descritos no padrão BPMN:
 
 ### Autenticação e Registro de Cliente
-![Autenticação e Registro de Cliente](images/bpmn-gestao-de-usuario-p1.png "Modelo BPMN do Processo 1 - Autenticação e Registro de Cliente.")
+![Autenticação e Registro de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp1.png "Modelo BPMN do Processo 1 - Autenticação e Registro de Cliente.")
 
 ### Subprocesso - Registro de Cliente
-![Subprocesso - Registro de Cliente](images/bpmn-gestao-de-usuario-p2.png "Modelo BPMN do Processo 1 - Subprocesso - Registro de Cliente.")
+![Subprocesso - Registro de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp2.png "Modelo BPMN do Processo 1 - Subprocesso - Registro de Cliente.")
 
 ### Criação de Convite para Admin e Colaborador
-![Criação de Convite para Admin e Colaborador](images/bpmn-gestao-de-usuario-p3.png "Modelo BPMN do Processo 1 - Criação de Convite para Admin e Colaborador")
+![Criação de Convite para Admin e Colaborador](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp3.png "Modelo BPMN do Processo 1 - Criação de Convite para Admin e Colaborador")
 
 ### Registro de Usuário Convidado
-![Registro de Usuário Convidado](images/bpmn-gestao-de-usuario-p4.png "Modelo BPMN do Processo 1 -Registro de Usuário Convidado.")
+![Registro de Usuário Convidado](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp4.png "Modelo BPMN do Processo 1 -Registro de Usuário Convidado.")
 
 ---
 
@@ -340,18 +340,16 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 ## Wireframe
 
 ### Autenticação e Registro de Cliente
-![Tela Autenticação](images/wireframe/loginServifySemErro.png)
-![Tela Autenticação](images/wireframe/loginServifyComErro.png)
+![Tela Autenticação](images/wireframe/gestao-de-usuario/loginServifySemErro.png)
+![Tela Autenticação](images/wireframe/gestao-de-usuario/loginServifyComErro.png)
 
 ### Subprocesso - Registro de Cliente
-![Tela Subprocesso - Registro de Cliente](images/wireframe/cadastroClienteServify.png)
-![Tela Subprocesso - Registro de Cliente](images/wireframe/cadastroColaboradorServify.png)
+![Tela Subprocesso - Registro de Cliente](images/wireframe/gestao-de-usuario/cadastroClienteServify.png)
+![Tela Subprocesso - Registro de Cliente](images/wireframe/gestao-de-usuario/cadastroColaboradorServify.png)
 
 ### Criação de Convite para Colaborador
-![Tela Criação de Convite para Colaborador](images/wireframe/inviteColaboradoresServify.png)
+![Tela Criação de Convite para Colaborador](images/wireframe/gestao-de-usuario/inviteColaboradoresServify.png)
 
 ### Registro de Colaboradores e Cliente
-![Tela Registro de Usuário Convidado](images/wireframe/listagemClientesServify.png)
-![Tela Registro de Usuário Convidado](images/wireframe/listagemColaboradoresServify.png)
-
-
+![Tela Registro de Usuário Convidado](images/wireframe/gestao-de-usuario/listagemClientesServify.png)
+![Tela Registro de Usuário Convidado](images/wireframe/gestao-de-usuario/listagemColaboradoresServify.png)
