@@ -1,16 +1,10 @@
 # 3.3.1 Processo 1 – GESTÃO DE USUÁRIO
 
----
-
 O processo de **Gestão de Usuário** tem como objetivo permitir o cadastro e manutenção das informações dos colaboradores e clientes da empresa, garantindo maior organização dos dados, rastreabilidade e apoio aos demais processos do sistema, como agendamento, prestação de serviços e cálculo de comissão.
 
 Atualmente, em muitos pequenos negócios, o controle de colaboradores é feito de maneira informal ou por meio de planilhas, o que pode gerar inconsistências cadastrais, retrabalho e dificuldade de integração com outros processos da operação. Com a informatização desse processo, será possível centralizar as informações dos profissionais, melhorar a confiabilidade dos dados e aumentar a eficiência administrativa do negócio.
 
----
-
 ## Oportunidades de melhoria
-
----
 
 A informatização do processo de Gestão de Colaborador traz as seguintes oportunidades de melhoria:
 
@@ -26,55 +20,17 @@ A informatização do processo de Gestão de Colaborador traz as seguintes oport
 
 • melhor rastreabilidade das alterações realizadas no cadastro.
 
----
-
 ## Modelagem
 
----
+Em seguida, apresentam-se os modelos dos sub-processos do processo de Gestão de Colaborador, descritos no padrão BPMN:
 
-Em seguida, apresenta-se os modelos do processo de Gestão de Colaborador, descritos no padrão BPMN:
-
-### Autenticação e Registro de Cliente
-![Autenticação e Registro de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp1.png "Modelo BPMN do Processo 1 - Autenticação e Registro de Cliente.")
-
-### Subprocesso - Registro de Cliente
-![Subprocesso - Registro de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp2.png "Modelo BPMN do Processo 1 - Subprocesso - Registro de Cliente.")
-
-### Criação de Convite para Admin e Colaborador
-![Criação de Convite para Admin e Colaborador](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp3.png "Modelo BPMN do Processo 1 - Criação de Convite para Admin e Colaborador")
-
-### Registro de Usuário Convidado
-![Registro de Usuário Convidado](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp4.png "Modelo BPMN do Processo 1 -Registro de Usuário Convidado.")
-
----
-
-## Detalhamento das atividades
-
----
-
-## Subprocesso 1 – Autenticação e Registro de Cliente
+### Subprocesso 1 – Autenticação e Registro de Cliente
 
 O processo de **Autenticação e Registro de Cliente** tem como objetivo permitir que um cliente acesse o sistema por meio do cadastro de uma nova conta ou pela autenticação com credenciais já existentes. O processo garante que apenas usuários com credenciais válidas obtenham acesso ao sistema. O processo se inicia com o usuário acessando a aplicação Web e apresentando a ele as opções disponíveis: criar uma nova conta ou digitar credenciais de acesso já existentes. Caso o usuário acione a opção de criação de uma nova conta, o sistema redireciona para o subprocesso de cadastro responsável pelo preenchimento e validação dos dados cadastrais do novo cliente. Ao ser concluído com sucesso, o sistema redireciona o usuário para a tela de autenticação. O detalhamento interno deste subprocesso está descrito no **Processo 2 – Registro de Cliente**. O usuário insere suas credenciais de acesso ao sistema (e-mail e senha). Esta atividade é inicializada tanto pelo fluxo de login direto quanto após a conclusão do cadastro. Depois há uma atividade executada pelo sistema em que as credenciais informadas são verificadas em relação à existência do usuário e à correspondência da senha. Não há interação direta do usuário nesta etapa. Caso a validação invalide a entrada, o sistema exibe uma mensagem de erro informando que as credenciais inseridas são inválidas. Então o usuário é redirecionado para tentar novamente. Caso a validação das credenciais seja bem-sucedida, uma sessão autenticada é criada para o usuário, concedendo a ele acesso ao sistema.
 
-## Subprocesso 2 – Registro de Cliente
+![Autenticação e Registro de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp1.png "Modelo BPMN do Processo 1 - Subprocesso - Autenticação e Registro de Cliente.")
 
-O processo de **Registro de Cliente** corresponde ao subprocesso de cadastro referenciado no Processo 1. Ele tem como objetivo coletar e validar as informações do novo cliente, efetuando seu login automaticamente ao final do cadastro bem-sucedido. O usuário preenche o formulário de cadastro com seus dados pessoais de acesso (esta é a única atividade de interação do usuário neste processo). Em seguida, há uma atividade executada pelo sistema em que os dados informados no formulário são verificados em relação ao cumprimento das restrições definidas (campos obrigatórios, e-mail único, correspondência de senha). Depois o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos. O usuário retorna ao formulário para efetuar os ajustes necessários. Após a validação bem-sucedida dos dados, o novo cadastro é registrado e uma sessão autenticada é criada automaticamente para o usuário encerrando o subprocesso.
-
-## Subprocesso 3 – Criação de Convite para Admin e Colaborador
-
-O processo de **Criação de Convite para Admin e Colaborador** tem como objetivo permitir que um administrador convide novos usuários para o sistema definindo seu e-mail e perfil de acesso. O sistema valida as informações, gera um token de convite e envia o convite por e-mail ao destinatário. O processo se inicia com o administrador acionando a funcionalidade de convite de novo usuário. Em seguida, o sistema exibe o prompt de convite para preenchimento das informações e exibe o formulário de convite para que o administrador insira o e-mail e o perfil de acesso do usuário convidado. O administrador preenche o e-mail do destinatário e define o perfil de acesso que será atribuído ao usuário convidado. Depois disso, há uma atividade do sistema em que e-mail e o perfil de acesso informados são verificados quanto ao formato e preenchimento obrigatório. Caso encontre algum erro, o sistema exibe uma mensagem de erro informando quais campos estão incorretos. Seguido disso, o administrador retorna ao formulário para corrigir os dados. Uma vez corrigido os dados ou inseridos eles corretamente, um token único de convite é gerado e associado ao e-mail e perfil de acesso definidos pelo administrador. Este token será utilizado para autenticar o convite no momento do registro do usuário. Em seguida, o sistema fecha o formulário de convite e aciona o serviço de e-mail para envio do convite ao destinatário. Ao final, o convite contendo o link com o token gerado é enviado ao endereço de e-mail informado pelo administrador.
-
-## Subprocesso 4 – Registro de Usuário Convidado
-
-O processo de **Registro de Usuário Convidado** tem como objetivo permitir que um usuário que recebeu um convite por e-mail conclua seu cadastro no sistema. O processo valida o token do convite, identifica o tipo de usuário (Admin ou Colaborador), exibe o formulário de cadastro correspondente e, após validação dos dados, realiza o login automaticamente. O processo se inicia com o usuário acessando o link de convite recebido por e-mail. Em seguida, o sistema recebe o token embutido no link e inicia o processo de validação. Há uma atividade executada pelo sistema em que o token presente no link é recebido e encaminhado para validação. Depois disso, o token recebido é verificado quanto à sua existência, validade e prazo de expiração. De acordo com a falta de correspondência, o sistema exibe uma mensagem informando que o link do convite é inválido ou expirou e então o processo é encerrado. Se a correspondência é positiva e o sistema identifica o perfil de acesso associado ao token do convite, ele redireciona para a página de cadastro correspondente. Logo em seguida, o sistema exibe o formulário de cadastro para o perfil de administrador ou o formulário de cadastro para o perfil de colaborador a depender do acesso. Então o usuário preenche o formulário de cadastro exibido conforme seu perfil de acesso. Esta atividade é compartilhada pelos fluxos de admin e colaborador. Depois há uma atividade do sistema em que os dados preenchidos no formulário são verificados quanto ao cumprimento das restrições definidas. Em caso de negativa, o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos e o usuário retorna ao formulário para efetuar os ajustes. Em caso de validação bem-sucedida dos dados, o novo cadastro é efetuado, o token de convite é invalidado e uma sessão autenticada é criada automaticamente para o usuário.
-
-## Subprocessos
-
----
-
-## Subprocesso 1 – Autenticação e Registro do Usuário
-
----
+#### Detalhamento das atividades
 
 #### Abrir aplicação
 
@@ -95,11 +51,23 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | Sessão criada (admi)      | Atividade "Registro de Usuário Convidado" |
 | Mensagem de erro    | "Credenciais inválidas. Tente novamente." |
 
+#### Wireframes
+
+![Tela Autenticação](images/wireframe/gestao-de-usuario/loginServifySemErro.png)
+
 ---
 
-## Subprocesso 2 – Registro de Cliente
+![Tela Autenticação](images/wireframe/gestao-de-usuario/loginServifyComErro.png)
 
 ---
+
+### Subprocesso 2 – Registro de Cliente
+
+O processo de **Registro de Cliente** corresponde ao subprocesso de cadastro referenciado no Processo 1. Ele tem como objetivo coletar e validar as informações do novo cliente, efetuando seu login automaticamente ao final do cadastro bem-sucedido. O usuário preenche o formulário de cadastro com seus dados pessoais de acesso (esta é a única atividade de interação do usuário neste processo). Em seguida, há uma atividade executada pelo sistema em que os dados informados no formulário são verificados em relação ao cumprimento das restrições definidas (campos obrigatórios, e-mail único, correspondência de senha). Depois o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos. O usuário retorna ao formulário para efetuar os ajustes necessários. Após a validação bem-sucedida dos dados, o novo cadastro é registrado e uma sessão autenticada é criada automaticamente para o usuário encerrando o subprocesso.
+
+![Subprocesso - Registro de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp2.png "Modelo BPMN do Processo 1 - Subprocesso - Registro de Cliente.")
+
+#### Detalhamento das atividades
 
 #### Preencher formulário
 
@@ -130,11 +98,91 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | Cadastro realizado  | Toast "Cadastro realizado com sucesso." e Atividade "Preencher formulário"  |
 | Mensagem de erro    | "Campo inválido" |
 
+#### Wireframes
+
+![Tela Subprocesso - Registro de Cliente](images/wireframe/gestao-de-usuario/cadastroClienteServify.png)
+
 ---
 
-## Subprocesso 3 – Registro de Usuários
+### Subprocesso 3 – Criação de Convite para Admin e Colaborador
+
+O processo de **Criação de Convite para Admin e Colaborador** tem como objetivo permitir que um administrador convide novos usuários para o sistema definindo seu e-mail e perfil de acesso. O sistema valida as informações, gera um token de convite e envia o convite por e-mail ao destinatário. O processo se inicia com o administrador acionando a funcionalidade de convite de novo usuário. Em seguida, o sistema exibe o prompt de convite para preenchimento das informações e exibe o formulário de convite para que o administrador insira o e-mail e o perfil de acesso do usuário convidado. O administrador preenche o e-mail do destinatário e define o perfil de acesso que será atribuído ao usuário convidado. Depois disso, há uma atividade do sistema em que e-mail e o perfil de acesso informados são verificados quanto ao formato e preenchimento obrigatório. Caso encontre algum erro, o sistema exibe uma mensagem de erro informando quais campos estão incorretos. Seguido disso, o administrador retorna ao formulário para corrigir os dados. Uma vez corrigido os dados ou inseridos eles corretamente, um token único de convite é gerado e associado ao e-mail e perfil de acesso definidos pelo administrador. Este token será utilizado para autenticar o convite no momento do registro do usuário. Em seguida, o sistema fecha o formulário de convite e aciona o serviço de e-mail para envio do convite ao destinatário. Ao final, o convite contendo o link com o token gerado é enviado ao endereço de e-mail informado pelo administrador.
+
+![Criação de Convite para Admin e Colaborador](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp3.png "Modelo BPMN do Processo 1 - Criação de Convite para Admin e Colaborador")
+
+#### Detalhamento das atividades
+
+#### Convidar usuário
+
+| **Comandos**     | **Destino**                         | **Tipo** |
+| ---------------- | ----------------------------------- | -------- |
+| Convidar | Atividade "Exibir prompt de convite" | padrão  |
 
 ---
+
+#### Exibir prompt de convite
+
+| **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
+| ----------------- | -------------- | ------------------------------------- | ---------------- |
+| E-mail do usuário            | Caixa de texto | obrigatório; deve ter formato válido  | vazio            |
+| Cargo  | Seleção única  | Admin / Colaborador                   | Colaborador      |
+
+| **Comandos**          | **Destino**                              | **Tipo** |
+| --------------------- | ---------------------------------------- | -------- |
+| Enviar Convite | Atividade "Exibir mensagem de convite enviado" | padrão |
+| Cancelar              | Fim do processo                          | cancelar |
+
+| **Resultado**        | **Destino**                          |
+| -------------------- | ------------------------------------ |
+| Convite enviado  | Atividade "Convite convite enviado com sucesso"   |
+| Mensagem | "Não foi possível enviar o convite. Tente novamente."   |
+
+---
+
+#### Fechar prompt de convite
+
+| **Comandos**          | **Destino**                              | **Tipo** |
+| --------------------- | ---------------------------------------- | -------- |
+| "X" | Atividade "Exibir mensagem de convite enviado" | padrão |
+
+| **Campo**          | **Tipo** | **Restrições**  | **Valor padrão**              |
+| ------------------ | -------- | --------------- | ----------------------------- |
+| prompt de convite  | Exibição | somente leitura | fechado automaticamente       |
+
+| **Resultado**     | **Destino**               |
+| ----------------- | ------------------------- |
+| prompt fechado    | Atividade "Enviar e-mail" |
+
+---
+
+#### Enviar e-mail
+
+| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**                        |
+| ------------------- | -------- | --------------- | --------------------------------------- |
+| destinatário        | Interno  | somente leitura | e-mail informado pelo administrador     |
+| link do convite     | Interno  | somente leitura | gerado com o token de convite           |
+
+| **Resultado**    | **Destino**     |
+| ---------------- | --------------- |
+| e-mail enviado   | Fim do processo |
+
+#### Wireframe
+
+![Tela Registro de Usuário Convidado](images/wireframe/gestao-de-usuario/listagemColaboradoresServify.png)
+
+---
+
+![Tela Criação de Convite para Colaborador](images/wireframe/gestao-de-usuario/inviteColaboradoresServify.png)
+
+---
+
+### Subprocesso 4 – Registro de Usuário Convidado
+
+O processo de **Registro de Usuário Convidado** tem como objetivo permitir que um usuário que recebeu um convite por e-mail conclua seu cadastro no sistema. O processo valida o token do convite, identifica o tipo de usuário (Admin ou Colaborador), exibe o formulário de cadastro correspondente e, após validação dos dados, realiza o login automaticamente. O processo se inicia com o usuário acessando o link de convite recebido por e-mail. Em seguida, o sistema recebe o token embutido no link e inicia o processo de validação. Há uma atividade executada pelo sistema em que o token presente no link é recebido e encaminhado para validação. Depois disso, o token recebido é verificado quanto à sua existência, validade e prazo de expiração. De acordo com a falta de correspondência, o sistema exibe uma mensagem informando que o link do convite é inválido ou expirou e então o processo é encerrado. Se a correspondência é positiva e o sistema identifica o perfil de acesso associado ao token do convite, ele redireciona para a página de cadastro correspondente. Logo em seguida, o sistema exibe o formulário de cadastro para o perfil de administrador ou o formulário de cadastro para o perfil de colaborador a depender do acesso. Então o usuário preenche o formulário de cadastro exibido conforme seu perfil de acesso. Esta atividade é compartilhada pelos fluxos de admin e colaborador. Depois há uma atividade do sistema em que os dados preenchidos no formulário são verificados quanto ao cumprimento das restrições definidas. Em caso de negativa, o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos e o usuário retorna ao formulário para efetuar os ajustes. Em caso de validação bem-sucedida dos dados, o novo cadastro é efetuado, o token de convite é invalidado e uma sessão autenticada é criada automaticamente para o usuário.
+
+![Registro de Usuário Convidado](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp4.png "Modelo BPMN do Processo 1 -Registro de Usuário Convidado.")
+
+#### Detalhamento das atividades
 
 #### Clicar no link do convite
 
@@ -274,82 +322,9 @@ O processo de **Registro de Usuário Convidado** tem como objetivo permitir que 
 | **Resultado**    | **Destino**     |
 | ---------------- | --------------- |
 | login realizado  | Fim do processo |
-
----
-
-## Subprocesso 4 – Criação de Convite para Admin e Colaborador
-
----
-
-#### Convidar usuário
-
-| **Comandos**     | **Destino**                         | **Tipo** |
-| ---------------- | ----------------------------------- | -------- |
-| Convidar | Atividade "Exibir prompt de convite" | padrão  |
-
----
-
-#### Exibir prompt de convite
-
-| **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
-| ----------------- | -------------- | ------------------------------------- | ---------------- |
-| E-mail do usuário            | Caixa de texto | obrigatório; deve ter formato válido  | vazio            |
-| Cargo  | Seleção única  | Admin / Colaborador                   | Colaborador      |
-
-| **Comandos**          | **Destino**                              | **Tipo** |
-| --------------------- | ---------------------------------------- | -------- |
-| Enviar Convite | Atividade "Exibir mensagem de convite enviado" | padrão |
-| Cancelar              | Fim do processo                          | cancelar |
-
-| **Resultado**        | **Destino**                          |
-| -------------------- | ------------------------------------ |
-| Convite enviado  | Atividade "Convite convite enviado com sucesso"   |
-| Mensagem | "Não foi possível enviar o convite. Tente novamente."   |
-
----
-
-#### Fechar prompt de convite
-
-| **Comandos**          | **Destino**                              | **Tipo** |
-| --------------------- | ---------------------------------------- | -------- |
-| "X" | Atividade "Exibir mensagem de convite enviado" | padrão |
-
-| **Campo**          | **Tipo** | **Restrições**  | **Valor padrão**              |
-| ------------------ | -------- | --------------- | ----------------------------- |
-| prompt de convite  | Exibição | somente leitura | fechado automaticamente       |
-
-| **Resultado**     | **Destino**               |
-| ----------------- | ------------------------- |
-| prompt fechado    | Atividade "Enviar e-mail" |
-
----
-
-#### Enviar e-mail
-
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**                        |
-| ------------------- | -------- | --------------- | --------------------------------------- |
-| destinatário        | Interno  | somente leitura | e-mail informado pelo administrador     |
-| link do convite     | Interno  | somente leitura | gerado com o token de convite           |
-
-| **Resultado**    | **Destino**     |
-| ---------------- | --------------- |
-| e-mail enviado   | Fim do processo |
-
----
  
-## Wireframe
+#### Wireframes
 
-### Autenticação e Registro de Cliente
-![Tela Autenticação](images/wireframe/gestao-de-usuario/loginServifySemErro.png)
-![Tela Autenticação](images/wireframe/gestao-de-usuario/loginServifyComErro.png)
-
-### Subprocesso - Registro de Cliente
-![Tela Subprocesso - Registro de Cliente](images/wireframe/gestao-de-usuario/cadastroClienteServify.png)
 ![Tela Subprocesso - Registro de Cliente](images/wireframe/gestao-de-usuario/cadastroColaboradorServify.png)
 
-### Criação de Convite para Colaborador
-![Tela Criação de Convite para Colaborador](images/wireframe/gestao-de-usuario/inviteColaboradoresServify.png)
-
-### Registro de Colaboradores e Cliente
 ![Tela Registro de Usuário Convidado](images/wireframe/gestao-de-usuario/listagemClientesServify.png)
-![Tela Registro de Usuário Convidado](images/wireframe/gestao-de-usuario/listagemColaboradoresServify.png)
