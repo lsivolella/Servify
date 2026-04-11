@@ -223,10 +223,13 @@ O processo Edição de Serviço se inicia com o administrador acionando o menu d
 ---
 
 ### Gerenciar Serviços
-![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico.jpg)
+![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
 
 ### Cadastrar Serviço
-![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico.jpg)
+![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
 
 ### Editar Serviço
-![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_editar-servico.jpg)
+![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_editar-servico_2.jpg)
+
+### Excluir Serviço
+![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_excluir-servico_2.jpg)
