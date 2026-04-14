@@ -6,6 +6,8 @@ Usuários definidos com perfil de **Cliente** podem ver e alterar os seus própr
 
 ## Oportunidades de melhoria
 
+A informatização do processo de Gestão de Agendamento traz as seguintes oportunidades de melhoria:
+
 - Previne que colaboradores agendem **serviços concomintantes**.
 - Melhor **organização** para colaboradores.
 - Melhora a **experiência do cliente**.
