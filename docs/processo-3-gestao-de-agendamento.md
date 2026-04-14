@@ -48,6 +48,12 @@ O processo de **Gestão de Agendamento** tem como objetivo permitir que um admin
 | Semana alterada         | Calendário atualizado para a semana selecionada  |
 | Agendamento selecionado | Atividade "Visualizar detalhes do agendamento"   |
 | Novo agendamento        | Atividade "Criar agendamento"                    |
+
+## Wireframes
+
+**Lista de agendamentos**
+
+![Lista de agendamentos — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-agendamentos.jpeg "Wireframe: lista de agendamentos (administrador)")
  
 ---
  
@@ -68,6 +74,12 @@ O processo de **Gestão de Agendamento** tem como objetivo permitir que um admin
 | Agendamentos encontrados | Listagem filtrada pelo termo digitado              |
 | Nenhum resultado        | Listagem vazia                                      |
 | Busca apagada           | Retorno ao calendário semanal padrão                |
+
+## Wireframes
+
+**Busca e filtros**
+
+![Busca e filtros — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-busca.jpeg "Wireframe: busca e filtros (administrador)")
  
 ---
  
@@ -93,6 +105,12 @@ O processo de **Gestão de Agendamento** tem como objetivo permitir que um admin
 | Agendamento criado      | Toast de sucesso e Atividade "Acessar a lista de agendamentos" |
 | Prompt de erro          | "Campo inválido."                                     |
 | Operação cancelada      | Atividade "Acessar a lista de agendamentos"           |
+
+## Wireframes
+
+**Criação de agendamento**
+
+![Criação de agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-criacao.jpeg "Wireframe: criação de agendamento (administrador)")
  
 ---
  
@@ -120,6 +138,12 @@ O processo de **Gestão de Agendamento** tem como objetivo permitir que um admin
 | Modal de edição aberto  | Atividade "Editar agendamento"                        |
 | Modal de exclusão aberto | Atividade "Excluir agendamento"                      |
 | Modal fechado           | Atividade "Acessar a lista de agendamentos"           |
+
+## Wireframes
+
+**Detalhes do agendamento**
+
+![Detalhes do agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-detalhes.jpeg "Wireframe: detalhes do agendamento (administrador)")
  
 ---
  
@@ -147,6 +171,12 @@ O processo de **Gestão de Agendamento** tem como objetivo permitir que um admin
 | Agendamento alterado    | Toast de sucesso e Atividade "Acessar a lista de agendamentos" |
 | Prompt de erro          | "Não foi possível salvar alteração. Tente novamente." |
 | Operação cancelada      | Atividade "Acessar a lista de agendamentos"           |
+
+## Wireframes
+
+**Edição do agendamento**
+
+![Edição do agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-edicao.jpeg "Wireframe: edição do agendamento (administrador)")
  
 ---
 
@@ -167,77 +197,8 @@ O processo de **Gestão de Agendamento** tem como objetivo permitir que um admin
 | Agendamento excluído    | Toast de sucesso e Atividade "Acessar a lista de agendamentos" |
 | Operação cancelada      | Atividade "Acessar a lista de agendamentos"           |
 
-### Wireframes
-
-Os wireframes abaixo estão agrupados por perfil de acesso (**administrador**, **prestador/colaborador** e **cliente**), na ordem sugerida da jornada na interface.
-
-#### Visualização do administrador
-
-**Lista de agendamentos**
-
-![Lista de agendamentos — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-agendamentos.jpeg "Wireframe: lista de agendamentos (administrador)")
-
-**Busca e filtros**
-
-![Busca e filtros — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-busca.jpeg "Wireframe: busca e filtros (administrador)")
-
-**Criação de agendamento**
-
-![Criação de agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-criacao.jpeg "Wireframe: criação de agendamento (administrador)")
-
-**Detalhes do agendamento**
-
-![Detalhes do agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-detalhes.jpeg "Wireframe: detalhes do agendamento (administrador)")
-
-**Edição do agendamento**
-
-![Edição do agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-edicao.jpeg "Wireframe: edição do agendamento (administrador)")
-
-#### Visualização do prestador (colaborador)
-
-**Lista de agendamentos**
-
-![Lista de agendamentos — prestador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_prestador-agendamentos.jpeg "Wireframe: lista de agendamentos (prestador)")
-
-**Busca e filtros**
-
-![Busca e filtros — prestador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_prestador-busca.jpeg "Wireframe: busca e filtros (prestador)")
-
-**Detalhes do agendamento**
-
-![Detalhes do agendamento — prestador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_prestador-detalhes.jpeg "Wireframe: detalhes do agendamento (prestador)")
-
-**Edição do agendamento**
-
-![Edição do agendamento — prestador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_prestador-edicao.jpeg "Wireframe: edição do agendamento (prestador)")
+## Wireframes
 
 **Exclusão / cancelamento**
 
 ![Exclusão ou cancelamento — prestador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_prestador-exclusao.jpeg "Wireframe: exclusão ou cancelamento (prestador)")
-
-#### Visualização do cliente
-
-**Lista de agendamentos**
-
-![Lista de agendamentos — cliente](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_cliente-agendamentos.jpeg "Wireframe: lista de agendamentos (cliente)")
-
-**Busca e filtros**
-
-![Busca e filtros — cliente](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_cliente-busca.jpeg "Wireframe: busca e filtros (cliente)")
-
-**Criação de agendamento**
-
-![Criação de agendamento — cliente](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_cliente-criacao.jpeg "Wireframe: criação de agendamento (cliente)")
-
-**Detalhes do agendamento**
-
-![Detalhes do agendamento — cliente](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_cliente-detalhes.jpeg "Wireframe: detalhes do agendamento (cliente)")
-
-**Edição do agendamento**
-
-![Edição do agendamento — cliente](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_cliente-edicao.jpeg "Wireframe: edição do agendamento (cliente)")
-
-**Exclusão / cancelamento**
-
-![Exclusão ou cancelamento — cliente](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_cliente-exclusao.jpeg "Wireframe: exclusão ou cancelamento (cliente)")
-
