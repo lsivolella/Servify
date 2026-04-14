@@ -1,16 +1,10 @@
 # 3.3.2 Processo 2 – GESTÃO DE SERVIÇO
 
----
-
 O processo de **Gestão de Serviço** tem como objetivo permitir o cadastro e manutenção das informações relacionados aos serviços prestados pela empresa. O cadastro de serviços permite que eles sejam exibidos a todos os clientes com informações padronizadas e estruturadas, além de permitir que colaboradores tenham a facilidade de registrar o leque de serviços que estão aptos a prestar.
-
----
 
 ## Oportunidades de melhoria
 
----
-
-A informatização do processo de Gestão de Serviços traz as seguintes oportunidades de melhoria:
+A informatização do processo de Gestão de Serviço traz as seguintes oportunidades de melhoria:
 
 • padronização dos serviços oferecidos pela empresa, evitando inconsistências na descrição, duração e valores;
 
@@ -30,31 +24,25 @@ A informatização do processo de Gestão de Serviços traz as seguintes oportun
 
 • aumento da confiabilidade das informações utilizadas nos processos financeiros e operacionais.
 
----
-
 ## Modelagem
 
----
-
-Em seguida, apresenta-se os modelos do processo de Gestão de Serviço, descritos no padrão BPMN:
+Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito no padrão BPMN:
 
 ![Exemplo de um Modelo BPMN do PROCESSO 2](images/process.png "Modelo BPMN do Processo 2.")
 
 ---
 
-## Detalhamento das atividades
+### Detalhamento das atividades
 
----
-
-## Processo 1 – Gerenciamento de serviços
+#### Processo 1 – Gerenciamento de serviços
 
 O processo de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O processo se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço ou selecionar um serviço existente para edição.
 
-## Processo 2 – Cadastro de Serviço
+#### Processo 2 – Cadastro de Serviço
 
 O processo de Cadastro de Serviço se inicia com o administrador acionando o botão "+Adicionar". O sistema exibe o modal de cadastro de novo serviço com todos os campos em branco, aguardando preenchimento. O administrador preenche os campos do formulário de cadastro de novo serviço. Em seguida, os dados preenchidos no formulário de adição são verificados pelo sistema quanto ao cumprimento das restrições definidas. Não há interação direta do administrador nesta etapa. Caso haja erro, o sistema exibe uma mensagem de erro indicando quais campos estão incorretos ou incompletos. O administrador então retorna ao formulário para efetuar as correções necessárias. Após a validação bem-sucedida dos dados, o novo serviço é registrado no banco de dados e o sistema retorna para a tela de listagem com o serviço incluído.
 
-## Processo 3 – Edição de Serviço
+#### Processo 3 – Edição de Serviço
 
 O processo Edição de Serviço se inicia com o administrador acionando o menu de ações (⋮) de um serviço existente e seleciona a opção de edição. O sistema exibe o modal de edição com os campos preenchidos com os dados atuais do serviço selecionado. O administrador modifica os campos do formulário de edição do serviço selecionado. Os campos são pré-carregados com os valores atuais do registro. O administrador pode também acionar a exclusão do serviço diretamente nesta tela. Após a confirmação das alterações pelo administrador, o registro existente é atualizado no banco de dados com os novos valores informados e o sistema retorna para a tela de listagem. Caso o administrador selecione "Excluir", o sistema solicita a confirmação do administrador antes de remover o serviço. Caso o administrador cancele, retorna ao modal de edição sem realizar alterações. Após a confirmação da exclusão, o registro do serviço é removido do banco de dados e o sistema retorna para a tela de listagem atualizada.
 
@@ -230,9 +218,7 @@ O processo Edição de Serviço se inicia com o administrador acionando o menu d
 
 ---
  
-## Wireframe
-
----
+## Wireframes
 
 ### Gerenciar Serviços
 ![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
