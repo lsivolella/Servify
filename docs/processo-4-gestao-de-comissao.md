@@ -9,11 +9,17 @@ Após a execução de qualquer uma dessas ações, o sistema retorna à listagem
 A informatização do processo de Gestão de Comissão traz as seguintes oportunidades de melhoria:
 
 • Implementação de **validações automáticas** para evitar cadastro de comissões duplicadas.
+
 • Configuração de regras automáticas: cálculo automático de comissão (percentual por serviço e faixa de valor) reduzindo erros manuais.
+
 • Inclusão de **confirmação antes da exclusão** de uma comissão.
+
 • Possibilidade de **filtros e busca na listagem de comissões** para facilitar a navegação.
+
 • Registro de **histórico de alterações** para auditoria.
+
 • Feedback visual ao usuário após operações de cadastro, edição ou exclusão.
+
 • Integração com dashboards financeiros e/ou relatórios.
 
 ## Modelagem
