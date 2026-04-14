@@ -1,28 +1,32 @@
-### 3.3.4 Processo 4 – GESTÃO DE COMISSÃO
+# 3.3.4 Processo 4 – GESTÃO DE COMISSÃO
 
-O **processo de Gestão de Comissão** tem como objetivo permitir que o usuário visualize, cadastre, edite e exclua comissões dentro do sistema. Inicialmente, o sistema apresenta a listagem das comissões existentes, permitindo ao usuário visualizar os registros disponíveis. A partir dessa visualização, o usuário pode decidir realizar uma das ações disponíveis: cadastrar uma nova comissão, editar uma comissão existente ou excluir uma comissão.
+O processo de **Gestão de Comissão** tem como objetivo permitir que o usuário visualize, cadastre, edite e exclua comissões dentro do sistema. Inicialmente, o sistema apresenta a listagem das comissões existentes, permitindo ao usuário visualizar os registros disponíveis. A partir dessa visualização, o usuário pode decidir realizar uma das ações disponíveis: cadastrar uma nova comissão, editar uma comissão existente ou excluir uma comissão.
 
 Após a execução de qualquer uma dessas ações, o sistema retorna à listagem atualizada de comissões. O usuário pode repetir o ciclo de gerenciamento quantas vezes desejar até decidir finalizar o processo(ir para outra tela ou sair do software).
 
-#### Oportunidades de melhoria
+## Oportunidades de melhoria
 
-Algumas oportunidades de melhoria identificadas no processo são:
+A informatização do processo de Gestão de Comissão traz as seguintes oportunidades de melhoria:
 
-- Implementação de **validações automáticas** para evitar cadastro de comissões duplicadas.
-- Inclusão de **confirmação antes da exclusão** de uma comissão.
-- Possibilidade de **filtros e busca na listagem de comissões** para facilitar a navegação.
-- Registro de **histórico de alterações** para auditoria.
-- Feedback visual ao usuário após operações de cadastro, edição ou exclusão.
+• Implementação de **validações automáticas** para evitar cadastro de comissões duplicadas.
+• Configuração de regras automáticas: cálculo automático de comissão (percentual por serviço e faixa de valor) reduzindo erros manuais.
+• Inclusão de **confirmação antes da exclusão** de uma comissão.
+• Possibilidade de **filtros e busca na listagem de comissões** para facilitar a navegação.
+• Registro de **histórico de alterações** para auditoria.
+• Feedback visual ao usuário após operações de cadastro, edição ou exclusão.
+• Integração com dashboards financeiros e/ou relatórios.
 
-Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
+## Modelagem
+
+Em seguida, apresenta-se o modelo do processo de Gestão de Comissão, descrito no padrão BPMN:
 
 ![Modelo BPMN do Processo 4](images/bpmn/gestao-de-comissao/bpmn-gestao-de-comissao-sp1.png "Modelo BPMN do Processo 4 - Cadastro de Comissão.")
 
 ---
 
-## Detalhamento das atividades
+### Detalhamento das atividades
 
-### Listar comissões
+#### Listar comissões
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -35,7 +39,7 @@ Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
 
 ---
 
-### Exibir comissões
+#### Exibir comissões
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -50,7 +54,7 @@ Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
 
 ---
 
-### 1 - Cadastrar comissão
+#### 1 - Cadastrar comissão
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -66,7 +70,7 @@ Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
 
 ---
 
-### 2 - Deletar comissão
+#### 2 - Deletar comissão
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -80,7 +84,7 @@ Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
 
 ---
 
-### 3 - Editar comissão
+#### 3 - Editar comissão
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -93,3 +97,5 @@ Em seguida, apresenta-se o modelo do processo utilizando o padrão BPMN.
 | --- | --- | --- |
 | salvar alterações | Listar comissões | default |
 | cancelar | Exibir comissões | cancel |
+
+## Wireframes
