@@ -266,7 +266,7 @@ O subprocesso de **Registro de Usuário Convidado** tem como objetivo permitir q
  
 ### Wireframes
 
-![Tela Subprocesso - Registro de Cliente](images/wireframe/gestao-de-usuario/cadastroColaboradorServify.png)
+![Tela Registro de Cliente](images/wireframe/gestao-de-usuario/cadastroColaboradorServify.png)
 
 ## Subprocesso 5 – Gerenciamento de Cliente
 
@@ -354,4 +354,4 @@ O subprocesso de **Gerenciamento de Cliente** tem como objetivo permitir que um 
 
 ### Wireframes
 
-![Tela Registro de Usuário Convidado](images/wireframe/gestao-de-usuario/listagemClientesServify.png)
+![Tela Gerenciamento de Clintes](images/wireframe/gestao-de-usuario/listagemClientesServify.png)
