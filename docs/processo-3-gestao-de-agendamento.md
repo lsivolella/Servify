@@ -1,19 +1,23 @@
-### 3.3.3 Processo 3 – GESTÃO DE AGENDAMENTO
+# 3.3.3 Processo 3 – GESTÃO DE AGENDAMENTO
 
 O processo de **Gestão de Agendamento** tem como objetivo permitir que o usuário visualize agendamentos com base no seu perfil de acesso, permitindo que clientes e colaboradores se organizem para seus atendimentos e que o gestor possa ter uma visão global dos serviços sendo prestados.
 
 Usuários definidos com perfil de **Cliente** podem ver e alterar os seus próprios agendamentos. Usuários com perfil de **Colaborador** podem ver e alterar os agendamentos em que são os responsáveis pelo serviço. Usuários com o perfil de **Admin** podem ver e alterar todos os agendamentos existentes.
 
-#### Oportunidades de melhoria
+## Oportunidades de melhoria
 
 - Previne que colaboradores agendem **serviços concomintantes**.
 - Melhor **organização** para colaboradores.
 - Melhora a **experiência do cliente**.
 - Facilita a **gestão de recursos** do estabelicimento.
 
+## Modelagem
+
+Em seguida, apresenta-se o modelo do processo de Gestão de Agendamento, descritos no padrão BPMN:
+
 ![Modelo BPMN do Processo 3](images/bpmn/bpmn-gestao-de-agendamento.png "Modelo BPMN do Processo 3.")
 
-#### Detalhamento das atividades
+### Detalhamento das atividades
 
 _Descreva aqui cada uma das propriedades das atividades do processo 3. 
 Devem estar relacionadas com o modelo de processo apresentado anteriormente._
@@ -80,4 +84,7 @@ _* **Tabela** - campo formado por uma matriz de valores_
 **Exibir Formulário de Agendamento**
 
 **Exibir Confirmação de Agendamento**
+
+### Wireframes
+
 
