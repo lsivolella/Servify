@@ -122,8 +122,14 @@ O subprocesso **Edição de Serviço** se inicia com o administrador acionando o
  
 ### Wireframes
 
+### Exibir Serviços
+![Tela Exibir Serviços](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
+
 ### Editar Serviço
-![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_editar-servico_2.jpg)
+![Tela Editar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_editar-servico_2.jpg)
 
 ### Excluir Serviço
-![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_excluir-servico_2.jpg)
+![Tela Editar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_excluir-servico_2.jpg)
+
+### Cadastrar Serviço
+![Tela Cadastrar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
