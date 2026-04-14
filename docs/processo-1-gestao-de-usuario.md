@@ -118,6 +118,8 @@ O subprocesso de **Gerenciamento de Colaboradores** tem como objetivo permitir q
 
 ![Exclusão de Perfil de Colaborador](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp6.png "Modelo BPMN do Processo 1 - Exclusão de Perfil de Colaborador")
 
+![Busca de Perfil de Colaborador](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp7.png "Modelo BPMN do Processo 1 - Busca de Perfil de Colaborador")
+
 
 ### Detalhamento das atividades
 
@@ -230,7 +232,7 @@ O subprocesso de **Gerenciamento de Colaboradores** tem como objetivo permitir q
 
 O subprocesso de **Registro de Usuário Convidado** tem como objetivo permitir que um usuário que recebeu um convite por e-mail conclua seu cadastro no sistema. O subprocesso se inicia com o usuário acessando o link de convite recebido por e-mail. Em caso de sucesso, o usuário acessa a aplicação na tela de "Completar Cadastro" referente ao nível de acesso correspondente. Logo em seguida, o sistema exibe o formulário de cadastro para o perfil de administrador ou o formulário de cadastro para o perfil de colaborador a depender do acesso. Então o usuário preenche o formulário de cadastro exibido conforme seu perfil de acesso. Esta atividade é compartilhada pelos fluxos de admin e colaborador. Depois há uma atividade do sistema em que os dados preenchidos no formulário são verificados quanto ao cumprimento das restrições definidas. Em caso de negativa, o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos e o usuário retorna ao formulário para efetuar os ajustes. Em caso de validação bem-sucedida dos dados, o novo cadastro é efetuado, o token de convite é invalidado e uma sessão autenticada é criada automaticamente para o usuário.
 
-![Registro de Usuário Convidado](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp7.png "Modelo BPMN do Processo 1 -Registro de Usuário Convidado.")
+![Registro de Usuário Convidado](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp8.png "Modelo BPMN do Processo 1 -Registro de Usuário Convidado.")
 
 ### Detalhamento das atividades
 
@@ -273,7 +275,11 @@ O subprocesso de **Gerenciamento de Cliente** tem como objetivo permitir que um 
 - Caso o admin queira editar um usuário de cliente, ele pode clicar no ícone de lápis e adaptar a informação atual do sistema daquele usuário e depois clicar em "Salvar". Caso tenha sucesso, uma mensagem de sucesso aparece no canto superior direito para o admin. O administrador, ainda pode no modal, clicar no "X" para fechar o modal ou "Cancelar" para cancelar a operação e fechar o modal.
 - Caso o admin queira excluir um usuário de cliente, ele pode clicar no ícone da lixeira e depois com o modal aberto, pressionar o botão "Excluir" para confirmar a exclusão daquele cliente e seu cadastro e acesso do sistema. O administrador, ainda pode no modal, clicar no "X" para fechar o modal ou "Cancelar" para cancelar a operação e fechar o modal.
 
-![Exclusão de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp8.png "Modelo BPMN do Processo 1 - Exclusão de Cliente.")
+![Gerenciamento de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp9.png "Modelo BPMN do Processo 1 - Gerenciamento de Cliente.")
+
+![Busca de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp7.png "Modelo BPMN do Processo 1 - Busca de Cliente.")
+
+![Edição de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp5.png "Modelo BPMN do Processo 1 - Edição de Cliente.")
 
 ![Exclusão de Usuário](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp6.png "Modelo BPMN do Processo 1 - Exclusão de Usuário.")
 
