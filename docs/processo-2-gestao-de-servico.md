@@ -32,7 +32,9 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito n
 
 O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O subprocesso se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço ou selecionar um serviço existente para edição.
 
-![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp1.png "Modelo BPMN do Processo 2 - Subprocesso - Gerenciamento de Serviços")
+![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-gerenciamento-servicos.png "Modelo BPMN do Processo 2 - Subprocesso - Gerenciamento de Serviços")
+
+![Busca de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-busca-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Busca de Serviço")
 
 ### Detalhamento das atividades
 
@@ -56,17 +58,17 @@ O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o
 
 ### Wireframes
 
-![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
+![Tela Gerenciar Serviços](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
 
 ## Subrocesso 2 – Cadastro de Serviço
 
 O subprocesso de **Cadastro de Serviço** se inicia com o administrador acionando o botão "Adicionar". O sistema exibe o modal de cadastro de novo serviço com todos os campos em branco, aguardando preenchimento. O administrador preenche os campos do formulário de cadastro de novo serviço. Em seguida, os dados preenchidos no formulário de adição são verificados pelo sistema quanto ao cumprimento das restrições definidas. Não há interação direta do administrador nesta etapa. Caso haja erro, o sistema exibe uma mensagem de erro indicando quais campos estão incorretos ou incompletos. O administrador então retorna ao formulário para efetuar as correções necessárias. Após a validação bem-sucedida dos dados, o novo serviço é registrado no banco de dados e o sistema retorna para a tela de listagem com o serviço incluído.
 
-![Cadastro de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp2.png "Modelo BPMN do Processo 2 - Subprocesso - Cadastro de Serviço")
+![Cadastro de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-cadastro-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Cadastro de Serviço")
 
 ### Detalhamento das atividades
 
-#### Preencher formulário
+#### Formulário de Serviço
  
 | **Campo**         | **Tipo**       | **Restrições**               | **Valor padrão** |
 | ----------------- | -------------- | ---------------------------- | ---------------- |
@@ -83,15 +85,17 @@ O subprocesso de **Cadastro de Serviço** se inicia com o administrador acionand
 
 ### Wireframes
 
-![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
+![Tela Cadastrar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
 
 ## Subprocesso 3 – Edição de Serviço
 
 O subprocesso **Edição de Serviço** se inicia com o administrador acionando o botão de edição de um serviço. O sistema exibe o modal de edição com os campos preenchidos com os dados atuais do serviço selecionado. O administrador modifica os campos do formulário de edição do serviço selecionado. O administrador pode também acionar a exclusão do serviço diretamente nesta tela. Após a confirmação das alterações pelo administrador, o registro existente é atualizado no banco de dados com os novos valores informados e o sistema retorna para a tela de listagem. Caso o administrador selecione "Excluir", o sistema solicita a confirmação do administrador antes de remover o serviço. Caso o administrador cancele, retorna ao modal de edição sem realizar alterações. Após a confirmação da exclusão, o registro do serviço é removido do banco de dados e o sistema retorna para a tela de listagem atualizada.
 
-![Edição de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp3.png "Modelo BPMN do Processo 2 - Subprocesso - Edição de Serviços")
+![Edição de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-edicao-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Edição de Serviço")
 
-#### Editar dados do serviço
+### Detalhamento das atividades
+
+#### Edição de Serviço
  
 | **Campo**         | **Tipo**       | **Restrições**               | **Valor padrão** |
 | ----------------- | -------------- | ---------------------------- | ---------------- |
@@ -122,14 +126,26 @@ O subprocesso **Edição de Serviço** se inicia com o administrador acionando o
  
 ### Wireframes
 
-### Exibir Serviços
-![Tela Exibir Serviços](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
-
-### Editar Serviço
 ![Tela Editar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_editar-servico_2.jpg)
 
-### Excluir Serviço
-![Tela Editar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_excluir-servico_2.jpg)
+## Subprocesso 4 – Exclusão de Serviço
 
-### Cadastrar Serviço
-![Tela Cadastrar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
+O subprocesso **Exclusçao de Serviço** se inicia com o administrador acionando o botão de exclusão de um serviço. O sistema exibe o modal de confirmação de exclusão e após a confirmação, as informações são removidas do sistema de acordo com as regras de negócio. Em caso de negativa, o modal é fechado sem nenhuma consequência.
+
+![Exclusão de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-exclusao-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Exclusão de Serviço")
+
+#### Exclusão de Serviço
+ 
+| **Campo**               | **Tipo** | **Restrições**  | **Valor padrão**              |
+| ----------------------- | -------- | --------------- | ----------------------------- |
+| serviço selecionado     | Exibição | somente leitura | nome do serviço a excluir     |
+| confirmação de exclusão | Seleção  | confirmar / cancelar | cancelar                 |
+ 
+| **Comandos**       | **Destino**                       | **Tipo**   |
+| ------------------ | --------------------------------- | ---------- |
+| confirmar exclusão | Atividade "Gerenciar serviços"    | destrutivo |
+| cancelar           | Atividade "Gerenciar serviços"    | cancelar   |
+
+### Wireframes
+
+![Tela Excluir Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_excluir-servico_2.jpg)
