@@ -28,81 +28,44 @@ A informatização do processo de Gestão de Serviço traz as seguintes oportuni
 
 Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito no padrão BPMN:
 
-![Exemplo de um Modelo BPMN do PROCESSO 2](images/process.png "Modelo BPMN do Processo 2.")
+## Subprocesso 1 – Gerenciamento de Serviços
 
----
+O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O subprocesso se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço ou selecionar um serviço existente para edição.
+
+![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp1.png "Modelo BPMN do Processo 2 - Subprocesso - Gerenciamento de Serviços")
 
 ### Detalhamento das atividades
-
-#### Processo 1 – Gerenciamento de serviços
-
-O processo de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O processo se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço ou selecionar um serviço existente para edição.
-
-#### Processo 2 – Cadastro de Serviço
-
-O processo de Cadastro de Serviço se inicia com o administrador acionando o botão "+Adicionar". O sistema exibe o modal de cadastro de novo serviço com todos os campos em branco, aguardando preenchimento. O administrador preenche os campos do formulário de cadastro de novo serviço. Em seguida, os dados preenchidos no formulário de adição são verificados pelo sistema quanto ao cumprimento das restrições definidas. Não há interação direta do administrador nesta etapa. Caso haja erro, o sistema exibe uma mensagem de erro indicando quais campos estão incorretos ou incompletos. O administrador então retorna ao formulário para efetuar as correções necessárias. Após a validação bem-sucedida dos dados, o novo serviço é registrado no banco de dados e o sistema retorna para a tela de listagem com o serviço incluído.
-
-#### Processo 3 – Edição de Serviço
-
-O processo Edição de Serviço se inicia com o administrador acionando o menu de ações (⋮) de um serviço existente e seleciona a opção de edição. O sistema exibe o modal de edição com os campos preenchidos com os dados atuais do serviço selecionado. O administrador modifica os campos do formulário de edição do serviço selecionado. Os campos são pré-carregados com os valores atuais do registro. O administrador pode também acionar a exclusão do serviço diretamente nesta tela. Após a confirmação das alterações pelo administrador, o registro existente é atualizado no banco de dados com os novos valores informados e o sistema retorna para a tela de listagem. Caso o administrador selecione "Excluir", o sistema solicita a confirmação do administrador antes de remover o serviço. Caso o administrador cancele, retorna ao modal de edição sem realizar alterações. Após a confirmação da exclusão, o registro do serviço é removido do banco de dados e o sistema retorna para a tela de listagem atualizada.
-
-## Processos
-
----
-
-## Processo 1 – Gerenciamento de serviços
-
----
 
 #### Exibir lista de serviços
  
 | **Campo**          | **Tipo**       | **Restrições**                  | **Valor padrão**       |
 | ------------------ | -------------- | ------------------------------- | ---------------------- |
+| busca de serviços  | Caixa de texto | preenchimento opcional          | vazio                  |
 | lista de serviços  | Tabela         | somente leitura                 | carregada pelo sistema |
-| nome do serviço    | Coluna         | somente leitura                 | —                      |
-| valor (R$)         | Coluna         | somente leitura                 | —                      |
-| duração            | Coluna         | somente leitura                 | —                      |
-| status             | Coluna         | somente leitura (ativo/inativo) | —                      |
-| campo de busca     | Caixa de texto | preenchimento opcional          | vazio                  |
+| nome do serviço    | Coluna         | somente leitura                 | vazio                  |
+| valor              | Coluna         | somente leitura                 | vazio                  |
+| duração            | Coluna         | somente leitura                 | vazio                  |
+| status             | Coluna         | somente leitura (ativo/inativo) | vazio                  |
  
-| **Comandos**       | **Destino**                              | **Tipo** |
-| ------------------ | ---------------------------------------- | -------- |
-| + Adicionar        | Atividade "Abrir modal Adicionar Serviço" | padrão  |
-| ⋮ (ações)          | Atividade "Abrir modal Editar Serviço"   | padrão   |
-| ← voltar           | Fim do processo                          | cancelar |
- 
----
+| **Comandos** | **Destino**                               | **Tipo** |
+| ---          | ---                                       | -------- |
+| Adicionar    | Atividade "Abrir modal Adicionar Serviço" | padrão   |
+| Editar       | Atividade "Abrir modal Editar Serviço"    | padrão   |
+| Excluir      | Atividade "Abrir modal Excluir Serviço"   | padrão   |
+| Voltar       | Fim do processo                           | cancelar |
 
-## Processo 2 – Cadastro de Serviço
+### Wireframes
 
----
- 
-#### Abrir modal Adicionar Serviço
- 
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**        |
-| ------------------- | -------- | --------------- | ----------------------- |
-| modal de cadastro   | Exibição | somente leitura | exibido pelo sistema    |
- 
-| **Comandos** | **Destino**                          | **Tipo** |
-| ------------ | ------------------------------------ | -------- |
-| preencher    | Atividade "Preencher formulário"     | padrão   |
-| Cancelar     | Atividade "Exibir lista de serviços" | cancelar |
- 
----
- 
-#### Abrir modal Editar Serviço
- 
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**               |
-| ------------------- | -------- | --------------- | ------------------------------ |
-| modal de edição     | Exibição | somente leitura | exibido pelo sistema           |
- 
-| **Comandos** | **Destino**                            | **Tipo** |
-| ------------ | -------------------------------------- | -------- |
-| preencher    | Atividade "Editar dados do serviço"    | padrão   |
-| Cancelar     | Atividade "Exibir lista de serviços"   | cancelar |
- 
----
- 
+![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
+
+## Subrocesso 2 – Cadastro de Serviço
+
+O subprocesso de **Cadastro de Serviço** se inicia com o administrador acionando o botão "Adicionar". O sistema exibe o modal de cadastro de novo serviço com todos os campos em branco, aguardando preenchimento. O administrador preenche os campos do formulário de cadastro de novo serviço. Em seguida, os dados preenchidos no formulário de adição são verificados pelo sistema quanto ao cumprimento das restrições definidas. Não há interação direta do administrador nesta etapa. Caso haja erro, o sistema exibe uma mensagem de erro indicando quais campos estão incorretos ou incompletos. O administrador então retorna ao formulário para efetuar as correções necessárias. Após a validação bem-sucedida dos dados, o novo serviço é registrado no banco de dados e o sistema retorna para a tela de listagem com o serviço incluído.
+
+![Cadastro de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp2.png "Modelo BPMN do Processo 2 - Subprocesso - Cadastro de Serviço")
+
+### Detalhamento das atividades
+
 #### Preencher formulário
  
 | **Campo**         | **Tipo**       | **Restrições**               | **Valor padrão** |
@@ -110,19 +73,24 @@ O processo Edição de Serviço se inicia com o administrador acionando o menu d
 | nome do serviço   | Caixa de texto | obrigatório                  | vazio            |
 | valor (R$)        | Numérico       | obrigatório; maior que zero  | 0.00             |
 | duração (minutos) | Numérico       | obrigatório; maior que zero  | 30               |
+| icone (minutos)   | Seleção única  | obrigatório                  | Ícone Tesoura    |
 | status            | Seleção única  | Ativo / Inativo              | Ativo            |
  
 | **Comandos** | **Destino**                          | **Tipo** |
 | ------------ | ------------------------------------ | -------- |
 | Adicionar    | Atividade "Validar dados"            | padrão   |
 | Cancelar     | Atividade "Exibir lista de serviços" | cancelar |
- 
----
 
-## Processo 3 – Edição de Serviço
+### Wireframes
 
----
- 
+![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
+
+## Subprocesso 3 – Edição de Serviço
+
+O subprocesso **Edição de Serviço** se inicia com o administrador acionando o botão de edição de um serviço. O sistema exibe o modal de edição com os campos preenchidos com os dados atuais do serviço selecionado. O administrador modifica os campos do formulário de edição do serviço selecionado. O administrador pode também acionar a exclusão do serviço diretamente nesta tela. Após a confirmação das alterações pelo administrador, o registro existente é atualizado no banco de dados com os novos valores informados e o sistema retorna para a tela de listagem. Caso o administrador selecione "Excluir", o sistema solicita a confirmação do administrador antes de remover o serviço. Caso o administrador cancele, retorna ao modal de edição sem realizar alterações. Após a confirmação da exclusão, o registro do serviço é removido do banco de dados e o sistema retorna para a tela de listagem atualizada.
+
+![Edição de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp3.png "Modelo BPMN do Processo 2 - Subprocesso - Edição de Serviços")
+
 #### Editar dados do serviço
  
 | **Campo**         | **Tipo**       | **Restrições**               | **Valor padrão** |
@@ -140,58 +108,6 @@ O processo Edição de Serviço se inicia com o administrador acionando o menu d
  
 ---
  
-#### Validar dados
- 
-| **Campo**         | **Tipo** | **Restrições**                              | **Valor padrão** |
-| ----------------- | -------- | ------------------------------------------- | ---------------- |
-| nome do serviço   | Interno  | não pode ser vazio                          | —                |
-| valor (R$)        | Interno  | não pode ser vazio; deve ser maior que zero | —                |
-| duração (minutos) | Interno  | não pode ser vazio; deve ser maior que zero | —                |
-| status            | Interno  | deve ser Ativo ou Inativo                   | —                |
- 
-| **Resultado**        | **Destino**                          |
-| -------------------- | ------------------------------------ |
-| dados válidos        | Atividade "Salvar serviço"           |
-| dados inválidos      | Atividade "Exibir erro de validação" |
- 
----
- 
-#### Exibir erro de validação
- 
-| **Campo**        | **Tipo** | **Restrições**  | **Valor padrão**                       |
-| ---------------- | -------- | --------------- | -------------------------------------- |
-| mensagem de erro | Exibição | somente leitura | descrição do(s) campo(s) com problema  |
- 
-| **Comandos** | **Destino**                      | **Tipo** |
-| ------------ | -------------------------------- | -------- |
-| corrigir     | Atividade "Preencher formulário" | padrão   |
- 
----
- 
-#### Salvar serviço
- 
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**                    |
-| ------------------- | -------- | --------------- | ----------------------------------- |
-| dados do serviço    | Interno  | somente leitura | dados validados na etapa anterior   |
- 
-| **Resultado**     | **Destino**                          |
-| ----------------- | ------------------------------------ |
-| salvo com sucesso | Atividade "Exibir lista de serviços" |
- 
----
- 
-#### Salvar edição do serviço
- 
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**                       |
-| ------------------- | -------- | --------------- | -------------------------------------- |
-| dados atualizados   | Interno  | somente leitura | dados editados pelo administrador      |
- 
-| **Resultado**        | **Destino**                          |
-| -------------------- | ------------------------------------ |
-| salvo com sucesso    | Atividade "Exibir lista de serviços" |
- 
----
- 
 #### Confirmar exclusão
  
 | **Campo**               | **Tipo** | **Restrições**  | **Valor padrão**              |
@@ -201,30 +117,10 @@ O processo Edição de Serviço se inicia com o administrador acionando o menu d
  
 | **Comandos**       | **Destino**                            | **Tipo**   |
 | ------------------ | -------------------------------------- | ---------- |
-| confirmar exclusão | Atividade "Excluir serviço do sistema" | destrutivo |
+| confirmar exclusão | Atividade "Editar dados do serviço"    | destrutivo |
 | cancelar           | Atividade "Editar dados do serviço"    | cancelar   |
  
----
- 
-#### Excluir serviço do sistema
- 
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**               |
-| ------------------- | -------- | --------------- | ------------------------------ |
-| serviço selecionado | Interno  | somente leitura | registro a ser removido        |
- 
-| **Resultado**       | **Destino**                          |
-| ------------------- | ------------------------------------ |
-| excluído com sucesso | Atividade "Exibir lista de serviços" |
-
----
- 
-## Wireframes
-
-### Gerenciar Serviços
-![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
-
-### Cadastrar Serviço
-![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
+### Wireframes
 
 ### Editar Serviço
 ![Tela Editar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_editar-servico_2.jpg)
