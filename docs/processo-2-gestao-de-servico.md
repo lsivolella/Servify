@@ -10,13 +10,25 @@ O processo de **Gestão de Serviço** tem como objetivo permitir o cadastro e ma
 
 ---
 
-A informatização do processo de Gestão de Serviço traz as seguintes oportunidades de melhoria:
+A informatização do processo de Gestão de Serviços traz as seguintes oportunidades de melhoria:
 
-• padronização dos nomes, valores e tempo de execução dos serviços prestados no estabelicimento;
+• padronização dos serviços oferecidos pela empresa, evitando inconsistências na descrição, duração e valores;
 
-• facilitação na alteração, exclusão ou inclusão de serviços no sistema;
+• centralização das informações dos serviços em um único sistema, facilitando o acesso e a manutenção dos dados;
 
-• facilitação na distribuição das informações dos serviços disponíveis para os clientes.
+• redução de erros operacionais decorrentes do uso de controles manuais ou planilhas;
+
+• facilidade na atualização de valores e duração dos serviços, permitindo maior flexibilidade na gestão do negócio;
+
+• integração com o processo de agendamento, garantindo que os horários sejam definidos corretamente com base na duração dos serviços;
+
+• apoio ao cálculo automático de comissões, uma vez que os serviços estarão previamente cadastrados com seus respectivos valores;
+
+• melhoria na organização e no controle do portfólio de serviços oferecidos pela empresa;
+
+• maior agilidade no atendimento ao cliente, uma vez que os serviços já estarão estruturados no sistema;
+
+• aumento da confiabilidade das informações utilizadas nos processos financeiros e operacionais.
 
 ---
 
