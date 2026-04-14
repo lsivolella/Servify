@@ -70,6 +70,16 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 | Modal de pagamento aberto | Atividade "Confirmar pagamento"                  |
 | Modal de exclusão aberto  | Atividade "Excluir comissão"                     |
 
+## Wireframe
+
+#### Acessar a lista de comissões
+
+![Tela Subprocesso - Gerenciar comissões](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_gerenciar_comissoes.jpg)
+
+#### Buscar comissão
+
+![Tela Subprocesso - Buscar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_busca_comissao.jpg)
+
 ---
 
 #### Cadastrar comissão
@@ -93,6 +103,12 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 | Comissão cadastrada    | Toast de sucesso e Atividade "Acessar a lista de comissões"        |
 | Prompt de erro         | "Campo inválido."                                                  |
 | Operação cancelada     | Atividade "Acessar a lista de comissões"                           |
+
+## Wireframe
+
+#### Cadastrar comissão
+
+![Tela Subprocesso - Adicionar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_adicionar_comissao.jpg)
 
 ---
 
@@ -119,6 +135,12 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 | Prompt de erro         | "Não foi possível salvar alteração. Tente novamente."              |
 | Operação cancelada     | Atividade "Acessar a lista de comissões"                           |
 
+## Wireframe
+
+#### Editar comissão
+
+![Tela Subprocesso - Editar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_editar_comissao.jpg)
+
 ---
 
 #### Confirmar pagamento
@@ -137,6 +159,12 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 | ---------------------- | ------------------------------------------------------------------ |
 | Pagamento confirmado   | Toast de sucesso e Atividade "Acessar a lista de comissões"        |
 | Operação cancelada     | Atividade "Acessar a lista de comissões"                           |
+
+## Wireframe
+
+#### Confirmar pagamento
+
+![Tela Subprocesso - Confirmar pagamento da comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_confirmar_pagamento_comissao.jpg)
 
 ---
 
@@ -157,27 +185,7 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 | Comissão excluída      | Toast de sucesso e Atividade "Acessar a lista de comissões"        |
 | Operação cancelada     | Atividade "Acessar a lista de comissões"                           |
 
-## Wireframes
-
-#### Acessar a lista de comissões
-
-![Tela Subprocesso - Gerenciar comissões](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_gerenciar_comissoes.jpg)
-
-#### Buscar comissão
-
-![Tela Subprocesso - Buscar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_busca_comissao.jpg)
-
-#### Cadastrar comissão
-
-![Tela Subprocesso - Adicionar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_adicionar_comissao.jpg)
-
-#### Editar comissão
-
-![Tela Subprocesso - Editar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_editar_comissao.jpg)
-
-#### Confirmar pagamento
-
-![Tela Subprocesso - Confirmar pagamento da comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_confirmar_pagamento_comissao.jpg)
+## Wireframe
 
 #### Excluir comissão
 
