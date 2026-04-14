@@ -19,7 +19,7 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Agendamento, descrit
 
 O processo de **Gestão de Agendamento** tem como objetivo permitir que um administrador visualize, crie, edite e exclua agendamentos de todos os clientes e colaboradores do sistema, permitir que o colaborador visualize, edite e exclua apenas os agendamentos vinculados a ele e permitir que o cliente visualize, crie, edite e exclua apenas os seus próprios agendamentos. O processo se inicia com o usuário acessando a página de Gerenciamento de Agendamentos, onde é exibido um calendário semanal com todos os agendamentos cadastrados e as seguintes opções: navegar entre semanas, buscar agendamentos, visualizar detalhes de um agendamento ou criar um novo agendamento.
 - Caso o usuário queira navegar entre semanas, ele pressiona os botões de seta para a esquerda ou para a direita, alterando a semana exibida no calendário.
-- Caso o usuário queira buscar um agendamento, ele digita na barra de pesquisa o serviço e a listagem é filtrada por uma tabela com os resultados encontrados, exibindo serviço, cliente, prestador, data, horário, duração, valor e ações (no caso de administrador ou colaborador). O usuário pode apagar a digitação para retornar ao calendário semanal. Na listagem de resultados, ele pode clicar no ícone de lápis para editar ou no ícone de lixeira para excluir o agendamento diretamente.
+- Caso o usuário queira buscar um agendamento, ele digita na barra de pesquisa o serviço e a listagem é filtrada por uma tabela com os resultados encontrados, exibindo serviço, cliente, prestador, data, horário, duração, valor e ações. O usuário pode apagar a digitação para retornar ao calendário semanal. Na listagem de resultados, ele pode clicar no ícone de lápis para editar ou no ícone de lixeira para excluir o agendamento diretamente.
 - Caso o usuário queira visualizar os detalhes de um agendamento, ele clica sobre o card do agendamento no calendário e um modal é aberto exibindo as informações completas: serviço, cliente, prestador, data, horário, duração, valor e status. A partir desse modal, o usuário pode clicar em "Editar" para editar o agendamento, "Excluir" para excluí-lo, ou "X" para fechar o modal.
 - Caso o usuário queira criar um novo agendamento, ele pressiona o botão "+ Adicionar" e um modal é aberto com campos para preencher: nome do serviço, cliente, prestador, data, horário de início, duração e valor. Após preencher os campos, o usuário clica em "Adicionar" para confirmar o cadastro ou em "Cancelar" para fechar o modal sem salvar.
 - Caso o usuário queira editar um agendamento, ele pode acessar o modal de edição a partir dos detalhes do agendamento ou da listagem de busca. O modal exibe os campos do agendamento preenchidos com os dados atuais: nome do serviço, cliente, prestador, data, horário de início, duração e valor. O usuário pode alterar os campos desejados e clicar em "Salvar" para confirmar as alterações, em "Excluir" para excluir o agendamento, ou em "Cancelar" ou "X" para fechar o modal sem salvar.
@@ -29,7 +29,7 @@ O processo de **Gestão de Agendamento** tem como objetivo permitir que um admin
 
 ### Detalhamento das atividades
  
-#### Acessar a lista de agendamentos (calendário semanal)
+#### Acessar a lista de agendamentos
  
 | **Campo**               | **Tipo**  | **Restrições**  | **Valor padrão**                  |
 | ----------------------- | --------- | --------------- | --------------------------------- |
