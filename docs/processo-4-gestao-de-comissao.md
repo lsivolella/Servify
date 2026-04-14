@@ -105,3 +105,27 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Comissão, descrito 
 | cancelar | Exibir comissões | cancel |
 
 ## Wireframes
+
+#### Editar comissão
+
+![Tela Subprocesso - Editar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_editar_comissao.jpg)
+
+#### Adicionar comissão
+
+![Tela Subprocesso - Adicionar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_adicionar_comissao.jpg)
+
+#### Buscar comissão
+
+![Tela Subprocesso - Buscar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_busca_comissao.jpg)
+
+#### Confirmar pagamento da comissão
+
+![Tela Subprocesso - Confirmar pagamento da comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_confirmar_pagamento_comissao.jpg)
+
+#### Excluir comissão
+
+![Tela Subprocesso - Excluir comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_excluir_comissao.jpg)
+
+#### Gerenciar comissões
+
+![Tela Subprocesso - Gerenciar comissões](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_gerenciar_comissoes.jpg)
