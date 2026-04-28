@@ -25,7 +25,7 @@ O processo de **Gestão de Agendamento** tem como objetivo permitir que um admin
 - Caso o usuário queira editar um agendamento, ele pode acessar o modal de edição a partir dos detalhes do agendamento ou da listagem de busca. O modal exibe os campos do agendamento preenchidos com os dados atuais: nome do serviço, cliente, prestador, data, horário de início, duração e valor. O usuário pode alterar os campos desejados e clicar em "Salvar" para confirmar as alterações, em "Excluir" para excluir o agendamento, ou em "Cancelar" ou "X" para fechar o modal sem salvar.
 - Caso o usuário queira excluir um agendamento, ele pode acionar o botão "Excluir" no modal de edição ou no modal de detalhes. Um modal de confirmação é exibido perguntando se deseja confirmar a exclusão. O usuário pode clicar em "Excluir" para confirmar ou em "Cancelar" para cancelar a operação.
 
-![Modelo BPMN do Processo 3](images/bpmn/bpmn-gestao-de-agendamento.png "Modelo BPMN do Processo 3.")
+![Modelo BPMN do Processo 3](images/bpmn/gestao-de-agendamento/bpmn-gestao-de-agendamento.png "Modelo BPMN do Processo 3.")
 
 ### Detalhamento das atividades
  
