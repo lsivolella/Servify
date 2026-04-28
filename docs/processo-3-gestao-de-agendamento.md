@@ -1,29 +1,25 @@
 # 3.3.3 Processo 3 – GESTÃO DE AGENDAMENTO
 
-O processo de **Gestão de Agendamento** tem como objetivo permitir que o usuário visualize agendamentos com base no seu perfil de acesso, permitindo que clientes e colaboradores se organizem para seus atendimentos e que o gestor possa ter uma visão global dos serviços sendo prestados.
+O processo de **Gestão de Agendamento** permite que administradores, colaboradores e clientes visualizem e gerenciem agendamentos de serviços, cada um com visibilidade adequada ao seu perfil.
 
-Usuários definidos com perfil de **Cliente** podem ver e alterar os seus próprios agendamentos. Usuários com perfil de **Colaborador** podem ver e alterar os agendamentos em que são os responsáveis pelo serviço. Usuários com o perfil de **Admin** podem ver e alterar todos os agendamentos existentes.
+Ao acessar a funcionalidade, o usuário vê um calendário semanal com todos os agendamentos permitidos para seu perfil. A partir dessa tela principal, que chamamos de Gerenciar Agendamentos, ele pode navegar entre semanas, usar a busca para filtrar rapidamente, abrir os detalhes de um compromisso, criar um novo agendamento ou, com base no perfil, editar ou excluir um existente.
+
+**O fluxo:**
+- Ao selecionar um agendamento no calendário, o usuário aciona a atividade Gerenciar Agendamentos, onde vê todas as informações e pode optar por Editar ou Excluir.
+- A opção Criar Agendamento abre um formulário em branco, enquanto Editar Agendamento reaproveita o mesmo formulário, já preenchido.
+- A exclusão sempre passa por uma confirmação simples para evitar remoções acidentais.
+- Em todas as etapas, é possível cancelar a ação e retornar ao calendário.
 
 ## Oportunidades de melhoria
 
 A informatização do processo de Gestão de Agendamento traz as seguintes oportunidades de melhoria:
 
-- Previne que colaboradores agendem **serviços concomintantes**.
-- Melhor **organização** para colaboradores.
-- Melhora a **experiência do cliente**.
-- Facilita a **gestão de recursos** do estabelicimento.
+- Prevenção de conflitos: o sistema impede o cadastro de serviços concomitantes para o mesmo prestador ou recurso, algo impossível no controle manual.
+- Organização e visibilidade: a visualização semanal unificada, com filtros e busca, dá a cada perfil exatamente a informação necessária no momento certo.
+- Experiência do cliente: redução de retrabalhos e atrasos, com horários claros e lembretes automáticos (potencial).
+- Gestão de recursos: o administrador consegue balancear a carga dos colaboradores e ajustar a oferta de serviços com dados reais de agendamento.
 
 ## Modelagem
-
-Em seguida, apresenta-se o modelo do processo de Gestão de Agendamento, descritos no padrão BPMN:
-
-O processo de **Gestão de Agendamento** tem como objetivo permitir que um administrador visualize, crie, edite e exclua agendamentos de todos os clientes e colaboradores do sistema, permitir que o colaborador visualize, edite e exclua apenas os agendamentos vinculados a ele e permitir que o cliente visualize, crie, edite e exclua apenas os seus próprios agendamentos. O processo se inicia com o usuário acessando a página de Gerenciamento de Agendamentos, onde é exibido um calendário semanal com todos os agendamentos cadastrados e as seguintes opções: navegar entre semanas, buscar agendamentos, visualizar detalhes de um agendamento ou criar um novo agendamento.
-- Caso o usuário queira navegar entre semanas, ele pressiona os botões de seta para a esquerda ou para a direita, alterando a semana exibida no calendário.
-- Caso o usuário queira buscar um agendamento, ele digita na barra de pesquisa o serviço e a listagem é filtrada por uma tabela com os resultados encontrados, exibindo serviço, cliente, prestador, data, horário, duração, valor e ações. O usuário pode apagar a digitação para retornar ao calendário semanal. Na listagem de resultados, ele pode clicar no ícone de lápis para editar ou no ícone de lixeira para excluir o agendamento diretamente.
-- Caso o usuário queira visualizar os detalhes de um agendamento, ele clica sobre o card do agendamento no calendário e um modal é aberto exibindo as informações completas: serviço, cliente, prestador, data, horário, duração, valor e status. A partir desse modal, o usuário pode clicar em "Editar" para editar o agendamento, "Excluir" para excluí-lo, ou "X" para fechar o modal.
-- Caso o usuário queira criar um novo agendamento, ele pressiona o botão "+ Adicionar" e um modal é aberto com campos para preencher: nome do serviço, cliente, prestador, data, horário de início, duração e valor. Após preencher os campos, o usuário clica em "Adicionar" para confirmar o cadastro ou em "Cancelar" para fechar o modal sem salvar.
-- Caso o usuário queira editar um agendamento, ele pode acessar o modal de edição a partir dos detalhes do agendamento ou da listagem de busca. O modal exibe os campos do agendamento preenchidos com os dados atuais: nome do serviço, cliente, prestador, data, horário de início, duração e valor. O usuário pode alterar os campos desejados e clicar em "Salvar" para confirmar as alterações, em "Excluir" para excluir o agendamento, ou em "Cancelar" ou "X" para fechar o modal sem salvar.
-- Caso o usuário queira excluir um agendamento, ele pode acionar o botão "Excluir" no modal de edição ou no modal de detalhes. Um modal de confirmação é exibido perguntando se deseja confirmar a exclusão. O usuário pode clicar em "Excluir" para confirmar ou em "Cancelar" para cancelar a operação.
 
 ![Modelo BPMN do Processo 3](images/bpmn/gestao-de-agendamento/bpmn-gestao-de-agendamento.png "Modelo BPMN do Processo 3.")
 
