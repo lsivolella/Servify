@@ -30,9 +30,11 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito n
 
 ## Subprocesso 1 – Gerenciamento de Serviços
 
-O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O subprocesso se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço ou selecionar um serviço existente para edição.
+O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O subprocesso se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço, selecionar um serviço existente para edição ou selecionar um serviço existente para exclusão.
 
-![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp1.png "Modelo BPMN do Processo 2 - Subprocesso - Gerenciamento de Serviços")
+![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-gerenciamento-servicos.png "Modelo BPMN do Processo 2 - Subprocesso - Gerenciamento de Serviços")
+
+![Busca de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-busca-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Busca de Serviço")
 
 ### Detalhamento das atividades
 
@@ -40,96 +42,126 @@ O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o
  
 | **Campo**          | **Tipo**       | **Restrições**                  | **Valor padrão**       |
 | ------------------ | -------------- | ------------------------------- | ---------------------- |
-| busca de serviços  | Caixa de texto | preenchimento opcional          | vazio                  |
-| lista de serviços  | Tabela         | somente leitura                 | carregada pelo sistema |
-| nome do serviço    | Coluna         | somente leitura                 | vazio                  |
-| valor              | Coluna         | somente leitura                 | vazio                  |
-| duração            | Coluna         | somente leitura                 | vazio                  |
-| status             | Coluna         | somente leitura (ativo/inativo) | vazio                  |
+| Buscar serviços  | Caixa de texto | preenchimento opcional          | vazio                  |
+| Lista de serviços  | Tabela         | somente leitura                 | carregada pelo sistema |
+| Nome do serviço    | Coluna         | somente leitura                 | vazio                  |
+| Valor              | Coluna         | somente leitura                 | vazio                  |
+| Duração            | Coluna         | somente leitura                 | vazio                  |
+| Status             | Coluna         | somente leitura (ativo/inativo) | vazio                  |
  
 | **Comandos** | **Destino**                               | **Tipo** |
 | ---          | ---                                       | -------- |
 | Adicionar    | Atividade "Abrir modal Adicionar Serviço" | padrão   |
 | Editar       | Atividade "Abrir modal Editar Serviço"    | padrão   |
 | Excluir      | Atividade "Abrir modal Excluir Serviço"   | padrão   |
-| Voltar       | Fim do processo                           | cancelar |
+| Voltar       | Atividade "Acessar a lista de agendamentos"   | padrão |
+
+| **Resultado**             | **Destino**                                      |
+| ------------------------- | ------------------------------------------------ |
+| Serviço encontrado       | Listagem filtrada pelo termo digitado            |
+| Nenhum resultado          | Listagem vazia                                   |
+| Busca apagada             | Retorno à listagem completa                      |
+| Modal de cadastro aberto  | Atividade "Cadastrar serviço"                   |
+| Modal de edição aberto    | Atividade "Editar serviço"                      |
+| Modal de exclusão aberto  | Atividade "Excluir serviço"                     |
 
 ### Wireframes
 
-![Tela Gerenciar Serviços](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
+![Tela Gerenciar Serviços](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_gerenciar-servico.jpg)
 
 ## Subrocesso 2 – Cadastro de Serviço
 
-O subprocesso de **Cadastro de Serviço** se inicia com o administrador acionando o botão "Adicionar". O sistema exibe o modal de cadastro de novo serviço com todos os campos em branco, aguardando preenchimento. O administrador preenche os campos do formulário de cadastro de novo serviço. Em seguida, os dados preenchidos no formulário de adição são verificados pelo sistema quanto ao cumprimento das restrições definidas. Não há interação direta do administrador nesta etapa. Caso haja erro, o sistema exibe uma mensagem de erro indicando quais campos estão incorretos ou incompletos. O administrador então retorna ao formulário para efetuar as correções necessárias. Após a validação bem-sucedida dos dados, o novo serviço é registrado no banco de dados e o sistema retorna para a tela de listagem com o serviço incluído.
+O subprocesso de **Cadastro de Serviço** se inicia com o administrador acionando o botão "Adicionar". O sistema exibe o modal de cadastro de novo serviço com todos os campos em branco, aguardando preenchimento sendo eles: nome do serviço, valor, duração, ícone e status. O administrador preenche os campos do formulário de cadastro de novo serviço. Caso haja algum erro, o usuário recebe uma mensagem de erro indicando quais campos estão incorretos ou incompletos. O administrador então retorna ao formulário para efetuar as correções necessárias. Após a validação bem-sucedida dos dados, uma mensagem de serviço registrado com sucesso aparece e ele retorna automaticamente para a tela de listagem com o serviço incluído.
 
-![Cadastro de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp2.png "Modelo BPMN do Processo 2 - Subprocesso - Cadastro de Serviço")
+![Cadastro de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-cadastro-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Cadastro de Serviço")
 
 ### Detalhamento das atividades
 
-#### Preencher formulário
+#### Cadastro de serviço
  
 | **Campo**         | **Tipo**       | **Restrições**               | **Valor padrão** |
 | ----------------- | -------------- | ---------------------------- | ---------------- |
-| nome do serviço   | Caixa de texto | obrigatório                  | vazio            |
-| valor (R$)        | Numérico       | obrigatório; maior que zero  | 0.00             |
-| duração (minutos) | Numérico       | obrigatório; maior que zero  | 30               |
-| icone (minutos)   | Seleção única  | obrigatório                  | Ícone Tesoura    |
-| status            | Seleção única  | Ativo / Inativo              | Ativo            |
+| Nome do serviço   | Caixa de texto | obrigatório                  | vazio            |
+| Valor (R$)        | Numérico       | obrigatório; maior que zero  | 0.00             |
+| Duração (minutos) | Numérico       | obrigatório; maior que zero  | 30               |
+| Ícone   | Seleção única  | obrigatório                  | Ícone Tesoura    |
+| Status            | Seleção única  | Ativo / Inativo              | Ativo            |
  
 | **Comandos** | **Destino**                          | **Tipo** |
 | ------------ | ------------------------------------ | -------- |
-| Adicionar    | Atividade "Validar dados"            | padrão   |
+| Adicionar    | Atividade "Exibir lista de serviços"            | padrão   |
 | Cancelar     | Atividade "Exibir lista de serviços" | cancelar |
+| X (fechar)            | Atividade "Exibir lista de serviços"              | cancelar |
+
+| **Resultado**             | **Destino**                                      |
+| ------------------------- | ------------------------------------------------ |
+| Serviço cadastado       | Toast "Serviço cadastrado com sucesso." e Atividade "Exibir lista de serviços"            |
+| Prompt de erro    | "Campo inválido." |
+| Operação cancelada    | Atividade "Exibir lista de serviços" |
 
 ### Wireframes
 
-![Tela Cadastrar Serviço](images/wireframe/gestao-de-servicos/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
+![Tela Cadastrar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_cadastrar-servico.jpg)
 
 ## Subprocesso 3 – Edição de Serviço
 
-O subprocesso **Edição de Serviço** se inicia com o administrador acionando o botão de edição de um serviço. O sistema exibe o modal de edição com os campos preenchidos com os dados atuais do serviço selecionado. O administrador modifica os campos do formulário de edição do serviço selecionado. O administrador pode também acionar a exclusão do serviço diretamente nesta tela. Após a confirmação das alterações pelo administrador, o registro existente é atualizado no banco de dados com os novos valores informados e o sistema retorna para a tela de listagem. Caso o administrador selecione "Excluir", o sistema solicita a confirmação do administrador antes de remover o serviço. Caso o administrador cancele, retorna ao modal de edição sem realizar alterações. Após a confirmação da exclusão, o registro do serviço é removido do banco de dados e o sistema retorna para a tela de listagem atualizada.
+O subprocesso **Edição de Serviço** se inicia com o administrador acionando o botão de edição de um serviço. O sistema exibe o modal de edição com os campos preenchidos com os dados atuais do serviço selecionado e os botões de Salvar e Cancelar. O administrador modifica os campos do formulário de edição do serviço selecionado e clica em "Salvar". Após a confirmação das alterações pelo administrador, o registro existente é atualizado e o usuário retorna automaticamente para a tela de listagem com o serviço ajustado. Caso o administrador opte por cancelar a operação, o modal de edição é fechado e o usuário retorna automaticamente para a tela de listagem. Caso haja algum erro na edição, uma mensagem de erro aparece para o usuário.
 
-![Edição de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-sp3.png "Modelo BPMN do Processo 2 - Subprocesso - Edição de Serviços")
+![Edição de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-edicao-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Edição de Serviço")
 
-#### Editar dados do serviço
+### Detalhamento das atividades
+
+#### Edição de Serviço
  
 | **Campo**         | **Tipo**       | **Restrições**               | **Valor padrão** |
 | ----------------- | -------------- | ---------------------------- | ---------------- |
-| nome do serviço   | Caixa de texto | obrigatório                  | valor atual      |
-| valor (R$)        | Numérico       | obrigatório; maior que zero  | valor atual      |
-| duração (minutos) | Numérico       | obrigatório; maior que zero  | valor atual      |
-| status            | Seleção única  | Ativo / Inativo              | valor atual      |
+| Nome do serviço   | Caixa de texto | obrigatório                  | valor atual      |
+| Valor (R$)        | Numérico       | obrigatório; maior que zero  | valor atual      |
+| Duração (minutos) | Numérico       | obrigatório; maior que zero  | valor atual      |
+| Ícone   | Seleção única  | obrigatório                  | valor atual    |
+| Status            | Seleção única  | Ativo / Inativo              | valor atual      |
  
 | **Comandos** | **Destino**                          | **Tipo** |
 | ------------ | ------------------------------------ | -------- |
-| Salvar       | Atividade "Salvar edição do serviço" | padrão   |
-| Excluir      | Atividade "Confirmar exclusão"       | destrutivo |
+| Salvar       | Atividade "Exibir lista de serviços" | padrão   |
 | Cancelar     | Atividade "Exibir lista de serviços" | cancelar |
+| X (fechar)            | Atividade "Exibir lista de serviços"              | cancelar |
+
+| **Resultado**             | **Destino**                                      |
+| ------------------------- | ------------------------------------------------ |
+| Serviço alterado       | Atividade "Exibir lista de serviços"            |
+| Prompt de erro    | "Campo inválido." |
+| Operação cancelada    | Atividade "Exibir lista de serviços" |
  
----
- 
+### Wireframes
+
+![Tela Editar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_editar-servico.jpg)
+
+## Subprocesso 4 – Exclusão de Serviço
+
+O subprocesso de **Exclusão de Serviço** se inicia com o administrador acionando o botão de exclusão de um serviço (lixeira). O modal de confirmação de exclusão é exibido ao usuário junto com as opções de Excluir, Cancelar e X. Caso o usuário clique em Excluir, uma mensagem de "Serviço excluído com sucesso." é exibida e o usuário retorna à listagem de serviços com o serviço excluído. Caso clique em Cancelar ou X, a operação é cancelada e o usuário retorna para a listagem de serviços.
+
+### Detalhamento das atividades
+
 #### Confirmar exclusão
  
 | **Campo**               | **Tipo** | **Restrições**  | **Valor padrão**              |
 | ----------------------- | -------- | --------------- | ----------------------------- |
-| serviço selecionado     | Exibição | somente leitura | nome do serviço a excluir     |
-| confirmação de exclusão | Seleção  | confirmar / cancelar | cancelar                 |
+| Serviço selecionado     | Exibição | somente leitura | nome do serviço a excluir     |
+| Confirmação de exclusão | Seleção  | confirmar / cancelar | cancelar                 |
  
 | **Comandos**       | **Destino**                            | **Tipo**   |
 | ------------------ | -------------------------------------- | ---------- |
-| confirmar exclusão | Atividade "Editar dados do serviço"    | destrutivo |
-| cancelar           | Atividade "Editar dados do serviço"    | cancelar   |
- 
+| Excluir | Atividade "Exibir lista de serviços"    | destrutivo |
+| Cancelar           | Atividade "Exibir lista de serviços"    | cancelar   |
+
+| **Resultado**             | **Destino**                                      |
+| ------------------------- | ------------------------------------------------ |
+| Serviço excluído       | Toast de "Serviço excluído com sucesso." e Atividade "Exibir lista de serviços"            |
+| Operação cancelada    | Atividade "Exibir lista de serviços" |
+
+![Exclusão de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-exclusao-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Exclusão de Serviço")
+
 ### Wireframes
 
-### Exibir Serviços
-![Tela Exibir Serviços](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_gerenciar-servico_2.jpg)
-
-### Editar Serviço
-![Tela Editar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_editar-servico_2.jpg)
-
-### Excluir Serviço
-![Tela Editar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_excluir-servico_2.jpg)
-
-### Cadastrar Serviço
-![Tela Cadastrar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_cadastrar-servico_2.jpg)
+![Tela Excluir Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_excluir-servico.jpg)
