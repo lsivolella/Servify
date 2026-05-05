@@ -1,4 +1,4 @@
-### 3.3.5 Processo 5 – GESTÃO DE RELATÓRIO
+# 3.3.5 Processo 5 – GESTÃO DE RELATÓRIO
 
 O processo de **Gestão de Relatório** tem como objetivo permitir que o administrador visualize, gere, filtre e exporte relatórios dentro do sistema.
 
@@ -60,7 +60,7 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
  
 #### Acessar a lista de relatórios
  
-![Tela Gerenciar relatórios](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorio.jpg)
+![Tela Gerenciar relatórios](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorio.JPG)
  
 #### Buscar relatório
  
