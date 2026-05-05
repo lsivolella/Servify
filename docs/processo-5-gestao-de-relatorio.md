@@ -31,7 +31,7 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
 - Caso o administrador queira exportar um relatório, ele clica no ícone de exportação na linha correspondente e um modal de confirmação é exibido informando o tipo e o período do relatório. O administrador pode selecionar o formato de exportação (PDF, Excel ou CSV) e clicar em "Exportar" para confirmar ou em "Cancelar" para fechar o modal sem exportar.
 - Caso o administrador queira excluir um relatório, ele clica no ícone de lixeira na linha correspondente e um modal de confirmação é exibido informando o tipo e o período do relatório a ser excluído. O administrador pode clicar em "Excluir" para confirmar a exclusão ou em "Cancelar" para fechar o modal sem excluir.
 
-![BMPN Gestão de relatório](images/bpmn-gestao-de-relatorio.png)
+![BMPN Gestão de relatório](images/bpmn/bpmn-gestao-de-relatorio.png.png)
 
 ### Detalhamento das atividades
  
@@ -60,11 +60,11 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
  
 #### Acessar a lista de relatórios
  
-![Tela Subprocesso - Gerenciar relatórios](images/wireframe/gestao-de-relatorios/wireframe_gestao-de-relatorios_gerenciar_relatorios.jpg)
+![Tela Subprocesso - Gerenciar relatórios](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_gerenciar_relatorios.jpg)
  
 #### Buscar relatório
  
-![Tela Subprocesso - Buscar relatório](images/wireframe/gestao-de-relatorios/wireframe_gestao-de-relatorios_busca_relatorio.jpg)
+![Tela Subprocesso - Buscar relatório](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_busca_relatorio.jpg)
  
 ---
  
@@ -93,7 +93,7 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
  
 #### Gerar relatório
  
-![Tela Gerar relatório](images/wireframe/gestao-de-relatorios/wireframe_gestao-de-relatorios_gerar_relatorio.jpg)
+![Tela Gerar relatório](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_gerar_relatorio.jpg)
  
 ---
  
@@ -119,7 +119,7 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
  
 #### Exportar relatório
  
-![Tela Exportar relatório](images/wireframe/gestao-de-relatorios/wireframe_gestao-de-relatorios_exportar_relatorio.jpg)
+![Tela Exportar relatório](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_exportar_relatorio.jpg)
  
 ---
  
@@ -140,4 +140,4 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
  
 #### Excluir relatório
  
-![Tela Excluir relatório](images/wireframe/gestao-de-relatorios/wireframe_gestao-de-relatorios_excluir_relatorio.jpg)
+![Tela Excluir relatório](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_excluir_relatorio.jpg)
