@@ -41,6 +41,7 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 
 | **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**             |
 | ------------------- | -------- | --------------- | ---------------------------- |
+| Listar Comissões    | Exibição | somente leitura | dado da comissão              |
 | Total em Comissões  | Exibição | somente leitura | valor calculado              |
 | Pendentes           | Exibição | somente leitura | valor calculado              |
 | Pagas               | Exibição | somente leitura | valor calculado              |
@@ -53,12 +54,14 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 | Data                | Exibição | somente leitura | dado da comissão             |
 | Status              | Exibição | somente leitura | dado da comissão             |
 
+
 | **Comandos**              | **Destino**                                      | **Tipo** |
 | ------------------------- | ------------------------------------------------ | -------- |
-| + Adicionar               | Atividade "Cadastrar comissão"                   | padrão   |
+| Cadastrar Comissão            | Atividade "Cadastrar comissão"               | padrão   |
+| Editar Comissão (lápis)            | Atividade "Editar comissão"             | padrão   |
+| Excluir Comissão (lixeira)         | Atividade "Excluir comissão"            | padrão   |
 | Confirmar pagamento (✓)   | Atividade "Confirmar pagamento"                  | padrão   |
-| Editar (lápis)            | Atividade "Editar comissão"                      | padrão   |
-| Excluir (lixeira)         | Atividade "Excluir comissão"                     | padrão   |
+
 
 | **Resultado**             | **Destino**                                      |
 | ------------------------- | ------------------------------------------------ |
