@@ -60,11 +60,11 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
  
 #### Acessar a lista de relatórios
  
-![Tela Subprocesso - Gerenciar relatórios](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_gerenciar_relatorios.jpg)
+![Tela Gerenciar relatórios](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_gerenciar_relatorios.jpg)
  
 #### Buscar relatório
  
-![Tela Subprocesso - Buscar relatório](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_busca_relatorio.jpg)
+![Tela Buscar relatório](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_busca_relatorio.jpg)
  
 ---
  
