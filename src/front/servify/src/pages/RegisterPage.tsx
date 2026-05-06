@@ -32,6 +32,7 @@ import {
   formatCepDisplay,
 } from '../services/viacep'
 import { maskCpf, maskEmailInput, maskPhoneBr } from '../utils/masks'
+import { toastCadastroErro, toastCadastroSucesso } from '../components/showAlert'
 import './styles/RegisterPage.css'
 
 const UFS = [
@@ -168,9 +169,42 @@ export default function RegisterPage() {
     })()
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    // TODO: enviar para API de cadastro
+    const nome = form.nome.trim()
+    const email = form.email.trim()
+    const cpfDigits = form.cpf.replace(/\D/g, '')
+
+    if (!nome) {
+      toastCadastroErro('Informe o nome completo.')
+      return
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toastCadastroErro('Informe um e-mail válido.')
+      return
+    }
+    if (cpfDigits.length !== 11) {
+      toastCadastroErro('CPF deve ter 11 dígitos.')
+      return
+    }
+    if (!form.senha || form.senha.length < 6) {
+      toastCadastroErro('A senha deve ter pelo menos 6 caracteres.')
+      return
+    }
+    if (form.senha !== form.confirmarSenha) {
+      toastCadastroErro('Senha e confirmação não conferem.')
+      return
+    }
+
+    try {
+      await new Promise<void>((resolve) => setTimeout(resolve, 700))
+      // TODO: substituir por POST à API de cadastro e tratar erro HTTP no catch
+      toastCadastroSucesso('Cadastro realizado com sucesso!')
+    } catch {
+      toastCadastroErro(
+        'Não foi possível concluir o cadastro. Tente novamente.',
+      )
+    }
   }
 
   return (
@@ -785,7 +819,7 @@ export default function RegisterPage() {
           </Box>
           <Link
             component={RouterLink}
-            to="/"
+            to="/login"
             underline="hover"
             className="register-footer__link"
           >
