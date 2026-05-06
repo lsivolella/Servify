@@ -17,7 +17,59 @@ Este trabalho apresenta a proposta de desenvolvimento de uma solução Web chama
 
 ## Instruções de utilização
 
-Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.
+### 1. Visão Geral
+
+Esta aplicação é composta por duas camadas principais:
+
+-   Frontend: desenvolvido em React utilizando Vite
+-   Backend: desenvolvido em Java com o framework Spring Boot
+
+O sistema segue uma arquitetura cliente-servidor, onde o frontend 
+
+consome APIs REST expostas pelo backend.
+
+---
+
+### 2. Pré-requisitos
+
+#### Frontend
+
+-   Node.js (versão xx ou superior)
+-   npm
+
+#### Backend
+
+-   Java (JDK xx ou superior recomendado)
+-   Maven ou Gradle
+
+---
+
+### 3. Estrutura do Projeto
+
+    /src
+      /back/src
+      /front/servify
+
+---
+
+### 4. Executando o Backend
+
+``` bash
+cd src/back/src
+mvn spring-boot:run
+```
+
+A aplicação será iniciada em: http://localhost:8080
+
+### 5. Executando o Frontend
+
+``` bash
+cd src/front/servify
+npm install
+npm run dev
+```
+
+A aplicação estará disponível em: http://localhost:5173
 
 ## Histórico de versões
 
