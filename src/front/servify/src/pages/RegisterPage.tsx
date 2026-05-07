@@ -197,9 +197,29 @@ export default function RegisterPage() {
     }
 
     try {
-      await new Promise<void>((resolve) => setTimeout(resolve, 700))
-      // TODO: substituir por POST à API de cadastro e tratar erro HTTP no catch
+      const reponse = await fetch('http://localhost:8080/usuarios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          perfilId: 1,
+          cpf: cpfDigits,
+          nome,
+          email,
+          senha: form.senha,
+          telefone: form.telefone,
+          dataNascimento: form.dataNascimento,
+          enderecoId: 1, // TODO: tentar criar endereço primeiro e usar o ID retornado
+        })
+      })
+
+      if (!reponse.ok) {
+        throw new Error('Erro ao cadastrar cliente')
+      }
+
       toastCadastroSucesso('Cadastro realizado com sucesso!')
+      setForm(initialForm)
     } catch {
       toastCadastroErro(
         'Não foi possível concluir o cadastro. Tente novamente.',
@@ -803,7 +823,7 @@ export default function RegisterPage() {
             Cadastrar Cliente
           </Button>
         </Box>
-        
+
 
         <br />
 
