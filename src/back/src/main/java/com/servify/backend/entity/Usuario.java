@@ -2,8 +2,6 @@ package com.servify.backend.entity;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,43 +19,43 @@ public class Usuario {
     // private Perfil perfilId;
     private Integer perfilId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String nome;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false, length = 150)
     private String senha;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 11)
     private String telefone;
 
     @Column(nullable = false)
     private LocalDate dataNascimento;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 8)
     private String cep;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String logradouro;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String numero;
 
+    @Column(length = 100)
     private String complemento;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String bairro;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String cidade;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2)
     private String uf;
 
     public Usuario() {

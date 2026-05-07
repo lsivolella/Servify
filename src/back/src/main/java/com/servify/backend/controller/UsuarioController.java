@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.servify.backend.entity.Usuario;
+import com.servify.backend.dto.UsuarioRequestDTO;
+import com.servify.backend.dto.UsuarioResponseDTO;
 import com.servify.backend.service.UsuarioService;
+
+import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -27,23 +30,23 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario criar(@RequestBody Usuario usuario) {
-        return service.criar(usuario);
+    public UsuarioResponseDTO criar(@Valid @RequestBody UsuarioRequestDTO dto) {
+        return service.criar(dto);
     }
 
     @GetMapping
-    public List<Usuario> listar() {
+    public List<UsuarioResponseDTO> listar() {
         return service.listar();
     }
 
     @GetMapping("/{id}")
-    public Usuario buscar(@PathVariable Long id) {
+    public UsuarioResponseDTO buscar(@PathVariable Long id) {
         return service.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
-        return service.atualizar(id, usuario);
+    public UsuarioResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioRequestDTO dto) {
+        return service.atualizar(id, dto);
     }
 
     @DeleteMapping("/{id}")

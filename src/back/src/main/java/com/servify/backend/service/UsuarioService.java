@@ -1,10 +1,13 @@
 package com.servify.backend.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.servify.backend.dto.UsuarioRequestDTO;
+import com.servify.backend.dto.UsuarioResponseDTO;
 import com.servify.backend.entity.Usuario;
 import com.servify.backend.repository.UsuarioRepository;
 
@@ -17,44 +20,120 @@ public class UsuarioService {
         this.repository = repository;
     }
 
-    public Usuario criar(Usuario usuario) {
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        return repository.save(usuario);
+    public UsuarioResponseDTO criar(UsuarioRequestDTO dto) {
+
+        Usuario usuario = new Usuario();
+
+        usuario.setPerfilId(dto.getPerfilId());
+        usuario.setCpf(dto.getCpf());
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuario.setTelefone(dto.getTelefone());
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep());
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento());
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
+
+        Usuario salvo = repository.save(usuario);
+
+        return toResponseDTO(salvo);
     }
 
-    public List<Usuario> listar() {
-        return repository.findAll();
+    public List<UsuarioResponseDTO> listar() {
+        return repository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    public Usuario buscarPorId(Long id) {
-        return repository.findById(id)
+    public UsuarioResponseDTO buscarPorId(Long id) {
+
+        Usuario usuario = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return toResponseDTO(usuario);
     }
 
-    public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
-        Usuario usuario = buscarPorId(id);
+    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
 
-        usuario.setPerfilId(usuarioAtualizado.getPerfilId());
-        usuario.setCpf(usuarioAtualizado.getCpf());
-        usuario.setNome(usuarioAtualizado.getNome());
-        usuario.setEmail(usuarioAtualizado.getEmail());
-        if (usuarioAtualizado.getSenha() != null) {
-            usuario.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuario.setPerfilId(dto.getPerfilId());
+        usuario.setCpf(dto.getCpf());
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
-        usuario.setTelefone(usuarioAtualizado.getTelefone());
-        usuario.setDataNascimento(usuarioAtualizado.getDataNascimento());
-        usuario.setCep(usuarioAtualizado.getCep());
-        usuario.setLogradouro(usuarioAtualizado.getLogradouro());
-        usuario.setNumero(usuarioAtualizado.getNumero());
-        usuario.setComplemento(usuarioAtualizado.getComplemento());
-        usuario.setBairro(usuarioAtualizado.getBairro());
-        usuario.setCidade(usuarioAtualizado.getCidade());
-        usuario.setUf(usuarioAtualizado.getUf());
+        usuario.setTelefone(dto.getTelefone());
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep());
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento());
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
 
-        return repository.save(usuario);
+        Usuario atualizado = repository.save(usuario);
+
+        return toResponseDTO(atualizado);
     }
 
     public void deletar(Long id) {
-        repository.deleteById(id);
+
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        repository.delete(usuario);
+    }
+
+    private Usuario toEntity(UsuarioRequestDTO dto) {
+
+        Usuario usuario = new Usuario();
+
+        usuario.setPerfilId(dto.getPerfilId());
+        usuario.setCpf(dto.getCpf());
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTelefone(dto.getTelefone());
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep());
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento());
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
+
+        return usuario;
+    }
+
+    private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
+
+        UsuarioResponseDTO dto = new UsuarioResponseDTO();
+
+        dto.setUsuarioId(usuario.getUsuarioId());
+        dto.setPerfilId(usuario.getPerfilId());
+        dto.setCpf(usuario.getCpf());
+        dto.setNome(usuario.getNome());
+        dto.setEmail(usuario.getEmail());
+        dto.setTelefone(usuario.getTelefone());
+        dto.setDataNascimento(usuario.getDataNascimento());
+        dto.setCep(usuario.getCep());
+        dto.setLogradouro(usuario.getLogradouro());
+        dto.setNumero(usuario.getNumero());
+        dto.setComplemento(usuario.getComplemento());
+        dto.setBairro(usuario.getBairro());
+        dto.setCidade(usuario.getCidade());
+        dto.setUf(usuario.getUf());
+
+        return dto;
     }
 }
