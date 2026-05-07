@@ -25,13 +25,16 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
 
         usuario.setPerfilId(dto.getPerfilId());
-        usuario.setCpf(dto.getCpf());
+        usuario.setCpf(dto.getCpf()
+                .replaceAll("\\D", ""));
         usuario.setNome(dto.getNome());
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
-        usuario.setTelefone(dto.getTelefone());
+        usuario.setTelefone(dto.getTelefone()
+                .replaceAll("\\D", ""));
         usuario.setDataNascimento(dto.getDataNascimento());
-        usuario.setCep(dto.getCep());
+        usuario.setCep(dto.getCep()
+                .replaceAll("\\D", ""));
         usuario.setLogradouro(dto.getLogradouro());
         usuario.setNumero(dto.getNumero());
         usuario.setComplemento(dto.getComplemento());

@@ -208,9 +208,15 @@ export default function RegisterPage() {
           nome,
           email,
           senha: form.senha,
-          telefone: form.telefone,
+          telefone: form.telefone.replace(/\D/g, ''),
           dataNascimento: form.dataNascimento,
-          enderecoId: 1, // TODO: tentar criar endereço primeiro e usar o ID retornado
+          cep: form.cep.replace(/\D/g, ''),
+          logradouro: form.logradouro,
+          numero: form.numero,
+          complemento: form.complemento,
+          bairro: form.bairro,
+          cidade: form.cidade,
+          uf: form.uf,
         })
       })
 
