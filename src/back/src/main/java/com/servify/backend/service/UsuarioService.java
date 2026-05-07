@@ -43,7 +43,13 @@ public class UsuarioService {
         }
         usuario.setTelefone(usuarioAtualizado.getTelefone());
         usuario.setDataNascimento(usuarioAtualizado.getDataNascimento());
-        usuario.setEnderecoId(usuarioAtualizado.getEnderecoId());
+        usuario.setCep(usuarioAtualizado.getCep());
+        usuario.setLogradouro(usuarioAtualizado.getLogradouro());
+        usuario.setNumero(usuarioAtualizado.getNumero());
+        usuario.setComplemento(usuarioAtualizado.getComplemento());
+        usuario.setBairro(usuarioAtualizado.getBairro());
+        usuario.setCidade(usuarioAtualizado.getCidade());
+        usuario.setUf(usuarioAtualizado.getUf());
 
         return repository.save(usuario);
     }
