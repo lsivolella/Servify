@@ -1,6 +1,5 @@
 package com.servify.backend.service;
 
-import com.servify.backend.controller.UsuarioController;
 import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,7 +13,7 @@ public class UsuarioService {
     private final UsuarioRepository repository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UsuarioService(UsuarioRepository repository, UsuarioController usuarioController) {
+    public UsuarioService(UsuarioRepository repository) {
         this.repository = repository;
     }
 
@@ -35,13 +34,16 @@ public class UsuarioService {
     public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
         Usuario usuario = buscarPorId(id);
 
+        usuario.setPerfilId(usuarioAtualizado.getPerfilId());
+        usuario.setCpf(usuarioAtualizado.getCpf());
         usuario.setNome(usuarioAtualizado.getNome());
         usuario.setEmail(usuarioAtualizado.getEmail());
-        usuario.setTelefone(usuarioAtualizado.getTelefone());
-
         if (usuarioAtualizado.getSenha() != null) {
-            usuario.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha().toString()));
+            usuario.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
         }
+        usuario.setTelefone(usuarioAtualizado.getTelefone());
+        usuario.setDataNascimento(usuarioAtualizado.getDataNascimento());
+        usuario.setEnderecoId(usuarioAtualizado.getEnderecoId());
 
         return repository.save(usuario);
     }
