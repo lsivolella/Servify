@@ -2,9 +2,7 @@ package com.servify.backend.entity;
 
 import java.time.LocalDate;
 
-import org.jspecify.annotations.Nullable;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +29,7 @@ public class Usuario {
     @Column(unique = true)
     private String email;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     private String telefone;
