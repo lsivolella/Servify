@@ -21,35 +21,43 @@ public class Usuario {
     // private Perfil perfilId;
     private Integer perfilId;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String cpf;
 
+    @Column(nullable = false)
     private String nome;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
+    @Column(nullable = false)
     private String telefone;
 
+    @Column(nullable = false)
     private LocalDate dataNascimento;
 
-    private Long enderecoId;
-
+    @Column(nullable = false)
     private String cep;
 
+    @Column(nullable = false)
     private String logradouro;
 
+    @Column(nullable = false)
     private String numero;
 
     private String complemento;
 
+    @Column(nullable = false)
     private String bairro;
 
+    @Column(nullable = false)
     private String cidade;
 
+    @Column(nullable = false)
     private String uf;
 
     public Usuario() {
