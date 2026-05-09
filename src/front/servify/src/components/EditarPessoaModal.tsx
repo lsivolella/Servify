@@ -37,6 +37,11 @@ import {
   formatCepDisplay,
 } from '../services/viacep'
 import { maskCpf, maskEmailInput, maskPhoneBr } from '../utils/masks'
+import {
+  labelPerfilColaborador,
+  perfilColaboradorFromInitial,
+  PERFIS_COLABORADOR,
+} from '../utils/perfilColaborador'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -50,7 +55,6 @@ type EditarPessoaModalProps = {
   open: boolean
   tipo: 'cliente' | 'colaborador'
   initial: EditarPessoaValues
-  cargos?: readonly string[]
   onClose: () => void
   onSave: (data: EditarPessoaValues) => void
 }
@@ -68,7 +72,6 @@ export default function EditarPessoaModal({
   open,
   tipo,
   initial,
-  cargos = [],
   onClose,
   onSave,
 }: EditarPessoaModalProps) {
@@ -103,7 +106,7 @@ export default function EditarPessoaModal({
     setTelefone(initial.telefone)
     setCpf(initial.cpf)
     setCidadeInput(initial.cidade)
-    setCargo(initial.cargo)
+    setCargo(perfilColaboradorFromInitial(initial.cargo))
     setAtivo(initial.ativo)
     setCep(initial.cep ?? '')
     setLogradouro(initial.logradouro ?? '')
@@ -185,7 +188,7 @@ export default function EditarPessoaModal({
       return
     }
     if (isColaborador && !cargo.trim()) {
-      setErroLocal('Selecione um cargo.')
+      setErroLocal('Selecione um perfil.')
       return
     }
     setErroLocal(null)
@@ -462,9 +465,9 @@ export default function EditarPessoaModal({
           </Box>
           {isColaborador ? (
             <Box>
-              <FieldLabel htmlFor="ep-cargo">Cargo</FieldLabel>
+              <FieldLabel htmlFor="ep-perfil">Perfil</FieldLabel>
               <TextField
-                id="ep-cargo"
+                id="ep-perfil"
                 name="cargo"
                 select
                 fullWidth
@@ -477,10 +480,10 @@ export default function EditarPessoaModal({
                     renderValue: (v: unknown) =>
                       v === '' || v == null ? (
                         <Typography component="span" sx={{ color: '#9ca3af' }}>
-                          Selecione o cargo
+                          Selecione o perfil
                         </Typography>
                       ) : (
-                        String(v)
+                        labelPerfilColaborador(String(v))
                       ),
                   },
                   input: {
@@ -494,11 +497,11 @@ export default function EditarPessoaModal({
                 sx={fieldShellSx()}
               >
                 <MenuItem value="" disabled sx={{ color: '#9ca3af' }}>
-                  Selecione o cargo
+                  Selecione o perfil
                 </MenuItem>
-                {cargos.map((c) => (
-                  <MenuItem key={c} value={c}>
-                    {c}
+                {PERFIS_COLABORADOR.map((p) => (
+                  <MenuItem key={p.value} value={p.value}>
+                    {p.label}
                   </MenuItem>
                 ))}
               </TextField>

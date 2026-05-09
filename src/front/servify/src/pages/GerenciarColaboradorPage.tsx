@@ -27,6 +27,7 @@ import {
   toastSuccess,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
+import { labelPerfilColaborador } from '../utils/perfilColaborador'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -51,14 +52,6 @@ type Colaborador = {
   uf: string
 }
 
-const CARGOS_DISPONIVEIS = [
-  'Cabeleireiro(a)',
-  'Manicure',
-  'Atendente',
-  'Gerente',
-  'Recepcionista',
-] as const
-
 const COLABORADORES_MOCK: Colaborador[] = [
   {
     id: '1',
@@ -67,7 +60,7 @@ const COLABORADORES_MOCK: Colaborador[] = [
     telefone: '(11) 98765-4321',
     cpf: '123.456.789-09',
     cidade: 'São Paulo - SP',
-    cargo: 'Cabeleireiro(a)',
+    cargo: 'colaborador',
     status: 'ativo',
     cep: '01310100',
     logradouro: 'Av. Paulista',
@@ -83,7 +76,7 @@ const COLABORADORES_MOCK: Colaborador[] = [
     telefone: '(31) 98765-4321',
     cpf: '123.456.789-09',
     cidade: 'Belo Horizonte - MG',
-    cargo: 'Manicure',
+    cargo: 'colaborador',
     status: 'pendente',
     cep: '30860330',
     logradouro: 'Rua Caitité',
@@ -99,7 +92,7 @@ const COLABORADORES_MOCK: Colaborador[] = [
     telefone: '(21) 97777-1111',
     cpf: '987.654.321-00',
     cidade: 'Belo Horizonte - MG',
-    cargo: 'Atendente',
+    cargo: 'adm',
     status: 'pendente',
     cep: '30860330',
     logradouro: 'Rua Caitité',
@@ -115,7 +108,7 @@ const COLABORADORES_MOCK: Colaborador[] = [
     telefone: '(31) 99999-8888',
     cpf: '456.789.123-45',
     cidade: 'Belo Horizonte - MG',
-    cargo: 'Gerente',
+    cargo: 'adm',
     status: 'ativo',
     cep: '',
     logradouro: '',
@@ -142,27 +135,6 @@ function rowToEditValues(row: Colaborador): EditarPessoaValues {
     bairro: row.bairro,
     uf: row.uf,
   }
-}
-
-function StatusBadge({ status }: { status: StatusColaborador }) {
-  const isAtivo = status === 'ativo'
-  return (
-    <Typography
-      component="span"
-      sx={{
-        display: 'inline-block',
-        px: 1.5,
-        py: 0.5,
-        borderRadius: '999px',
-        fontSize: '0.8125rem',
-        fontWeight: 600,
-        bgcolor: isAtivo ? '#dcfce7' : '#fef3c7',
-        color: isAtivo ? '#166534' : '#92400e',
-      }}
-    >
-      {isAtivo ? 'Ativo' : 'Pendente'}
-    </Typography>
-  )
 }
 
 export default function GerenciarColaboradorPage() {
@@ -416,11 +388,10 @@ export default function GerenciarColaboradorPage() {
                   },
                 }}
               >
-                <TableCell width="22%">Nome</TableCell>
-                <TableCell width="28%">Email</TableCell>
-                <TableCell width="20%">Cargo</TableCell>
-                <TableCell width="15%">Status</TableCell>
-                <TableCell width="15%" align="right">
+                <TableCell width="26%">Nome</TableCell>
+                <TableCell width="34%">Email</TableCell>
+                <TableCell width="22%">Perfil</TableCell>
+                <TableCell width="18%" align="right">
                   Ações
                 </TableCell>
               </TableRow>
@@ -459,11 +430,8 @@ export default function GerenciarColaboradorPage() {
                   </TableCell>
                   <TableCell>
                     <Typography sx={{ color: '#64748b', fontSize: '0.9375rem' }}>
-                      {row.cargo}
+                      {labelPerfilColaborador(row.cargo)}
                     </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <StatusBadge status={row.status} />
                   </TableCell>
                   <TableCell align="right">
                     <Box
@@ -509,7 +477,6 @@ export default function GerenciarColaboradorPage() {
 
       <ColaboradorFormModal
         open={conviteOpen}
-        cargos={CARGOS_DISPONIVEIS}
         email={formEmail}
         cargo={formCargo}
         onEmailChange={setFormEmail}
@@ -522,7 +489,6 @@ export default function GerenciarColaboradorPage() {
         open={editOpen}
         tipo="colaborador"
         initial={editInitial}
-        cargos={CARGOS_DISPONIVEIS}
         onClose={fecharEditar}
         onSave={handleSalvarEdicao}
       />
