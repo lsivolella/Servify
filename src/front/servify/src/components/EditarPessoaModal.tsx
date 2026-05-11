@@ -101,32 +101,37 @@ export default function EditarPessoaModal({
 
   useEffect(() => {
     if (!open) return
-    setNome(initial.nome)
-    setEmail(initial.email)
-    setTelefone(initial.telefone)
-    setCpf(initial.cpf)
-    setCidadeInput(initial.cidade)
-    setCargo(perfilColaboradorFromInitial(initial.cargo))
-    setAtivo(initial.ativo)
-    setCep(initial.cep ?? '')
-    setLogradouro(initial.logradouro ?? '')
-    setNumero(initial.numero ?? '')
-    setComplemento(initial.complemento ?? '')
-    setBairro(initial.bairro ?? '')
-    setUf(initial.uf ?? '')
-    setErroLocal(null)
-    const temEndereco =
-      Boolean(initial.cep?.trim()) ||
-      Boolean(initial.logradouro?.trim()) ||
-      Boolean(initial.bairro?.trim())
-    setEnderecoExpandido(temEndereco)
+    queueMicrotask(() => {
+      setNome(initial.nome)
+      setEmail(initial.email)
+      setTelefone(initial.telefone)
+      setCpf(initial.cpf)
+      setCidadeInput(initial.cidade)
+      setCargo(perfilColaboradorFromInitial(initial.cargo))
+      setAtivo(initial.ativo)
+      setCep(initial.cep ?? '')
+      setLogradouro(initial.logradouro ?? '')
+      setNumero(initial.numero ?? '')
+      setComplemento(initial.complemento ?? '')
+      setBairro(initial.bairro ?? '')
+      setUf(initial.uf ?? '')
+      setErroLocal(null)
+      const temEndereco =
+        Boolean(initial.cep?.trim()) ||
+        Boolean(initial.logradouro?.trim()) ||
+        Boolean(initial.bairro?.trim())
+      setEnderecoExpandido(temEndereco)
+    })
   }, [open, initial])
 
   useEffect(() => {
     if (!open) return
     let cancel = false
-    setMunLoading(true)
-    setMunErro(null)
+    queueMicrotask(() => {
+      if (cancel) return
+      setMunLoading(true)
+      setMunErro(null)
+    })
     fetchMunicipiosBrasil()
       .then((list) => {
         if (!cancel) setMunicipios(list)
@@ -137,7 +142,11 @@ export default function EditarPessoaModal({
         }
       })
       .finally(() => {
-        if (!cancel) setMunLoading(false)
+        if (!cancel) {
+          queueMicrotask(() => {
+            if (!cancel) setMunLoading(false)
+          })
+        }
       })
     return () => {
       cancel = true

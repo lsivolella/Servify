@@ -42,7 +42,8 @@ export default function ColaboradorFormModal({
   const [erroLocal, setErroLocal] = useState<string | null>(null)
 
   useEffect(() => {
-    if (open) setErroLocal(null)
+    if (!open) return
+    queueMicrotask(() => setErroLocal(null))
   }, [open])
 
   function handleFormSubmit(e: FormEvent) {

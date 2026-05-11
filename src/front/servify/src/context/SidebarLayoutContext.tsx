@@ -7,6 +7,8 @@ import {
   type ReactNode,
 } from 'react'
 
+/* eslint-disable react-refresh/only-export-components */
+
 type SidebarLayoutValue = {
   sidebarExpanded: boolean
   toggleSidebar: () => void

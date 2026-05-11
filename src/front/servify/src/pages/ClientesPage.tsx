@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import EditarPessoaModal from '../components/EditarPessoaModal'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
@@ -22,76 +22,14 @@ import {
   confirmDeleteRecord,
   toastCadastroSucesso,
   toastSuccess,
+  toastError,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
+import { getClientes, type Cliente } from '../services/clientes'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
 const PAGE_BG = '#f8fafc'
-
-type Cliente = {
-  id: string
-  nome: string
-  email: string
-  telefone: string
-  cpf: string
-  cidade: string
-  ativo: boolean
-  cep: string
-  logradouro: string
-  numero: string
-  complemento: string
-  bairro: string
-  uf: string
-}
-
-const CLIENTES_MOCK: Cliente[] = [
-  {
-    id: '1',
-    nome: 'João Pereira',
-    email: 'joao@email.com',
-    telefone: '(11) 99999-0001',
-    cpf: '',
-    cidade: 'São Paulo - SP',
-    ativo: true,
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    uf: 'SP',
-  },
-  {
-    id: '2',
-    nome: 'Maria Santos',
-    email: 'maria.santos@email.com',
-    telefone: '(21) 98888-2222',
-    cpf: '321.654.987-10',
-    cidade: 'Rio de Janeiro - RJ',
-    ativo: true,
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    uf: 'RJ',
-  },
-  {
-    id: '3',
-    nome: 'Pedro Henrique',
-    email: 'pedro@empresa.com',
-    telefone: '',
-    cpf: '',
-    cidade: 'Curitiba - PR',
-    ativo: false,
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    uf: 'PR',
-  },
-]
 
 function rowToEditValues(row: Cliente): EditarPessoaValues {
   return {
@@ -114,7 +52,8 @@ function rowToEditValues(row: Cliente): EditarPessoaValues {
 export default function ClientesPage() {
   const { sidebarExpanded, toggleSidebar } = useSidebarLayout()
   const [busca, setBusca] = useState('')
-  const [clientes, setClientes] = useState<Cliente[]>(CLIENTES_MOCK)
+  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [loading, setLoading] = useState(true)
 
   const [editOpen, setEditOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -133,6 +72,31 @@ export default function ClientesPage() {
     bairro: '',
     uf: '',
   })
+
+  useEffect(() => {
+    let alive = true
+    void (async () => {
+      try {
+        const data = await getClientes()
+        if (!alive) return
+        setClientes(data)
+      } catch (e: unknown) {
+        if (!alive) return
+        toastError(
+          e instanceof Error
+            ? e.message
+            : 'Não foi possível carregar os clientes.',
+        )
+      } finally {
+        queueMicrotask(() => {
+          if (alive) setLoading(false)
+        })
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [])
 
   function abrirEditar(row: Cliente) {
     setEditingId(row.id)
@@ -251,6 +215,7 @@ export default function ClientesPage() {
           placeholder="Buscar clientes..."
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
+          disabled={loading}
           slotProps={{
             input: {
               startAdornment: (
@@ -380,6 +345,15 @@ export default function ClientesPage() {
                   </TableCell>
                 </TableRow>
               ))}
+              {!loading && filtrados.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5} sx={{ py: 4 }}>
+                    <Typography sx={{ color: '#64748b', textAlign: 'center' }}>
+                      Nenhum cliente encontrado.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -388,8 +362,11 @@ export default function ClientesPage() {
           variant="body2"
           sx={{ mt: 2, color: '#94a3b8', fontSize: '0.875rem' }}
         >
-          {filtrados.length} cliente{filtrados.length === 1 ? '' : 's'}{' '}
-          encontrado{filtrados.length === 1 ? '' : 's'}
+          {loading
+            ? 'Carregando clientes...'
+            : `${filtrados.length} cliente${filtrados.length === 1 ? '' : 's'} encontrado${
+                filtrados.length === 1 ? '' : 's'
+              }`}
         </Typography>
       </Container>
 

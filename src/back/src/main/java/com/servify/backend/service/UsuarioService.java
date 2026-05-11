@@ -1,5 +1,6 @@
 package com.servify.backend.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,20 @@ public class UsuarioService {
 
     public List<UsuarioResponseDTO> listar() {
         return repository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<UsuarioResponseDTO> listarClientes() {
+        return repository.findByPerfilId(3)
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<UsuarioResponseDTO> listarColaboradores() {
+        return repository.findByPerfilIdIn(Arrays.asList(1, 2))
                 .stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());

@@ -39,6 +39,16 @@ public class UsuarioController {
         return service.listar();
     }
 
+    @GetMapping("/clientes")
+    public List<UsuarioResponseDTO> listarClientes() {
+        return service.listarClientes();
+    }
+
+    @GetMapping("/colaboradores")
+    public List<UsuarioResponseDTO> listarColaboradores() {
+        return service.listarColaboradores();
+    }
+
     @GetMapping("/{id}")
     public UsuarioResponseDTO buscar(@PathVariable Long id) {
         return service.buscarPorId(id);

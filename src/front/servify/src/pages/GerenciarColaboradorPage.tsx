@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ColaboradorFormModal from '../components/ColaboradorFormModal'
 import EditarPessoaModal from '../components/EditarPessoaModal'
 import Box from '@mui/material/Box'
@@ -25,99 +25,15 @@ import {
   confirmDeleteRecord,
   toastCadastroSucesso,
   toastSuccess,
+  toastError,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
 import { labelPerfilColaborador } from '../utils/perfilColaborador'
+import { getColaboradores, type Colaborador } from '../services/colaboradores'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
 const PAGE_BG = '#f8fafc'
-
-type StatusColaborador = 'ativo' | 'pendente'
-
-type Colaborador = {
-  id: string
-  nome: string | null
-  email: string
-  telefone: string
-  cpf: string
-  cidade: string
-  cargo: string
-  status: StatusColaborador
-  cep: string
-  logradouro: string
-  numero: string
-  complemento: string
-  bairro: string
-  uf: string
-}
-
-const COLABORADORES_MOCK: Colaborador[] = [
-  {
-    id: '1',
-    nome: 'Carlos Silva',
-    email: 'carlos@empresa.com',
-    telefone: '(11) 98765-4321',
-    cpf: '123.456.789-09',
-    cidade: 'São Paulo - SP',
-    cargo: 'colaborador',
-    status: 'ativo',
-    cep: '01310100',
-    logradouro: 'Av. Paulista',
-    numero: '1000',
-    complemento: '',
-    bairro: 'Bela Vista',
-    uf: 'SP',
-  },
-  {
-    id: '2',
-    nome: 'Ana Oliveira',
-    email: 'ana@empresa.com',
-    telefone: '(31) 98765-4321',
-    cpf: '123.456.789-09',
-    cidade: 'Belo Horizonte - MG',
-    cargo: 'colaborador',
-    status: 'pendente',
-    cep: '30860330',
-    logradouro: 'Rua Caitité',
-    numero: '1001',
-    complemento: 'Apto 101',
-    bairro: 'Gloria',
-    uf: 'SP',
-  },
-  {
-    id: '3',
-    nome: 'Patricia Oliveira',
-    email: 'patricia@empresa.com',
-    telefone: '(21) 97777-1111',
-    cpf: '987.654.321-00',
-    cidade: 'Belo Horizonte - MG',
-    cargo: 'adm',
-    status: 'pendente',
-    cep: '30860330',
-    logradouro: 'Rua Caitité',
-    numero: '1001',
-    complemento: '',
-    bairro: 'Gloria',
-    uf: 'MG',
-  },
-  {
-    id: '4',
-    nome: 'Ricardo Mendes',
-    email: 'ricardo@empresa.com',
-    telefone: '(31) 99999-8888',
-    cpf: '456.789.123-45',
-    cidade: 'Belo Horizonte - MG',
-    cargo: 'adm',
-    status: 'ativo',
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    uf: 'MG',
-  },
-]
 
 function rowToEditValues(row: Colaborador): EditarPessoaValues {
   return {
@@ -140,8 +56,8 @@ function rowToEditValues(row: Colaborador): EditarPessoaValues {
 export default function GerenciarColaboradorPage() {
   const { sidebarExpanded, toggleSidebar } = useSidebarLayout()
   const [busca, setBusca] = useState('')
-  const [colaboradores, setColaboradores] =
-    useState<Colaborador[]>(COLABORADORES_MOCK)
+  const [colaboradores, setColaboradores] = useState<Colaborador[]>([])
+  const [loading, setLoading] = useState(true)
 
   const [conviteOpen, setConviteOpen] = useState(false)
   const [formEmail, setFormEmail] = useState('')
@@ -164,6 +80,31 @@ export default function GerenciarColaboradorPage() {
     bairro: '',
     uf: '',
   })
+
+  useEffect(() => {
+    let alive = true
+    void (async () => {
+      try {
+        const data = await getColaboradores()
+        if (!alive) return
+        setColaboradores(data)
+      } catch (e: unknown) {
+        if (!alive) return
+        toastError(
+          e instanceof Error
+            ? e.message
+            : 'Não foi possível carregar os colaboradores.',
+        )
+      } finally {
+        queueMicrotask(() => {
+          if (alive) setLoading(false)
+        })
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [])
 
   function abrirConvidar() {
     setFormEmail('')
@@ -345,6 +286,7 @@ export default function GerenciarColaboradorPage() {
           placeholder="Buscar colaboradores..."
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
+          disabled={loading}
           slotProps={{
             input: {
               startAdornment: (
@@ -461,6 +403,15 @@ export default function GerenciarColaboradorPage() {
                   </TableCell>
                 </TableRow>
               ))}
+              {!loading && filtrados.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} sx={{ py: 4 }}>
+                    <Typography sx={{ color: '#64748b', textAlign: 'center' }}>
+                      Nenhum colaborador encontrado.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -469,9 +420,11 @@ export default function GerenciarColaboradorPage() {
           variant="body2"
           sx={{ mt: 2, color: '#94a3b8', fontSize: '0.875rem' }}
         >
-          {filtrados.length} colaborador
-          {filtrados.length === 1 ? '' : 'es'} encontrado
-          {filtrados.length === 1 ? '' : 's'}
+          {loading
+            ? 'Carregando colaboradores...'
+            : `${filtrados.length} colaborador${
+                filtrados.length === 1 ? '' : 'es'
+              } encontrado${filtrados.length === 1 ? '' : 's'}`}
         </Typography>
       </Container>
 
