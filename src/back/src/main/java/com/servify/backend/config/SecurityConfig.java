@@ -7,6 +7,27 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+// @Configuration
+// @EnableWebSecurity
+// public class SecurityConfig {
+
+// 	@Bean
+// 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+// 		http
+// 				.csrf(AbstractHttpConfigurer::disable)
+// 				.authorizeHttpRequests(auth -> auth
+// 						.requestMatchers(
+// 								"/swagger-ui/**",
+// 								"/swagger-ui.html",
+// 								"/v3/api-docs",
+// 								"/v3/api-docs/**")
+// 						.permitAll()
+// 						.anyRequest()
+// 						.authenticated());
+// 		return http.build();
+// 	}
+// }
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -16,14 +37,8 @@ public class SecurityConfig {
 		http
 				.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(
-								"/swagger-ui/**",
-								"/swagger-ui.html",
-								"/v3/api-docs",
-								"/v3/api-docs/**")
-						.permitAll()
 						.anyRequest()
-						.authenticated());
+						.permitAll());
 		return http.build();
 	}
 }
