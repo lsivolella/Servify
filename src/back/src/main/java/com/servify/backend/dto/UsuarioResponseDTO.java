@@ -6,6 +6,7 @@ public class UsuarioResponseDTO {
 
     private Long id;
     private Integer perfilId;
+    private String perfilNome;
     private String cpf;
     private String nome;
     private String email;
@@ -36,6 +37,14 @@ public class UsuarioResponseDTO {
 
     public void setPerfilId(Integer perfilId) {
         this.perfilId = perfilId;
+    }
+
+    public String getPerfilNome() {
+        return perfilNome;
+    }
+
+    public void setPerfilNome(String perfilNome) {
+        this.perfilNome = perfilNome;
     }
 
     public String getCpf() {
