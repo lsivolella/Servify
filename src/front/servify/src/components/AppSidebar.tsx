@@ -16,6 +16,12 @@ import GroupsOutlined from '@mui/icons-material/GroupsOutlined'
 import LogoutOutlined from '@mui/icons-material/LogoutOutlined'
 import PercentOutlined from '@mui/icons-material/PercentOutlined'
 import PersonOutlined from '@mui/icons-material/PersonOutlined'
+import {
+  clearSession,
+  formatPerfilAcesso,
+  getSession,
+  initialsFromNome,
+} from '../auth/session'
 import { useSidebarLayout } from '../context/SidebarLayoutContext'
 
 const BG = '#0B1E3B'
@@ -144,6 +150,16 @@ export default function AppSidebar() {
   const { sidebarExpanded } = useSidebarLayout()
   const collapsed = !sidebarExpanded
 
+  const sessionUser = getSession()?.user
+  const displayName = sessionUser?.nome?.trim() || sessionUser?.email || 'Usuário'
+  const perfilLabel = sessionUser ? formatPerfilAcesso(sessionUser) : '—'
+  const avatarLetters = initialsFromNome(displayName)
+
+  function handleLogout() {
+    clearSession()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <Box
       component="nav"
@@ -226,7 +242,11 @@ export default function AppSidebar() {
           }}
         >
           <Tooltip
-            title={collapsed ? 'Waltinho' : ''}
+            title={
+              collapsed
+                ? `${displayName}${perfilLabel !== '—' ? ` · ${perfilLabel}` : ''}`
+                : ''
+            }
             placement="right"
             disableHoverListener={!collapsed}
             arrow
@@ -241,30 +261,36 @@ export default function AppSidebar() {
                 fontWeight: 700,
               }}
             >
-              WA
+              {avatarLetters}
             </Avatar>
           </Tooltip>
           {!collapsed ? (
-            <Box sx={{ minWidth: 0 }}>
+            <Box sx={{ minWidth: 0, flex: 1 }}>
               <Typography
                 sx={{
                   color: '#FFFFFF',
                   fontWeight: 600,
                   fontSize: '0.9375rem',
                   lineHeight: 1.2,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                Waltinho
+                {displayName}
               </Typography>
-              <Box
+              <Typography
                 sx={{
-                  mt: 0.75,
-                  width: 36,
-                  height: 2,
-                  borderRadius: 1,
-                  bgcolor: 'rgba(255, 255, 255, 0.22)',
+                  mt: 0.35,
+                  color: 'rgba(255, 255, 255, 0.55)',
+                  fontSize: '0.6875rem',
+                  fontWeight: 500,
+                  lineHeight: 1.25,
+                  letterSpacing: '0.02em',
                 }}
-              />
+              >
+                {perfilLabel}
+              </Typography>
             </Box>
           ) : null}
         </Box>
@@ -272,7 +298,7 @@ export default function AppSidebar() {
         {collapsed ? (
           <Tooltip title="Sair" placement="right" arrow enterDelay={400}>
             <IconButton
-              onClick={() => navigate('/login')}
+              onClick={handleLogout}
               aria-label="Sair"
               sx={{
                 width: '100%',
@@ -296,7 +322,7 @@ export default function AppSidebar() {
             startIcon={
               <LogoutOutlined sx={{ fontSize: 20, color: '#fff !important' }} />
             }
-            onClick={() => navigate('/login')}
+            onClick={handleLogout}
             sx={{
               borderRadius: '10px',
               py: 1.1,

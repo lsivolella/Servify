@@ -17,6 +17,9 @@ public class ConviteResponseDTO {
 
     private ConviteStatus status;
 
+    /** {@code true} se o convite exige senha provisória do e-mail para concluir o cadastro. */
+    private boolean exigeSenhaProvisoria;
+
     public Integer getId() {
         return id;
     }
@@ -63,5 +66,13 @@ public class ConviteResponseDTO {
 
     public void setStatus(ConviteStatus status) {
         this.status = status;
+    }
+
+    public boolean isExigeSenhaProvisoria() {
+        return exigeSenhaProvisoria;
+    }
+
+    public void setExigeSenhaProvisoria(boolean exigeSenhaProvisoria) {
+        this.exigeSenhaProvisoria = exigeSenhaProvisoria;
     }
 }

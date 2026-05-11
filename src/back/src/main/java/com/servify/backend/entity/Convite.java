@@ -30,6 +30,10 @@ public class Convite {
     @Column(nullable = false, unique = true, length = 36)
     private String token;
 
+    /** Hash BCrypt da senha provisória; o texto plano só vai no e-mail de convite. */
+    @Column(name = "senha_provisoria_hash", length = 255)
+    private String senhaProvisoriaHash;
+
     @Column(nullable = false)
     private LocalDateTime dataCriacao;
 
@@ -70,6 +74,14 @@ public class Convite {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getSenhaProvisoriaHash() {
+        return senhaProvisoriaHash;
+    }
+
+    public void setSenhaProvisoriaHash(String senhaProvisoriaHash) {
+        this.senhaProvisoriaHash = senhaProvisoriaHash;
     }
 
     public LocalDateTime getDataCriacao() {

@@ -27,7 +27,7 @@ type ColaboradorFormModalProps = {
   onEmailChange: (value: string) => void
   onCargoChange: (value: string) => void
   onClose: () => void
-  onSubmit: () => void
+  onSubmit: () => void | Promise<void>
 }
 
 export default function ColaboradorFormModal({
@@ -40,13 +40,20 @@ export default function ColaboradorFormModal({
   onSubmit,
 }: ColaboradorFormModalProps) {
   const [erroLocal, setErroLocal] = useState<string | null>(null)
+  const [enviando, setEnviando] = useState(false)
 
   useEffect(() => {
-    if (!open) return
+    if (!open) {
+      queueMicrotask(() => {
+        setErroLocal(null)
+        setEnviando(false)
+      })
+      return
+    }
     queueMicrotask(() => setErroLocal(null))
   }, [open])
 
-  function handleFormSubmit(e: FormEvent) {
+  async function handleFormSubmit(e: FormEvent) {
     e.preventDefault()
     const emailTrim = email.trim()
     const cargoTrim = cargo.trim()
@@ -59,7 +66,18 @@ export default function ColaboradorFormModal({
       return
     }
     setErroLocal(null)
-    onSubmit()
+    setEnviando(true)
+    try {
+      await Promise.resolve(onSubmit())
+    } catch (err) {
+      setErroLocal(
+        err instanceof Error
+          ? err.message
+          : 'Não foi possível enviar o convite.',
+      )
+    } finally {
+      setEnviando(false)
+    }
   }
 
   return (
@@ -276,6 +294,7 @@ export default function ColaboradorFormModal({
               type="button"
               variant="outlined"
               onClick={onClose}
+              disabled={enviando}
               sx={{
                 borderRadius: '10px',
                 px: 2.5,
@@ -293,6 +312,7 @@ export default function ColaboradorFormModal({
               type="submit"
               variant="contained"
               color="primary"
+              disabled={enviando}
               sx={{
                 borderRadius: '10px',
                 px: 2.5,
@@ -303,7 +323,7 @@ export default function ColaboradorFormModal({
                 '&:hover': { bgcolor: '#162d4a' },
               }}
             >
-              Enviar Convite
+              {enviando ? 'Enviando…' : 'Enviar Convite'}
             </Button>
           </Box>
         </Box>

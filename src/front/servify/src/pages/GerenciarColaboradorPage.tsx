@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import ColaboradorFormModal from '../components/ColaboradorFormModal'
 import EditarPessoaModal from '../components/EditarPessoaModal'
+import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -28,8 +29,18 @@ import {
   toastError,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
-import { labelPerfilColaborador } from '../utils/perfilColaborador'
+import {
+  cargoColaboradorFromPerfilId,
+  labelPerfilColaborador,
+  perfilIdParaConvite,
+} from '../utils/perfilColaborador'
 import { getColaboradores, type Colaborador } from '../services/colaboradores'
+import { criarConvite } from '../services/convites'
+import {
+  fetchGmailOAuthStatus,
+  getGmailAuthorizeUrl,
+  type GmailOAuthStatus,
+} from '../services/gmailOAuth'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -65,6 +76,9 @@ export default function GerenciarColaboradorPage() {
 
   const [editOpen, setEditOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [gmailOAuthStatus, setGmailOAuthStatus] = useState<
+    GmailOAuthStatus | null | undefined
+  >(undefined)
   const [editInitial, setEditInitial] = useState<EditarPessoaValues>({
     nome: '',
     email: '',
@@ -106,6 +120,36 @@ export default function GerenciarColaboradorPage() {
     }
   }, [])
 
+  useEffect(() => {
+    let alive = true
+    void (async () => {
+      try {
+        const s = await fetchGmailOAuthStatus()
+        if (!alive) return
+        setGmailOAuthStatus(s)
+      } catch {
+        if (!alive) return
+        setGmailOAuthStatus(null)
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  async function iniciarOAuthGmail() {
+    try {
+      const url = await getGmailAuthorizeUrl()
+      window.location.href = url
+    } catch (e: unknown) {
+      toastError(
+        e instanceof Error
+          ? e.message
+          : 'Não foi possível iniciar o login com Google.',
+      )
+    }
+  }
+
   function abrirConvidar() {
     setFormEmail('')
     setFormCargo('')
@@ -127,31 +171,48 @@ export default function GerenciarColaboradorPage() {
     setEditingId(null)
   }
 
-  function handleSubmitConvite() {
+  async function handleSubmitConvite() {
     const email = formEmail.trim()
     const cargo = formCargo.trim()
-    setColaboradores((prev) => [
-      ...prev,
-      {
-        id: `novo-${Date.now()}`,
-        nome: null,
-        email,
-        telefone: '',
-        cpf: '',
-        cidade: '',
-        cargo,
-        status: 'pendente',
-        cep: '',
-        logradouro: '',
-        numero: '',
-        complemento: '',
-        bairro: '',
-        uf: '',
-      },
-    ])
+    const perfilId = perfilIdParaConvite(cargo)
+    if (perfilId == null) {
+      throw new Error('Selecione um perfil válido.')
+    }
+
+    const criado = await criarConvite({ email, perfilId })
+    const cargoLinha = cargoColaboradorFromPerfilId(
+      typeof criado.perfilId === 'number' ? criado.perfilId : perfilId,
+    )
+    const rowId =
+      typeof criado.id === 'number' ? String(criado.id) : `convite-${Date.now()}`
+
+    setColaboradores((prev) => {
+      const rest = prev.filter(
+        (c) => c.email.toLowerCase() !== email.toLowerCase(),
+      )
+      return [
+        ...rest,
+        {
+          id: rowId,
+          nome: null,
+          email,
+          telefone: '',
+          cpf: '',
+          cidade: '',
+          cargo: cargoLinha,
+          status: 'pendente' as const,
+          cep: '',
+          logradouro: '',
+          numero: '',
+          complemento: '',
+          bairro: '',
+          uf: '',
+        },
+      ]
+    })
     fecharConvite()
     toastCadastroSucesso(
-      'Convite registrado. O envio por e-mail será integrado à API.',
+      'Convite salvo com token. E-mail com token e senha provisória é enviado quando o servidor Gmail estiver configurado.',
     )
   }
 
@@ -281,6 +342,41 @@ export default function GerenciarColaboradorPage() {
       </Box>
 
       <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 }, py: 3 }}>
+        {gmailOAuthStatus != null ? (
+          <Box sx={{ mb: 2.5 }}>
+            {gmailOAuthStatus.connected ? (
+              <Alert severity="success" sx={{ borderRadius: '12px' }}>
+                Gmail autorizado: convites podem ser enviados por e-mail a partir deste servidor.
+              </Alert>
+            ) : gmailOAuthStatus.browserFlowConfigured ? (
+              <Alert
+                severity="warning"
+                sx={{ borderRadius: '12px', alignItems: 'center' }}
+                action={
+                  <Button
+                    color="inherit"
+                    size="small"
+                    variant="outlined"
+                    onClick={() => void iniciarOAuthGmail()}
+                    sx={{ fontWeight: 700, textTransform: 'none', borderColor: 'rgba(0,0,0,0.25)' }}
+                  >
+                    Conectar Gmail
+                  </Button>
+                }
+              >
+                Conceda permissão de envio no Google para que os convites cheguem por e-mail.
+              </Alert>
+            ) : (
+              <Alert severity="info" sx={{ borderRadius: '12px' }}>
+                Para login OAuth no navegador, defina no backend{' '}
+                <strong>servify.gmail.oauth-redirect-uri</strong> igual à rota deste app (ex.:{' '}
+                <strong>http://localhost:5173/oauth/google/callback</strong>) e cadastre a mesma
+                URI nas credenciais OAuth do tipo <strong>aplicativo Web</strong> no Google Cloud.
+              </Alert>
+            )}
+          </Box>
+        ) : null}
+
         <TextField
           fullWidth
           placeholder="Buscar colaboradores..."

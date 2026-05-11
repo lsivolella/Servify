@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.servify.backend.dto.CompletarConviteCadastroDTO;
 import com.servify.backend.dto.ConviteRequestDTO;
 import com.servify.backend.dto.ConviteResponseDTO;
+import com.servify.backend.dto.UsuarioResponseDTO;
 import com.servify.backend.service.ConviteService;
 
 import jakarta.validation.Valid;
@@ -38,6 +40,13 @@ public class ConviteController {
             @PathVariable String token) {
 
         return service.validarToken(token);
+    }
+
+    @PostMapping("/token/{token}/completar-cadastro")
+    public UsuarioResponseDTO completarCadastro(
+            @PathVariable String token,
+            @Valid @RequestBody CompletarConviteCadastroDTO dto) {
+        return service.completarCadastro(token, dto);
     }
 
     @GetMapping("/{id}")
