@@ -15,113 +15,113 @@ import com.servify.backend.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
-        private final UsuarioRepository usuarioRepository;
-        private final PerfilRepository perfilRepository;
-        private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final UsuarioRepository usuarioRepository;
+    private final PerfilRepository perfilRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        public UsuarioService(UsuarioRepository repository, PerfilRepository perfilRepository) {
-                this.usuarioRepository = repository;
-                this.perfilRepository = perfilRepository;
+    public UsuarioService(UsuarioRepository repository, PerfilRepository perfilRepository) {
+        this.usuarioRepository = repository;
+        this.perfilRepository = perfilRepository;
+    }
+
+    public UsuarioResponseDTO criar(UsuarioRequestDTO dto) {
+
+        Usuario usuario = new Usuario();
+
+        Perfil perfil = perfilRepository.findById(dto.getPerfilId())
+                .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
+
+        popularUsuario(dto, usuario, perfil);
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+
+        Usuario salvo = usuarioRepository.save(usuario);
+
+        return toResponseDTO(salvo);
+    }
+
+    public List<UsuarioResponseDTO> listar() {
+        return usuarioRepository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public UsuarioResponseDTO buscarPorId(Long id) {
+
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return toResponseDTO(usuario);
+    }
+
+    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
+
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Perfil perfil = perfilRepository.findById(dto.getPerfilId())
+                .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
+
+        popularUsuario(dto, usuario, perfil);
+
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
 
-        public UsuarioResponseDTO criar(UsuarioRequestDTO dto) {
+        Usuario atualizado = usuarioRepository.save(usuario);
 
-                Usuario usuario = new Usuario();
+        return toResponseDTO(atualizado);
+    }
 
-                Perfil perfil = perfilRepository.findById(dto.getPerfilId())
-                                .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
+    public void deletar(Long id) {
 
-                popularUsuario(dto, usuario, perfil);
-                usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-                Usuario salvo = usuarioRepository.save(usuario);
+        usuarioRepository.delete(usuario);
+    }
 
-                return toResponseDTO(salvo);
-        }
+    // #region Helpers
+    private void popularUsuario(UsuarioRequestDTO dto, Usuario usuario, Perfil perfil) {
+        usuario.setPerfil(perfil);
+        usuario.setCpf(dto.getCpf()
+                .replaceAll("\\D", ""));
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTelefone(dto.getTelefone()
+                .replaceAll("\\D", ""));
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep()
+                .replaceAll("\\D", ""));
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento());
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
+    }
 
-        public List<UsuarioResponseDTO> listar() {
-                return usuarioRepository.findAll()
-                                .stream()
-                                .map(this::toResponseDTO)
-                                .collect(Collectors.toList());
-        }
+    private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
 
-        public UsuarioResponseDTO buscarPorId(Long id) {
+        UsuarioResponseDTO dto = new UsuarioResponseDTO();
 
-                Usuario usuario = usuarioRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        dto.setId(usuario.getId());
+        dto.setPerfilId(usuario.getPerfil().getId());
+        dto.setPerfilNome(usuario.getPerfil().getNome());
+        dto.setCpf(usuario.getCpf());
+        dto.setNome(usuario.getNome());
+        dto.setEmail(usuario.getEmail());
+        dto.setTelefone(usuario.getTelefone());
+        dto.setDataNascimento(usuario.getDataNascimento());
+        dto.setCep(usuario.getCep());
+        dto.setLogradouro(usuario.getLogradouro());
+        dto.setNumero(usuario.getNumero());
+        dto.setComplemento(usuario.getComplemento());
+        dto.setBairro(usuario.getBairro());
+        dto.setCidade(usuario.getCidade());
+        dto.setUf(usuario.getUf());
 
-                return toResponseDTO(usuario);
-        }
-
-        public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
-
-                Usuario usuario = usuarioRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-                Perfil perfil = perfilRepository.findById(dto.getPerfilId())
-                                .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
-
-                popularUsuario(dto, usuario, perfil);
-
-                if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
-                        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
-                }
-
-                Usuario atualizado = usuarioRepository.save(usuario);
-
-                return toResponseDTO(atualizado);
-        }
-
-        public void deletar(Long id) {
-
-                Usuario usuario = usuarioRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-                usuarioRepository.delete(usuario);
-        }
-
-        // #region Helpers
-        private void popularUsuario(UsuarioRequestDTO dto, Usuario usuario, Perfil perfil) {
-                usuario.setPerfil(perfil);
-                usuario.setCpf(dto.getCpf()
-                                .replaceAll("\\D", ""));
-                usuario.setNome(dto.getNome());
-                usuario.setEmail(dto.getEmail());
-                usuario.setTelefone(dto.getTelefone()
-                                .replaceAll("\\D", ""));
-                usuario.setDataNascimento(dto.getDataNascimento());
-                usuario.setCep(dto.getCep()
-                                .replaceAll("\\D", ""));
-                usuario.setLogradouro(dto.getLogradouro());
-                usuario.setNumero(dto.getNumero());
-                usuario.setComplemento(dto.getComplemento());
-                usuario.setBairro(dto.getBairro());
-                usuario.setCidade(dto.getCidade());
-                usuario.setUf(dto.getUf());
-        }
-
-        private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
-
-                UsuarioResponseDTO dto = new UsuarioResponseDTO();
-
-                dto.setId(usuario.getId());
-                dto.setPerfilId(usuario.getPerfil().getId());
-                dto.setPerfilNome(usuario.getPerfil().getNome());
-                dto.setCpf(usuario.getCpf());
-                dto.setNome(usuario.getNome());
-                dto.setEmail(usuario.getEmail());
-                dto.setTelefone(usuario.getTelefone());
-                dto.setDataNascimento(usuario.getDataNascimento());
-                dto.setCep(usuario.getCep());
-                dto.setLogradouro(usuario.getLogradouro());
-                dto.setNumero(usuario.getNumero());
-                dto.setComplemento(usuario.getComplemento());
-                dto.setBairro(usuario.getBairro());
-                dto.setCidade(usuario.getCidade());
-                dto.setUf(usuario.getUf());
-
-                return dto;
-        }
-        // #endregion
+        return dto;
+    }
+    // #endregion
 }
