@@ -8,14 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.servify.backend.entity.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findById(Long id);
 
     Optional<Usuario> findByCpf(String cpf);
 
     Optional<Usuario> findByEmail(String email);
 
-    List<Usuario> findByPerfilId(Integer perfilId);
+    List<Usuario> findByPerfil_Id(Integer perfilId);
 
-    List<Usuario> findByPerfilIdIn(List<Integer> perfilIds);
     Optional<Usuario> findByNome(String nome);
 }

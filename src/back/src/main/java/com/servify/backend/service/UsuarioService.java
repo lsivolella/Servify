@@ -1,8 +1,8 @@
 package com.servify.backend.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,8 +52,9 @@ public class UsuarioService {
     }
 
     public List<UsuarioResponseDTO> listarColaboradores() {
-        return usuarioRepository.findByPerfil_IdIn(Arrays.asList(1, 2))
-                .stream()
+        return Stream.concat(
+                usuarioRepository.findByPerfil_Id(1).stream(),
+                usuarioRepository.findByPerfil_Id(2).stream())
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
