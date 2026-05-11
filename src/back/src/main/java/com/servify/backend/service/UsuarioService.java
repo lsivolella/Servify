@@ -122,7 +122,7 @@ public class UsuarioService {
 
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
 
-        dto.setUsuarioId(usuario.getUsuarioId());
+        dto.setId(usuario.getId());
         dto.setPerfilId(usuario.getPerfilId());
         dto.setCpf(usuario.getCpf());
         dto.setNome(usuario.getNome());

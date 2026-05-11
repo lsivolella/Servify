@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long usuarioId;
+    private Long id;
 
     // @ManyToOne
     // @JoinColumn(name = "perfil_id")
@@ -61,12 +61,12 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getPerfilId() {

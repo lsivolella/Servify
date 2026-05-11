@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class UsuarioResponseDTO {
 
-    private Long usuarioId;
+    private Long id;
     private Integer perfilId;
     private String cpf;
     private String nome;
@@ -22,12 +22,12 @@ public class UsuarioResponseDTO {
     public UsuarioResponseDTO() {
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getPerfilId() {
