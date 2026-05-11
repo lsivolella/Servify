@@ -1,11 +1,13 @@
 package com.servify.backend.service;
 
-import com.servify.backend.controller.UsuarioController;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.servify.backend.dto.UsuarioRequestDTO;
+import com.servify.backend.dto.UsuarioResponseDTO;
 import com.servify.backend.entity.Usuario;
 import com.servify.backend.repository.UsuarioRepository;
 
@@ -14,39 +16,127 @@ public class UsuarioService {
     private final UsuarioRepository repository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UsuarioService(UsuarioRepository repository, UsuarioController usuarioController) {
+    public UsuarioService(UsuarioRepository repository) {
         this.repository = repository;
     }
 
-    public Usuario criar(Usuario usuario) {
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        return repository.save(usuario);
+    public UsuarioResponseDTO criar(UsuarioRequestDTO dto) {
+
+        Usuario usuario = new Usuario();
+
+        usuario.setPerfilId(dto.getPerfilId());
+        usuario.setCpf(dto.getCpf()
+                .replaceAll("\\D", ""));
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuario.setTelefone(dto.getTelefone()
+                .replaceAll("\\D", ""));
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep()
+                .replaceAll("\\D", ""));
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento());
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
+
+        Usuario salvo = repository.save(usuario);
+
+        return toResponseDTO(salvo);
     }
 
-    public List<Usuario> listar() {
-        return repository.findAll();
+    public List<UsuarioResponseDTO> listar() {
+        return repository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    public Usuario buscarPorId(Long id) {
-        return repository.findById(id)
+    public UsuarioResponseDTO buscarPorId(Long id) {
+
+        Usuario usuario = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return toResponseDTO(usuario);
     }
 
-    public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
-        Usuario usuario = buscarPorId(id);
+    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
 
-        usuario.setNome(usuarioAtualizado.getNome());
-        usuario.setEmail(usuarioAtualizado.getEmail());
-        usuario.setTelefone(usuarioAtualizado.getTelefone());
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if (usuarioAtualizado.getSenha() != null) {
-            usuario.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha().toString()));
+        usuario.setPerfilId(dto.getPerfilId());
+        usuario.setCpf(dto.getCpf());
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
+        usuario.setTelefone(dto.getTelefone());
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep());
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento());
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
 
-        return repository.save(usuario);
+        Usuario atualizado = repository.save(usuario);
+
+        return toResponseDTO(atualizado);
     }
 
     public void deletar(Long id) {
-        repository.deleteById(id);
+
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        repository.delete(usuario);
+    }
+
+    private Usuario toEntity(UsuarioRequestDTO dto) {
+
+        Usuario usuario = new Usuario();
+
+        usuario.setPerfilId(dto.getPerfilId());
+        usuario.setCpf(dto.getCpf());
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTelefone(dto.getTelefone());
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep());
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento());
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
+
+        return usuario;
+    }
+
+    private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
+
+        UsuarioResponseDTO dto = new UsuarioResponseDTO();
+
+        dto.setUsuarioId(usuario.getUsuarioId());
+        dto.setPerfilId(usuario.getPerfilId());
+        dto.setCpf(usuario.getCpf());
+        dto.setNome(usuario.getNome());
+        dto.setEmail(usuario.getEmail());
+        dto.setTelefone(usuario.getTelefone());
+        dto.setDataNascimento(usuario.getDataNascimento());
+        dto.setCep(usuario.getCep());
+        dto.setLogradouro(usuario.getLogradouro());
+        dto.setNumero(usuario.getNumero());
+        dto.setComplemento(usuario.getComplemento());
+        dto.setBairro(usuario.getBairro());
+        dto.setCidade(usuario.getCidade());
+        dto.setUf(usuario.getUf());
+
+        return dto;
     }
 }
