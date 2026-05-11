@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Usuario {
@@ -14,10 +16,9 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @ManyToOne
-    // @JoinColumn(name = "perfil_id")
-    // private Perfil perfilId;
-    private Integer perfilId;
+    @ManyToOne
+    @JoinColumn(name = "perfil_id", nullable = false)
+    private Perfil perfil;
 
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
@@ -69,12 +70,12 @@ public class Usuario {
         this.id = id;
     }
 
-    public Integer getPerfilId() {
-        return perfilId;
+    public Perfil getPerfil() {
+        return perfil;
     }
 
-    public void setPerfilId(Integer perfilId) {
-        this.perfilId = perfilId;
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
     }
 
     public String getCpf() {

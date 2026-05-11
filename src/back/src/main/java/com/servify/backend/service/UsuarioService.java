@@ -102,7 +102,6 @@ public class UsuarioService {
     }
 
     private UsuarioResponseDTO toResponseDTO(Usuario usuario) {
-
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
 
         dto.setId(usuario.getId());
