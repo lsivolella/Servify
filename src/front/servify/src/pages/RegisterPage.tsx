@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
@@ -104,6 +104,7 @@ export default function RegisterPage() {
   const [cepLoading, setCepLoading] = useState(false)
   const [cepHelperText, setCepHelperText] = useState<string | null>(null)
   const cepAbortRef = useRef<AbortController | null>(null)
+  const navigate = useNavigate()
 
   function setField<K extends keyof FormState>(key: K) {
     return (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -226,6 +227,11 @@ export default function RegisterPage() {
 
       toastCadastroSucesso('Cadastro realizado com sucesso!')
       setForm(initialForm)
+
+      setTimeout(() => {
+        navigate('/login')
+      }, 2500)
+
     } catch {
       toastCadastroErro(
         'Não foi possível concluir o cadastro. Tente novamente.',
