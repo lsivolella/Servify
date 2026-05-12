@@ -29,12 +29,12 @@ import {
   toastError,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
+import { labelPerfilColaborador, perfilIdParaConvite } from '../utils/perfilColaborador'
 import {
-  cargoColaboradorFromPerfilId,
-  labelPerfilColaborador,
-  perfilIdParaConvite,
-} from '../utils/perfilColaborador'
-import { getColaboradores, type Colaborador } from '../services/colaboradores'
+  deleteUsuarioPorId,
+  getColaboradores,
+  type Colaborador,
+} from '../services/colaboradores'
 import { criarConvite } from '../services/convites'
 import {
   fetchGmailOAuthStatus,
@@ -52,6 +52,7 @@ function rowToEditValues(row: Colaborador): EditarPessoaValues {
     email: row.email,
     telefone: row.telefone,
     cpf: row.cpf,
+    dataNascimento: row.dataNascimento,
     cidade: row.cidade,
     cargo: row.cargo,
     ativo: row.status === 'ativo',
@@ -84,6 +85,7 @@ export default function GerenciarColaboradorPage() {
     email: '',
     telefone: '',
     cpf: '',
+    dataNascimento: '',
     cidade: '',
     cargo: '',
     ativo: true,
@@ -179,40 +181,12 @@ export default function GerenciarColaboradorPage() {
       throw new Error('Selecione um perfil válido.')
     }
 
-    const criado = await criarConvite({ email, perfilId })
-    const cargoLinha = cargoColaboradorFromPerfilId(
-      typeof criado.perfilId === 'number' ? criado.perfilId : perfilId,
-    )
-    const rowId =
-      typeof criado.id === 'number' ? String(criado.id) : `convite-${Date.now()}`
-
-    setColaboradores((prev) => {
-      const rest = prev.filter(
-        (c) => c.email.toLowerCase() !== email.toLowerCase(),
-      )
-      return [
-        ...rest,
-        {
-          id: rowId,
-          nome: null,
-          email,
-          telefone: '',
-          cpf: '',
-          cidade: '',
-          cargo: cargoLinha,
-          status: 'pendente' as const,
-          cep: '',
-          logradouro: '',
-          numero: '',
-          complemento: '',
-          bairro: '',
-          uf: '',
-        },
-      ]
-    })
+    await criarConvite({ email, perfilId })
+    const data = await getColaboradores()
+    setColaboradores(data)
     fecharConvite()
     toastCadastroSucesso(
-      'Convite salvo com token. E-mail com token e senha provisória é enviado quando o servidor Gmail estiver configurado.',
+      'Convite salvo com token. E-mail com token e senha provisória é enviado quando o servidor Gmail estiver configurado. Caso não receba o e-mail, verifique se o servidor Gmail está configurado e se o e-mail está na lista de permitidos.',
     )
   }
 
@@ -227,6 +201,7 @@ export default function GerenciarColaboradorPage() {
               email: data.email,
               telefone: data.telefone,
               cpf: data.cpf,
+              dataNascimento: data.dataNascimento,
               cidade: data.cidade,
               cargo: data.cargo,
               status: data.ativo ? 'ativo' : 'pendente',
@@ -250,8 +225,19 @@ export default function GerenciarColaboradorPage() {
       : `O convite para ${row.email} será removido.`
     const ok = await confirmDeleteRecord('Remover colaborador?', subtitulo)
     if (!ok) return
-    setColaboradores((prev) => prev.filter((c) => c.id !== row.id))
-    toastSuccess('Colaborador removido.')
+    try {
+      await deleteUsuarioPorId(row.id)
+      if (editingId === row.id) fecharEditar()
+      const data = await getColaboradores()
+      setColaboradores(data)
+      toastSuccess('Colaborador removido.')
+    } catch (e: unknown) {
+      toastError(
+        e instanceof Error
+          ? e.message
+          : 'Não foi possível remover o colaborador.',
+      )
+    }
   }
 
   const filtrados = useMemo(() => {

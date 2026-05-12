@@ -19,6 +19,7 @@ public class UsuarioResponseDTO {
     private String bairro;
     private String cidade;
     private String uf;
+    private boolean cadastroPendente;
 
     public UsuarioResponseDTO() {
     }
@@ -141,5 +142,13 @@ public class UsuarioResponseDTO {
 
     public void setUf(String uf) {
         this.uf = uf;
+    }
+
+    public boolean isCadastroPendente() {
+        return cadastroPendente;
+    }
+
+    public void setCadastroPendente(boolean cadastroPendente) {
+        this.cadastroPendente = cadastroPendente;
     }
 }

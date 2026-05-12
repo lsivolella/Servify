@@ -6,6 +6,8 @@ export type SessionUser = {
   cargo?: string
   nome: string
   email: string
+  cadastroPendente?: boolean
+  conviteToken?: string | null
 }
 
 export type Session = {

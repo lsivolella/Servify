@@ -2,7 +2,6 @@ package com.servify.backend.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,6 @@ import com.servify.backend.service.UsuarioService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -33,6 +31,11 @@ public class UsuarioController {
     @PostMapping
     public UsuarioResponseDTO criar(@Valid @RequestBody UsuarioRequestDTO dto) {
         return service.criar(dto);
+    }
+
+    @PostMapping("/cadastro-cliente")
+    public UsuarioResponseDTO cadastroCliente(@Valid @RequestBody UsuarioRequestDTO dto) {
+        return service.cadastroClientePublico(dto);
     }
 
     @GetMapping

@@ -1,5 +1,7 @@
 package com.servify.backend.dto;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +26,9 @@ public class UsuarioUpdateDTO {
     @Size(min = 10, max = 11)
     @Pattern(regexp = "^\\d+$", message = "Deve conter apenas dígitos")
     private String telefone;
+
+    @NotNull
+    private LocalDate dataNascimento;
 
     @NotBlank
     @Size(min = 8, max = 8)
@@ -88,6 +93,14 @@ public class UsuarioUpdateDTO {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getCep() {

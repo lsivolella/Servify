@@ -33,6 +33,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import dayjs from 'dayjs'
 import { setSession } from '../auth/session'
 import { toastCadastroErro, toastCadastroSucesso } from '../components/showAlert'
+import { mensagemDeErroCapturado } from '../services/api'
 import { loginApi } from '../services/auth'
 import {
   completarCadastroConvite,
@@ -271,8 +272,12 @@ export default function CompletarCadastroConvitePage() {
       navigate('/agendamentos', { replace: true })
     } catch (err: unknown) {
       setPhase('ready')
-      const msg = err instanceof Error ? err.message : 'Não foi possível concluir o cadastro.'
-      toastCadastroErro(msg)
+      toastCadastroErro(
+        mensagemDeErroCapturado(
+          err,
+          'Não foi possível concluir o cadastro. Tente novamente.',
+        ),
+      )
     }
   }
 

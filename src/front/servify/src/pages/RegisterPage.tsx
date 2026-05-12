@@ -32,6 +32,7 @@ import {
   formatCepDisplay,
 } from '../services/viacep'
 import { maskCpf, maskEmailInput, maskPhoneBr } from '../utils/masks'
+import { apiPostJson, mensagemDeErroCapturado } from '../services/api'
 import { toastCadastroErro, toastCadastroSucesso } from '../components/showAlert'
 import './styles/RegisterPage.css'
 
@@ -198,32 +199,22 @@ export default function RegisterPage() {
     }
 
     try {
-      const reponse = await fetch('http://localhost:8080/usuarios', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          perfilId: 1,
-          cpf: cpfDigits,
-          nome,
-          email,
-          senha: form.senha,
-          telefone: form.telefone.replace(/\D/g, ''),
-          dataNascimento: form.dataNascimento,
-          cep: form.cep.replace(/\D/g, ''),
-          logradouro: form.logradouro,
-          numero: form.numero,
-          complemento: form.complemento,
-          bairro: form.bairro,
-          cidade: form.cidade,
-          uf: form.uf,
-        })
+      await apiPostJson('/usuarios/cadastro-cliente', {
+        perfilId: 3,
+        cpf: cpfDigits,
+        nome,
+        email,
+        senha: form.senha,
+        telefone: form.telefone.replace(/\D/g, ''),
+        dataNascimento: form.dataNascimento,
+        cep: form.cep.replace(/\D/g, ''),
+        logradouro: form.logradouro,
+        numero: form.numero,
+        complemento: form.complemento,
+        bairro: form.bairro,
+        cidade: form.cidade,
+        uf: form.uf,
       })
-
-      if (!reponse.ok) {
-        throw new Error('Erro ao cadastrar cliente')
-      }
 
       toastCadastroSucesso('Cadastro realizado com sucesso!')
       setForm(initialForm)
@@ -231,10 +222,12 @@ export default function RegisterPage() {
       setTimeout(() => {
         navigate('/login')
       }, 2500)
-
-    } catch {
+    } catch (err) {
       toastCadastroErro(
-        'Não foi possível concluir o cadastro. Tente novamente.',
+        mensagemDeErroCapturado(
+          err,
+          'Não foi possível concluir o cadastro. Tente novamente.',
+        ),
       )
     }
   }

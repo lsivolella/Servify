@@ -8,16 +8,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.servify.backend.dto.LoginResponseDTO;
+import com.servify.backend.entity.Convite;
 import com.servify.backend.entity.Usuario;
+import com.servify.backend.enums.ConviteStatus;
+import com.servify.backend.repository.ConviteRepository;
 import com.servify.backend.repository.UsuarioRepository;
 
 @Service
 public class AuthService {
   private final UsuarioRepository usuarioRepository;
+  private final ConviteRepository conviteRepository;
   private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-  public AuthService(UsuarioRepository usuarioRepository) {
+  public AuthService(UsuarioRepository usuarioRepository, ConviteRepository conviteRepository) {
     this.usuarioRepository = usuarioRepository;
+    this.conviteRepository = conviteRepository;
   }
 
   private static String cargoFromPerfilId(Integer perfilId) {
@@ -55,6 +60,13 @@ public class AuthService {
     dto.setCargo(cargoFromPerfilId(user.getPerfil().getId()));
     dto.setNome(user.getNome());
     dto.setEmail(user.getEmail());
+    dto.setCadastroPendente(user.isCadastroPendente());
+    if (user.isCadastroPendente()) {
+      conviteRepository
+          .findByEmailAndStatus(user.getEmail(), ConviteStatus.ATIVO)
+          .map(Convite::getToken)
+          .ifPresent(dto::setConviteToken);
+    }
     return dto;
   }
 }

@@ -1,12 +1,17 @@
 package com.servify.backend.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.servify.backend.dto.CompletarConviteCadastroDTO;
 import com.servify.backend.dto.UsuarioRequestDTO;
 import com.servify.backend.dto.UsuarioResponseDTO;
 import com.servify.backend.dto.UsuarioUpdateDTO;
@@ -28,14 +33,100 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO criar(UsuarioRequestDTO dto) {
-        Usuario usuario = new Usuario();
         Perfil perfil = perfilRepository.findById(dto.getPerfilId())
                 .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
+        return salvarNovoUsuario(dto, perfil);
+    }
 
+    /**
+     * Cadastro público em {@code /cadastro}: sempre perfil Cliente (id 3), ignorando
+     * {@code perfilId} do corpo para evitar escolha incorreta ou manipulação.
+     */
+    public UsuarioResponseDTO cadastroClientePublico(UsuarioRequestDTO dto) {
+        Perfil perfil = perfilRepository.findById(3)
+                .orElseThrow(() -> new RuntimeException("Perfil Cliente não encontrado"));
+        return salvarNovoUsuario(dto, perfil);
+    }
+
+    private UsuarioResponseDTO salvarNovoUsuario(UsuarioRequestDTO dto, Perfil perfil) {
+        String email = dto.getEmail().trim();
+        String cpf = dto.getCpf().replaceAll("\\D", "");
+        usuarioRepository.findByEmailIgnoreCase(email).ifPresent(u -> {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado.");
+        });
+        usuarioRepository.findByCpf(cpf).ifPresent(u -> {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "CPF já cadastrado.");
+        });
+
+        Usuario usuario = new Usuario();
         popularUsuario(dto, usuario, perfil);
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
-
+        usuario.setCadastroPendente(false);
         return toResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    /**
+     * Pré-cadastro ao enviar convite: e-mail + perfil + senha já criptografada (BCrypt),
+     * demais campos preenchidos com placeholders até {@link #completarPreCadastroConvidado}.
+     */
+    public void criarPreCadastroConvidado(String email, Perfil perfil, String senhaPlana) {
+        Usuario usuario = new Usuario();
+        usuario.setPerfil(perfil);
+        usuario.setEmail(email.trim());
+        usuario.setNome("Convidado (cadastro pendente)");
+        usuario.setCpf(cpfPlaceholderUnico());
+        usuario.setTelefone("11999999999");
+        usuario.setDataNascimento(LocalDate.of(1900, 1, 1));
+        usuario.setCep("00000000");
+        usuario.setLogradouro("A completar");
+        usuario.setNumero("0");
+        usuario.setComplemento("");
+        usuario.setBairro("Pendente");
+        usuario.setCidade("Pendente");
+        usuario.setUf("SP");
+        usuario.setSenha(passwordEncoder.encode(senhaPlana));
+        usuario.setCadastroPendente(true);
+        usuarioRepository.save(usuario);
+    }
+
+    public UsuarioResponseDTO completarPreCadastroConvidado(Long usuarioId, CompletarConviteCadastroDTO dto) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        if (!usuario.isCadastroPendente()) {
+            throw new RuntimeException("Este usuário não aguarda conclusão de cadastro.");
+        }
+        String novoCpf = dto.getCpf().replaceAll("\\D", "");
+        usuarioRepository.findByCpf(novoCpf)
+                .filter(u -> !u.getId().equals(usuarioId))
+                .ifPresent(u -> {
+                    throw new RuntimeException("CPF já cadastrado.");
+                });
+        usuario.setCpf(novoCpf);
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail().trim());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuario.setTelefone(dto.getTelefone().replaceAll("\\D", ""));
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep().replaceAll("\\D", ""));
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento() != null ? dto.getComplemento() : "");
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
+        usuario.setCadastroPendente(false);
+        return toResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    private String cpfPlaceholderUnico() {
+        for (int i = 0; i < 80; i++) {
+            long n = ThreadLocalRandom.current().nextLong(0L, 100_000_000_000L);
+            String cpf = String.format("%011d", n);
+            if (usuarioRepository.findByCpf(cpf).isEmpty()) {
+                return cpf;
+            }
+        }
+        throw new RuntimeException("Não foi possível gerar CPF temporário único para o convite.");
     }
 
     public List<UsuarioResponseDTO> listar() {
@@ -87,7 +178,7 @@ public class UsuarioService {
         usuario.setPerfil(perfil);
         usuario.setCpf(dto.getCpf().replaceAll("\\D", ""));
         usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
+        usuario.setEmail(dto.getEmail().trim());
         usuario.setTelefone(dto.getTelefone().replaceAll("\\D", ""));
         usuario.setDataNascimento(dto.getDataNascimento());
         usuario.setCep(dto.getCep().replaceAll("\\D", ""));
@@ -102,8 +193,9 @@ public class UsuarioService {
     private void popularUsuario(UsuarioUpdateDTO dto, Usuario usuario, Perfil perfil) {
         usuario.setPerfil(perfil);
         usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
+        usuario.setEmail(dto.getEmail().trim());
         usuario.setTelefone(dto.getTelefone().replaceAll("\\D", ""));
+        usuario.setDataNascimento(dto.getDataNascimento());
         usuario.setCep(dto.getCep().replaceAll("\\D", ""));
         usuario.setLogradouro(dto.getLogradouro());
         usuario.setNumero(dto.getNumero());
@@ -130,6 +222,7 @@ public class UsuarioService {
         dto.setBairro(usuario.getBairro());
         dto.setCidade(usuario.getCidade());
         dto.setUf(usuario.getUf());
+        dto.setCadastroPendente(usuario.isCadastroPendente());
         return dto;
     }
 }

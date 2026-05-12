@@ -1,4 +1,4 @@
-import { apiGetJson } from './api'
+import { apiDelete, apiGetJson } from './api'
 
 export type ClienteApi = Record<string, unknown>
 
@@ -16,6 +16,8 @@ export type Cliente = {
   complemento: string
   bairro: string
   uf: string
+  /** ISO `YYYY-MM-DD` quando disponível na API */
+  dataNascimento: string
 }
 
 function asString(v: unknown): string {
@@ -44,6 +46,22 @@ function pickFirstBoolean(obj: ClienteApi, keys: string[], fallback = true): boo
     }
   }
   return fallback
+}
+
+function parseDataNascimentoApi(obj: ClienteApi): string {
+  const v = obj.dataNascimento
+  if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}/.test(v)) {
+    return v.slice(0, 10)
+  }
+  if (Array.isArray(v) && v.length >= 3) {
+    const y = Number(v[0])
+    const m = Number(v[1])
+    const d = Number(v[2])
+    if (Number.isFinite(y) && Number.isFinite(m) && Number.isFinite(d)) {
+      return `${String(y).padStart(4, '0')}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+    }
+  }
+  return ''
 }
 
 export function clienteFromApi(raw: unknown): Cliente | null {
@@ -98,6 +116,7 @@ export function clienteFromApi(raw: unknown): Cliente | null {
     complemento,
     bairro,
     uf,
+    dataNascimento: parseDataNascimentoApi(obj),
   }
 }
 
@@ -111,5 +130,14 @@ export async function getClientes(): Promise<Cliente[]> {
       : []
 
   return arr.map(clienteFromApi).filter((x): x is Cliente => Boolean(x))
+}
+
+/** Remove o usuário cliente no backend (`DELETE /usuarios/{id}`). */
+export async function deleteClientePorId(usuarioId: string): Promise<void> {
+  const id = usuarioId.trim()
+  if (!/^\d+$/.test(id)) {
+    throw new Error('Identificador inválido para exclusão.')
+  }
+  await apiDelete(`/usuarios/${id}`)
 }
 

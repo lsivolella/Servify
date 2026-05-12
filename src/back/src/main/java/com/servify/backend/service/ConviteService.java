@@ -21,7 +21,6 @@ import com.servify.backend.entity.Perfil;
 import com.servify.backend.entity.Usuario;
 import com.servify.backend.enums.ConviteStatus;
 import com.servify.backend.mail.GmailMailSender;
-import com.servify.backend.mail.ProvisionalPasswordGenerator;
 import com.servify.backend.repository.ConviteRepository;
 import com.servify.backend.repository.PerfilRepository;
 import com.servify.backend.repository.UsuarioRepository;
@@ -36,7 +35,8 @@ public class ConviteService {
     private final GmailMailSender gmailMailSender;
 
     private static final int EXPIRATION_HOURS = 24;
-    private static final int SENHA_PROVISORIA_LENGTH = 8;
+    /** Senha provisória fixa (texto plano no e-mail; armazenada com BCrypt em convite e em usuário). */
+    private static final String SENHA_PROVISORIA_CONVITE = "12345";
 
     public ConviteService(ConviteRepository conviteRepository,
             UsuarioRepository usuarioRepository,
@@ -58,7 +58,7 @@ public class ConviteService {
                     "Convites só podem ser enviados para administradores ou colaboradores");
         }
 
-        Usuario usuarioExistente = usuarioRepository.findByEmail(dto.getEmail())
+        Usuario usuarioExistente = usuarioRepository.findByEmailIgnoreCase(dto.getEmail())
                 .orElse(null);
 
         if (usuarioExistente != null && usuarioExistente.getPerfil().getId() != 1) {
@@ -82,6 +82,10 @@ public class ConviteService {
                     conviteRepository.save(conviteAtivo);
                 });
 
+        if (usuarioExistente == null) {
+            usuarioService.criarPreCadastroConvidado(dto.getEmail(), perfil, SENHA_PROVISORIA_CONVITE);
+        }
+
         Convite convite = new Convite();
 
         convite.setEmail(dto.getEmail());
@@ -90,20 +94,15 @@ public class ConviteService {
         convite.setDataCriacao(LocalDateTime.now());
         convite.setDataExpiracao(LocalDateTime.now().plusHours(EXPIRATION_HOURS));
         convite.setStatus(ConviteStatus.ATIVO);
-
-        String senhaProvisoriaPlana = null;
-        if (gmailMailSender != null) {
-            senhaProvisoriaPlana = ProvisionalPasswordGenerator.generate(SENHA_PROVISORIA_LENGTH);
-            convite.setSenhaProvisoriaHash(passwordEncoder.encode(senhaProvisoriaPlana));
-        }
+        convite.setSenhaProvisoriaHash(passwordEncoder.encode(SENHA_PROVISORIA_CONVITE));
 
         Convite salvo = conviteRepository.save(convite);
 
-        if (gmailMailSender != null && senhaProvisoriaPlana != null) {
+        if (gmailMailSender != null) {
             gmailMailSender.sendConviteEmail(
                     salvo.getEmail(),
                     salvo.getToken(),
-                    senhaProvisoriaPlana,
+                    SENHA_PROVISORIA_CONVITE,
                     EXPIRATION_HOURS);
         }
 
@@ -160,7 +159,8 @@ public class ConviteService {
     }
 
     /**
-     * Cria o usuário com o perfil do convite, valida e-mail e senha provisória (se houver)
+     * Conclui o cadastro do convidado: valida e-mail e senha provisória do convite,
+     * atualiza o usuário pré-cadastrado (quando existir) ou cria o usuário (convites antigos),
      * e marca o convite como {@link ConviteStatus#USADO}.
      */
     public UsuarioResponseDTO completarCadastro(String token, CompletarConviteCadastroDTO dto) {
@@ -182,32 +182,39 @@ public class ConviteService {
             }
         }
 
-        if (usuarioRepository.findByEmailIgnoreCase(convite.getEmail()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    "Já existe cadastro para este e-mail.");
-        }
-
-        UsuarioRequestDTO usuarioDto = new UsuarioRequestDTO();
-        usuarioDto.setPerfilId(convite.getPerfil().getId());
-        usuarioDto.setEmail(convite.getEmail());
-        usuarioDto.setNome(dto.getNome());
-        usuarioDto.setCpf(dto.getCpf());
-        usuarioDto.setSenha(dto.getSenha());
-        usuarioDto.setTelefone(dto.getTelefone());
-        usuarioDto.setDataNascimento(dto.getDataNascimento());
-        usuarioDto.setCep(dto.getCep());
-        usuarioDto.setLogradouro(dto.getLogradouro());
-        usuarioDto.setNumero(dto.getNumero());
-        usuarioDto.setComplemento(dto.getComplemento() != null ? dto.getComplemento() : "");
-        usuarioDto.setBairro(dto.getBairro());
-        usuarioDto.setCidade(dto.getCidade());
-        usuarioDto.setUf(dto.getUf());
-
         try {
-            UsuarioResponseDTO criado = usuarioService.criar(usuarioDto);
+            var existente = usuarioRepository.findByEmailIgnoreCase(convite.getEmail());
+            UsuarioResponseDTO resultado;
+            if (existente.isPresent()) {
+                Usuario u = existente.get();
+                if (!u.isCadastroPendente()) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT,
+                            "Já existe cadastro para este e-mail.");
+                }
+                resultado = usuarioService.completarPreCadastroConvidado(u.getId(), dto);
+            } else {
+                UsuarioRequestDTO usuarioDto = new UsuarioRequestDTO();
+                usuarioDto.setPerfilId(convite.getPerfil().getId());
+                usuarioDto.setEmail(convite.getEmail());
+                usuarioDto.setNome(dto.getNome());
+                usuarioDto.setCpf(dto.getCpf());
+                usuarioDto.setSenha(dto.getSenha());
+                usuarioDto.setTelefone(dto.getTelefone());
+                usuarioDto.setDataNascimento(dto.getDataNascimento());
+                usuarioDto.setCep(dto.getCep());
+                usuarioDto.setLogradouro(dto.getLogradouro());
+                usuarioDto.setNumero(dto.getNumero());
+                usuarioDto.setComplemento(dto.getComplemento() != null ? dto.getComplemento() : "");
+                usuarioDto.setBairro(dto.getBairro());
+                usuarioDto.setCidade(dto.getCidade());
+                usuarioDto.setUf(dto.getUf());
+                resultado = usuarioService.criar(usuarioDto);
+            }
             convite.setStatus(ConviteStatus.USADO);
             conviteRepository.save(convite);
-            return criado;
+            return resultado;
+        } catch (ResponseStatusException ex) {
+            throw ex;
         } catch (RuntimeException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     ex.getMessage() != null && !ex.getMessage().isBlank()

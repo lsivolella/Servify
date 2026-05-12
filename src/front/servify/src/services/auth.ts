@@ -7,6 +7,9 @@ export type LoginResponse = {
   cargo?: string
   nome: string
   email: string
+  /** Fluxo convite: deve concluir cadastro em `/convite/{conviteToken}`. */
+  cadastroPendente?: boolean
+  conviteToken?: string | null
 }
 
 export async function loginApi(login: string, senha: string): Promise<LoginResponse> {

@@ -22,5 +22,5 @@ export function perfilIdParaConvite(cargo: string): number | null {
 export function cargoColaboradorFromPerfilId(perfilId: number): string {
   if (perfilId === 1) return 'adm'
   if (perfilId === 2) return 'colaborador'
-  return 'colaborador'
+  return ''
 }

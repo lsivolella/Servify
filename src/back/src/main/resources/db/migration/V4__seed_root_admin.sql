@@ -1,4 +1,4 @@
--- Usuário root com perfil Administrador (perfil.id = 1). Senha em texto: 12345 (BCrypt, compatível com BCryptPasswordEncoder do Spring).
+-- Usuário root com perfil Administrador (perfil.id = 1). Senha em texto: 123456 (BCrypt $2a$10$, compatível com BCryptPasswordEncoder do Spring).
 INSERT INTO usuario (
     perfil_id,
     cpf,
@@ -20,7 +20,7 @@ SELECT
     '99999999999',
     'Administrador',
     'root@servify.local',
-    '$2a$10$X1Ds8FwYw8iqetZZMbmO2e1O6VyKVvBiqmwVgSeJx3cRRRCFqWELq',
+    '$2a$10$csPZ0nI8UwK6rSwSc/sbTOjKWFpE3dNlhjPC1rxMIAS0HkR05MuBS',
     '11999999999',
     DATE '1990-01-01',
     '00000000',

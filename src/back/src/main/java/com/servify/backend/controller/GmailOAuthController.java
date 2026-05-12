@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +17,6 @@ import com.servify.backend.mail.GmailMailSender.GmailMailException;
 @RestController
 @RequestMapping("/mail/gmail")
 @ConditionalOnBean(GmailMailSender.class)
-@CrossOrigin(originPatterns = {"http://localhost:*", "http://127.0.0.1:*"})
 public class GmailOAuthController {
 
     private final GmailMailSender gmailMailSender;

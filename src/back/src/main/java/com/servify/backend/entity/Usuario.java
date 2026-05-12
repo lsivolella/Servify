@@ -59,6 +59,10 @@ public class Usuario {
     @Column(nullable = false, length = 2)
     private String uf;
 
+    /** {@code true} para pré-cadastro via convite (login com senha provisória até concluir o cadastro). */
+    @Column(name = "cadastro_pendente", nullable = false)
+    private boolean cadastroPendente = false;
+
     public Usuario() {
     }
 
@@ -180,5 +184,13 @@ public class Usuario {
 
     public void setUf(String uf) {
         this.uf = uf;
+    }
+
+    public boolean isCadastroPendente() {
+        return cadastroPendente;
+    }
+
+    public void setCadastroPendente(boolean cadastroPendente) {
+        this.cadastroPendente = cadastroPendente;
     }
 }

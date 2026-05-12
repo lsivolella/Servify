@@ -8,6 +8,10 @@ public class LoginResponseDTO {
   private String cargo;
   private String nome;
   private String email;
+  /** {@code true} se o usuário deve concluir o cadastro (fluxo de convite). */
+  private boolean cadastroPendente;
+  /** Token do convite ativo para a URL {@code /convite/{token}}; vazio quando não aplicável. */
+  private String conviteToken;
 
   public LoginResponseDTO() {}
 
@@ -57,6 +61,22 @@ public class LoginResponseDTO {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public boolean isCadastroPendente() {
+    return cadastroPendente;
+  }
+
+  public void setCadastroPendente(boolean cadastroPendente) {
+    this.cadastroPendente = cadastroPendente;
+  }
+
+  public String getConviteToken() {
+    return conviteToken;
+  }
+
+  public void setConviteToken(String conviteToken) {
+    this.conviteToken = conviteToken;
   }
 }
 

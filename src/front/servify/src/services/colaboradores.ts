@@ -1,4 +1,4 @@
-import { apiGetJson } from './api'
+import { apiDelete, apiGetJson } from './api'
 
 type UsuarioApi = Record<string, unknown>
 
@@ -19,6 +19,8 @@ export type Colaborador = {
   complemento: string
   bairro: string
   uf: string
+  /** ISO `YYYY-MM-DD` quando disponível na API */
+  dataNascimento: string
 }
 
 function asString(v: unknown): string {
@@ -39,6 +41,7 @@ function cargoFromPerfilId(perfilId: unknown): string {
   const n = typeof perfilId === 'number' ? perfilId : Number(perfilId)
   if (n === 1) return 'adm'
   if (n === 2) return 'colaborador'
+  if (n === 3) return 'cliente'
   return ''
 }
 
@@ -51,6 +54,22 @@ function cargoFromApi(obj: UsuarioApi): string {
     return explicit
   }
   return cargoFromPerfilId(obj.perfilId)
+}
+
+function parseDataNascimentoApi(obj: UsuarioApi): string {
+  const v = obj.dataNascimento
+  if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}/.test(v)) {
+    return v.slice(0, 10)
+  }
+  if (Array.isArray(v) && v.length >= 3) {
+    const y = Number(v[0])
+    const m = Number(v[1])
+    const d = Number(v[2])
+    if (Number.isFinite(y) && Number.isFinite(m) && Number.isFinite(d)) {
+      return `${String(y).padStart(4, '0')}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+    }
+  }
+  return ''
 }
 
 export function colaboradorFromApi(raw: unknown): Colaborador | null {
@@ -112,6 +131,7 @@ export function colaboradorFromApi(raw: unknown): Colaborador | null {
     complemento,
     bairro,
     uf,
+    dataNascimento: parseDataNascimentoApi(obj),
   }
 }
 
@@ -125,4 +145,13 @@ export async function getColaboradores(): Promise<Colaborador[]> {
       : []
 
   return arr.map(colaboradorFromApi).filter((x): x is Colaborador => Boolean(x))
+}
+
+/** Remove o usuário no backend (`DELETE /usuarios/{id}`). */
+export async function deleteUsuarioPorId(usuarioId: string): Promise<void> {
+  const id = usuarioId.trim()
+  if (!/^\d+$/.test(id)) {
+    throw new Error('Identificador inválido para exclusão.')
+  }
+  await apiDelete(`/usuarios/${id}`)
 }

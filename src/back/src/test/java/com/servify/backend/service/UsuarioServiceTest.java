@@ -77,6 +77,7 @@ public class UsuarioServiceTest {
                 dto.setNome("Teste Servify");
                 dto.setEmail("teste@email.com");
                 dto.setTelefone("31111111111");
+                dto.setDataNascimento(LocalDate.of(1990, 5, 15));
                 dto.setCep("30140071");
                 dto.setLogradouro("Rua A");
                 dto.setNumero("100");
@@ -190,6 +191,7 @@ public class UsuarioServiceTest {
 
                 // Verifica se o telefone foi atualizado corretamente
                 assertEquals("31111111111", response.getTelefone());
+                assertEquals(LocalDate.of(1990, 5, 15), response.getDataNascimento());
         }
 
         @Test

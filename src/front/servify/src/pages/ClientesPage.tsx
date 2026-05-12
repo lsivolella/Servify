@@ -25,7 +25,8 @@ import {
   toastError,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
-import { getClientes, type Cliente } from '../services/clientes'
+import { getClientes, deleteClientePorId, type Cliente } from '../services/clientes'
+import { mensagemDeErroCapturado } from '../services/api'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -37,6 +38,7 @@ function rowToEditValues(row: Cliente): EditarPessoaValues {
     email: row.email,
     telefone: row.telefone,
     cpf: row.cpf,
+    dataNascimento: row.dataNascimento,
     cidade: row.cidade,
     cargo: '',
     ativo: row.ativo,
@@ -62,6 +64,7 @@ export default function ClientesPage() {
     email: '',
     telefone: '',
     cpf: '',
+    dataNascimento: '',
     cidade: '',
     cargo: '',
     ativo: true,
@@ -131,6 +134,19 @@ export default function ClientesPage() {
       return
     }
 
+    const dataNasc = data.dataNascimento.trim()
+    if (!dataNasc || !/^\d{4}-\d{2}-\d{2}$/.test(dataNasc)) {
+      toastError('Informe uma data de nascimento válida.')
+      return
+    }
+
+    const cidadeApi = (() => {
+      const t = data.cidade.trim()
+      const idx = t.lastIndexOf(' - ')
+      if (idx > 0) return t.slice(0, idx).trim()
+      return t
+    })()
+
     try {
       const response = await fetch(
         `http://localhost:8080/usuarios/${editingId}`,
@@ -140,19 +156,18 @@ export default function ClientesPage() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            perfilId: 1,
-            cpf: cpfDigits,
+            perfilId: 3,
             nome,
             email,
             telefone: data.telefone.replace(/\D/g, ''),
+            dataNascimento: dataNasc,
             cep: data.cep.replace(/\D/g, ''),
             logradouro: data.logradouro,
             numero: data.numero,
             complemento: data.complemento,
             bairro: data.bairro,
-            cidade: data.cidade,
+            cidade: cidadeApi,
             uf: data.uf,
-            ativo: data.ativo,
           }),
         },
       )
@@ -175,6 +190,7 @@ export default function ClientesPage() {
               email: data.email,
               telefone: data.telefone,
               cpf: data.cpf,
+              dataNascimento: data.dataNascimento,
               cidade: data.cidade,
               ativo: data.ativo,
               cep: data.cep,
@@ -199,9 +215,17 @@ export default function ClientesPage() {
     const subtitulo = `${row.nome} (${row.email}) será removido da lista.`
     const ok = await confirmDeleteRecord('Remover cliente?', subtitulo)
     if (!ok) return
-    if (editingId === row.id) fecharEditar()
-    setClientes((prev) => prev.filter((c) => c.id !== row.id))
-    toastSuccess('Cliente removido.')
+    try {
+      await deleteClientePorId(row.id)
+      if (editingId === row.id) fecharEditar()
+      const data = await getClientes()
+      setClientes(data)
+      toastSuccess('Cliente removido.')
+    } catch (e: unknown) {
+      toastError(
+        mensagemDeErroCapturado(e, 'Não foi possível remover o cliente.'),
+      )
+    }
   }
 
   const filtrados = useMemo(() => {

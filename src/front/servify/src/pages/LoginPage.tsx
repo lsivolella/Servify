@@ -13,6 +13,7 @@ import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import LockOutlined from '@mui/icons-material/LockOutlined'
 import { toastError } from '../components/showAlert'
 import { setSession } from '../auth/session'
+import { mensagemDeErroCapturado } from '../services/api'
 import { loginApi } from '../services/auth'
 import './styles/LoginPage.css'
 
@@ -36,8 +37,8 @@ export default function LoginPage() {
       return
     }
 
-    if (password.length < 4) {
-      toastError('A senha deve ter pelo menos 4 caracteres.')
+    if (password.length < 6) {
+      toastError('A senha deve ter pelo menos 6 caracteres.')
       return
     }
 
@@ -46,12 +47,19 @@ export default function LoginPage() {
       const user = await loginApi(userEmail, password)
       setSession({ user })
 
+      const tokenConv = user.conviteToken?.trim()
+      if (user.cadastroPendente && tokenConv) {
+        navigate(`/convite/${encodeURIComponent(tokenConv)}`, { replace: true })
+        return
+      }
+
       const from = (location.state as { from?: { pathname?: string } } | null)?.from
       const target = from?.pathname && typeof from.pathname === 'string' ? from.pathname : '/agendamentos'
       navigate(target, { replace: true })
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'Não foi possível entrar. Tente novamente.'
-      toastError(msg)
+      toastError(
+        mensagemDeErroCapturado(e, 'Não foi possível entrar. Tente novamente.'),
+      )
     } finally {
       setLoading(false)
     }
