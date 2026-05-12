@@ -24,6 +24,9 @@ A informatização do processo de Gestão de Usuário traz as seguintes oportuni
 ## Modelagem
 Em seguida, apresentam-se os modelos do processo de Gestão de Usuário, descritos no padrão BPMN:
 
+![bpmn](images/bpmn/gestao-de-usuario/BPMN_GestaoUsuarios-1205.png)
+
+
 
 
 ### Descrições Detalhadas Alinhadas aos Wireframes
