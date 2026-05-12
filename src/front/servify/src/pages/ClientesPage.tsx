@@ -109,12 +109,67 @@ export default function ClientesPage() {
     setEditingId(null)
   }
 
-  function handleSalvarEdicao(data: EditarPessoaValues) {
+  async function handleSalvarEdicao(data: EditarPessoaValues) {
     if (!editingId) return
-    setClientes((prev) =>
-      prev.map((c) =>
-        c.id === editingId
-          ? {
+
+    const nome = data.nome.trim()
+    const email = data.email.trim()
+    const cpfDigits = data.cpf.replace(/\D/g, '')
+
+    if (!nome) {
+      toastError('Informe o nome completo.')
+      return
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toastError('Informe um e-mail válido.')
+      return
+    }
+
+    if (cpfDigits.length !== 11) {
+      toastError('CPF deve ter 11 dígitos.')
+      return
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/usuarios/${editingId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            perfilId: 1,
+            cpf: cpfDigits,
+            nome,
+            email,
+            telefone: data.telefone.replace(/\D/g, ''),
+            cep: data.cep.replace(/\D/g, ''),
+            logradouro: data.logradouro,
+            numero: data.numero,
+            complemento: data.complemento,
+            bairro: data.bairro,
+            cidade: data.cidade,
+            uf: data.uf,
+            ativo: data.ativo,
+          }),
+        },
+      )
+
+      if (!response.ok) {
+        //throw new Error('Erro ao atualizar cliente')
+        const errorText = await response.text()
+
+        console.error('Erro backend:', errorText)
+
+        throw new Error(errorText)
+      }
+
+      setClientes((prev) =>
+        prev.map((c) =>
+          c.id === editingId
+            ? {
               ...c,
               nome: data.nome,
               email: data.email,
@@ -129,11 +184,15 @@ export default function ClientesPage() {
               bairro: data.bairro,
               uf: data.uf,
             }
-          : c,
-      ),
-    )
-    fecharEditar()
-    toastCadastroSucesso('Cliente atualizado com sucesso.')
+            : c,
+        ),
+      )
+
+      fecharEditar()
+      toastCadastroSucesso('Cliente atualizado com sucesso.')
+    } catch {
+      toastError('Não foi possível atualizar o cliente.')
+    }
   }
 
   async function solicitarRemocao(row: Cliente) {
@@ -364,9 +423,8 @@ export default function ClientesPage() {
         >
           {loading
             ? 'Carregando clientes...'
-            : `${filtrados.length} cliente${filtrados.length === 1 ? '' : 's'} encontrado${
-                filtrados.length === 1 ? '' : 's'
-              }`}
+            : `${filtrados.length} cliente${filtrados.length === 1 ? '' : 's'} encontrado${filtrados.length === 1 ? '' : 's'
+            }`}
         </Typography>
       </Container>
 

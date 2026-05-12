@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.servify.backend.dto.UsuarioRequestDTO;
 import com.servify.backend.dto.UsuarioResponseDTO;
+import com.servify.backend.dto.UsuarioUpdateDTO;
 import com.servify.backend.entity.Perfil;
 import com.servify.backend.entity.Usuario;
 import com.servify.backend.repository.PerfilRepository;
@@ -34,7 +35,7 @@ public class UsuarioServiceTest {
         private UsuarioService service;
 
         @BeforeEach
-        public void SetUp() {
+        public void setUp() {
                 MockitoAnnotations.openMocks(this);
                 service = new UsuarioService(usuarioRepository, perfilRepository);
         }
@@ -58,6 +59,24 @@ public class UsuarioServiceTest {
                 dto.setSenha("123456");
                 dto.setTelefone("31111111111");
                 dto.setDataNascimento(LocalDate.of(2000, 1, 1));
+                dto.setCep("30140071");
+                dto.setLogradouro("Rua A");
+                dto.setNumero("100");
+                dto.setComplemento("Casa");
+                dto.setBairro("Centro");
+                dto.setCidade("Belo Horizonte");
+                dto.setUf("MG");
+
+                return dto;
+        }
+
+        private UsuarioUpdateDTO criarUsuarioUpdateDTO() {
+                UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
+
+                dto.setPerfilId(1);
+                dto.setNome("Teste Servify");
+                dto.setEmail("teste@email.com");
+                dto.setTelefone("31111111111");
                 dto.setCep("30140071");
                 dto.setLogradouro("Rua A");
                 dto.setNumero("100");
@@ -149,7 +168,7 @@ public class UsuarioServiceTest {
                 usuario.setTelefone("31999999999");
 
                 // Simula um usuário atualizado vindo da requisição
-                UsuarioRequestDTO dto = criarUsuarioRequestDTO();
+                UsuarioUpdateDTO dto = criarUsuarioUpdateDTO();
 
                 // Altera o telefone para um valor não normalizado para testar a normalização na
                 // atualização

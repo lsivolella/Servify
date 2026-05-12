@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.servify.backend.dto.UsuarioRequestDTO;
 import com.servify.backend.dto.UsuarioResponseDTO;
+import com.servify.backend.dto.UsuarioUpdateDTO;
 import com.servify.backend.entity.Perfil;
 import com.servify.backend.entity.Usuario;
 import com.servify.backend.repository.PerfilRepository;
@@ -65,17 +66,13 @@ public class UsuarioService {
         return toResponseDTO(usuario);
     }
 
-    public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
+    public UsuarioResponseDTO atualizar(Long id, UsuarioUpdateDTO dto) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         Perfil perfil = perfilRepository.findById(dto.getPerfilId())
                 .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
 
         popularUsuario(dto, usuario, perfil);
-
-        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
-            usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
-        }
 
         return toResponseDTO(usuarioRepository.save(usuario));
     }
@@ -93,6 +90,20 @@ public class UsuarioService {
         usuario.setEmail(dto.getEmail());
         usuario.setTelefone(dto.getTelefone().replaceAll("\\D", ""));
         usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setCep(dto.getCep().replaceAll("\\D", ""));
+        usuario.setLogradouro(dto.getLogradouro());
+        usuario.setNumero(dto.getNumero());
+        usuario.setComplemento(dto.getComplemento());
+        usuario.setBairro(dto.getBairro());
+        usuario.setCidade(dto.getCidade());
+        usuario.setUf(dto.getUf());
+    }
+
+    private void popularUsuario(UsuarioUpdateDTO dto, Usuario usuario, Perfil perfil) {
+        usuario.setPerfil(perfil);
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTelefone(dto.getTelefone().replaceAll("\\D", ""));
         usuario.setCep(dto.getCep().replaceAll("\\D", ""));
         usuario.setLogradouro(dto.getLogradouro());
         usuario.setNumero(dto.getNumero());

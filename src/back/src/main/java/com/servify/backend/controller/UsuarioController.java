@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.servify.backend.dto.UsuarioRequestDTO;
 import com.servify.backend.dto.UsuarioResponseDTO;
+import com.servify.backend.dto.UsuarioUpdateDTO;
 import com.servify.backend.service.UsuarioService;
 
 import jakarta.validation.Valid;
@@ -55,7 +56,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public UsuarioResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioRequestDTO dto) {
+    public UsuarioResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioUpdateDTO dto) {
         return service.atualizar(id, dto);
     }
 

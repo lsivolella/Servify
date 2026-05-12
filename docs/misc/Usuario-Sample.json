@@ -1,6 +1,6 @@
 [
     {
-        "perfilId": 1,
+        "perfilId": 3,
         "cpf": "48392017564",
         "nome": "Lucas Servify",
         "email": "lucas@email.com",
@@ -16,7 +16,7 @@
         "uf": "MG"
     },
     {
-        "perfilId": 1,
+        "perfilId": 3,
         "cpf": "75018436291",
         "nome": "Arthur Servify",
         "email": "arthur@email.com",
@@ -32,7 +32,7 @@
         "uf": "RJ"
     },
     {
-        "perfilId": 1,
+        "perfilId": 3,
         "cpf": "91527463820",
         "nome": "Jansen Servify",
         "email": "jansen@email.com",
@@ -48,7 +48,7 @@
         "uf": "SP"
     },
     {
-        "perfilId": 1,
+        "perfilId": 3,
         "cpf": "60491827355",
         "nome": "Bruna Servify",
         "email": "bruna@email.com",
@@ -64,7 +64,7 @@
         "uf": "PR"
     },
     {
-        "perfilId": 1,
+        "perfilId": 3,
         "cpf": "37265019488",
         "nome": "Vinícius Servify",
         "email": "vinicius@email.com",

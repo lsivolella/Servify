@@ -173,9 +173,9 @@ export default function EditarPessoaModal({
           setLogradouro(addr.logradouro)
           setBairro(addr.bairro)
           setUf(addr.uf)
-          setCidadeInput(`${addr.cidade} - ${addr.uf}`)
+          setCidadeInput(addr.cidade)
         })
-        .catch(() => {})
+        .catch(() => { })
     }, 450)
 
     return () => {
