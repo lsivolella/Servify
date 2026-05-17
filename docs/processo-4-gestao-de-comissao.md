@@ -37,7 +37,7 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 
 ### Detalhamento das atividades
 
-#### Acessar a lista de comissões
+#### Acessar tela de Comissão
 
 | **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**             |
 | ------------------- | -------- | --------------- | ---------------------------- |
@@ -75,17 +75,17 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 
 ## Wireframe
 
-#### Acessar a lista de comissões
+#### Acessar tela de Comissão
 
 ![Tela Subprocesso - Gerenciar comissões](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_gerenciar_comissoes.jpg)
 
-#### Buscar comissão
+#### Listar comissões
 
 ![Tela Subprocesso - Buscar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_busca_comissao.jpg)
 
 ---
 
-#### Cadastrar comissão
+#### Cadastrar Comissão
 
 | **Campo**                   | **Tipo**       | **Restrições**              | **Valor padrão** |
 | --------------------------- | -------------- | --------------------------- | ---------------- |
@@ -109,13 +109,13 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 
 ## Wireframe
 
-#### Cadastrar comissão
+#### Cadastrar Comissão
 
 ![Tela Subprocesso - Adicionar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_adicionar_comissao.jpg)
 
 ---
 
-#### Editar comissão
+#### Editar Comissão
 
 | **Campo**                   | **Tipo**       | **Restrições**              | **Valor padrão**   |
 | --------------------------- | -------------- | --------------------------- | ------------------ |
@@ -140,7 +140,7 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 
 ## Wireframe
 
-#### Editar comissão
+#### Editar Comissão
 
 ![Tela Subprocesso - Editar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_editar_comissao.jpg)
 
@@ -171,7 +171,7 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 
 ---
 
-#### Excluir comissão
+#### Excluir Comissão
 
 | **Campo**                | **Tipo**  | **Restrições**  | **Valor padrão**        |
 | ------------------------ | --------- | --------------- | ----------------------- |
@@ -190,6 +190,6 @@ O processo de **Gerenciamento de Comissões** tem como objetivo permitir que o a
 
 ## Wireframe
 
-#### Excluir comissão
+#### Excluir Comissão
 
 ![Tela Subprocesso - Excluir comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_excluir_comissao.jpg)

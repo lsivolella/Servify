@@ -35,7 +35,7 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
 
 ### Detalhamento das atividades
  
-#### Acessar a lista de relatórios
+#### Acessar tela de relatórios
  
 | **Campo**           | **Tipo**       | **Restrições** | **Valor padrão** |
 | ------------------- | -------------- | -------------- | ---------------- |
@@ -58,11 +58,11 @@ O processo de **Gerenciamento de Relatório** tem como objetivo permitir que o a
  
 ## Wireframe
  
-#### Acessar a lista de relatórios
+#### Acessar tela de relatórios
  
 ![Tela Gerenciar relatórios](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorio.JPG)
  
-#### Buscar relatório
+#### Listar relatórios
  
 ![Tela Buscar relatório](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorios_busca_relatorio.jpg)
  
