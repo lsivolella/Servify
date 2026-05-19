@@ -120,7 +120,7 @@ Após cada uma dessas opções, o fluxo é finalizado.
  
 | **Comandos** | **Destino**                          | **Tipo** |
 | ------------ | ------------------------------------ | -------- |
-| Adicionar    | Atividade "Acessar a página de gerenciamento de serviços"            | padrão   |
+| Salvar    | Atividade "Acessar a página de gerenciamento de serviços"            | padrão   |
 | Cancelar     | Atividade "Acessar a página de gerenciamento de serviços" | cancelar |
 | X (fechar)            | Atividade "Acessar a página de gerenciamento de serviços"              | cancelar |
 
