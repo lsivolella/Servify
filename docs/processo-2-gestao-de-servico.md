@@ -70,7 +70,7 @@ Após cada uma dessas opções, o fluxo é finalizado.
 
 | **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
 | ----------------- | -------------- | ------------------------------------- | ---------------- |
-| Buscar colaboradores           | Caixa de texto | vazio  | vazio            |
+| Buscar serviços          | Caixa de texto | vazio  | vazio            |
 
 | **Resultado**             | **Destino**                                      |
 | ------------------------- | ------------------------------------------------ |
