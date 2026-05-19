@@ -28,7 +28,9 @@ A informatização do processo de Gestão de Serviço traz as seguintes oportuni
 
 Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito no padrão BPMN:
 
-## Subprocesso 1 – Gerenciamento de Serviços
+![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/GestaodeServicosBPMN.png)
+
+## Processo Gerenciamento de Serviços
 
 O processo de **Gerenciamento de Serviços** se inicia com o administrador acessando a tela gerenciamento de serviços em que se apresenta a relação de todos os serviços cadastrados no sistema. A partir desta tela, o administrador pode buscar um serviço, adicionar um novo serviço, selecionar um serviço existente para edição ou selecionar um serviço existente para exclusão conforme opções mostradas a seguir.
 
@@ -38,8 +40,6 @@ O processo de **Gerenciamento de Serviços** se inicia com o administrador acess
 - Excluir: Ao clicar no ícone de lixeira, o sistema exibe um modal de exclusão, em que o usuário pode excluir o serviço confirmando a ação no botão "Excluir" ou cancelar a operação no botão "Cancelar" ou "X".
 
 Após cada uma dessas opções, o fluxo é finalizado.
-
-![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/GestaodeServicosBPMN.png)
 
 ### Detalhamento das atividades
 
