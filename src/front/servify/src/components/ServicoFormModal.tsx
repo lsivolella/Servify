@@ -11,13 +11,17 @@ import AccessTimeOutlined from '@mui/icons-material/AccessTimeOutlined'
 import AttachMoneyOutlined from '@mui/icons-material/AttachMoneyOutlined'
 import CloseOutlined from '@mui/icons-material/CloseOutlined'
 import LocalOfferOutlined from '@mui/icons-material/LocalOfferOutlined'
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker'
+import { renderMultiSectionDigitalClockTimeView } from '@mui/x-date-pickers/timeViewRenderers'
+import dayjs, { type Dayjs } from 'dayjs'
+import type { ServicoFormPayload } from '../services/servicos'
+import { maskMoedaBrl, parseMoedaBrl } from '../utils/masks'
 import {
   ICONE_PADRAO_SERVICO,
   SERVICO_ICONES,
   ServicoIcone,
   type ServicoIconeKey,
 } from '../utils/servicoIcones'
-import type { ServicoFormPayload } from '../services/servicos'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -46,19 +50,29 @@ type ServicoFormModalProps = {
   onSubmit: (payload: ServicoFormPayload) => void | Promise<void>
 }
 
+function minutosParaDayjs(minutos: number): Dayjs {
+  const h = Math.floor(minutos / 60)
+  const m = minutos % 60
+  return dayjs().hour(h).minute(m).second(0).millisecond(0)
+}
+
+function dayjsParaMinutos(value: Dayjs | null): number {
+  if (!value?.isValid()) return 0
+  return value.hour() * 60 + value.minute()
+}
+
 function validar(values: ServicoFormValues): string | null {
   const nome = values.nome.trim()
   if (!nome) return 'Informe o nome do serviço.'
 
-  const valorStr = values.valor.replace(',', '.').trim()
-  const valor = Number(valorStr)
-  if (!valorStr || !Number.isFinite(valor) || valor <= 0) {
+  const valor = parseMoedaBrl(values.valor)
+  if (!Number.isFinite(valor) || valor <= 0) {
     return 'Informe um valor maior que zero.'
   }
 
   const duracao = Number(values.duracaoMinutos.trim())
   if (!Number.isFinite(duracao) || duracao <= 0 || !Number.isInteger(duracao)) {
-    return 'Informe uma duração em minutos maior que zero.'
+    return 'Informe uma duração válida (hora e minuto).'
   }
 
   if (!values.icone) return 'Selecione um ícone.'
@@ -69,7 +83,7 @@ function validar(values: ServicoFormValues): string | null {
 function toPayload(values: ServicoFormValues): ServicoFormPayload {
   return {
     nome: values.nome.trim(),
-    valor: Number(values.valor.replace(',', '.').trim()),
+    valor: parseMoedaBrl(values.valor),
     duracaoMinutos: Number(values.duracaoMinutos.trim()),
     icone: values.icone,
     ativo: values.ativo,
@@ -168,7 +182,7 @@ export default function ServicoFormModal({
               sx={{
                 width: 48,
                 height: 48,
-                borderRadius: '50%',
+                borderRadius: '50%',  
                 bgcolor: '#e0e7ff',
                 display: 'flex',
                 alignItems: 'center',
@@ -224,21 +238,92 @@ export default function ServicoFormModal({
             label="Valor (R$)"
             id="servico-valor"
             value={values.valor}
-            onChange={(v) => setValues((s) => ({ ...s, valor: v }))}
-            placeholder="0.00"
-            inputMode="decimal"
+            onChange={(v) => setValues((s) => ({ ...s, valor: maskMoedaBrl(v) }))}
+            placeholder="0,00"
+            inputMode="numeric"
             startIcon={<AttachMoneyOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />}
           />
 
-          <Campo
-            label="Duração (minutos)"
-            id="servico-duracao"
-            value={values.duracaoMinutos}
-            onChange={(v) => setValues((s) => ({ ...s, duracaoMinutos: v }))}
-            placeholder="30"
-            inputMode="numeric"
-            startIcon={<AccessTimeOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />}
-          />
+          <Box>
+            <Typography
+              component="label"
+              htmlFor="servico-duracao"
+              sx={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: '#475569',
+                mb: 0.75,
+              }}
+            >
+              Duração
+            </Typography>
+            <DesktopTimePicker
+              format="HH:mm"
+              ampm={false}
+              views={['hours', 'minutes']}
+              openTo="hours"
+              timeSteps={{ hours: 1, minutes: 5 }}
+              viewRenderers={{
+                hours: renderMultiSectionDigitalClockTimeView,
+                minutes: renderMultiSectionDigitalClockTimeView,
+              }}
+              value={
+                values.duracaoMinutos
+                  ? minutosParaDayjs(Number(values.duracaoMinutos))
+                  : null
+              }
+              onChange={(newValue) => {
+                const minutos = dayjsParaMinutos(newValue)
+                setValues((s) => ({
+                  ...s,
+                  duracaoMinutos: minutos > 0 ? String(minutos) : '',
+                }))
+              }}
+              slotProps={{
+                toolbar: { hidden: true },
+                layout: {
+                  sx: {
+                    '& .MuiMultiSectionDigitalClock-root': {
+                      maxHeight: 280,
+                    },
+                    '& .MuiMenuItem-root.Mui-selected': {
+                      bgcolor: '#e0e7ff',
+                      color: NAVY,
+                      fontWeight: 700,
+                      '&:hover': { bgcolor: '#c7d2fe' },
+                    },
+                  },
+                },
+                popper: {
+                  placement: 'bottom-start',
+                  sx: { zIndex: (theme) => theme.zIndex.modal + 1 },
+                },
+                textField: {
+                  id: 'servico-duracao',
+                  name: 'duracaoMinutos',
+                  fullWidth: true,
+                  variant: 'outlined',
+                  slotProps: {
+                    htmlInput: { placeholder: '00:30' },
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccessTimeOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                        </InputAdornment>
+                      ),
+                    },
+                  },
+                  sx: {
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
+                      '& fieldset': { borderColor: BORDER },
+                    },
+                  },
+                },
+              }}
+            />
+          </Box>
 
           <Box>
             <Typography

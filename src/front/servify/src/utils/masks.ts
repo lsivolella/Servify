@@ -42,3 +42,29 @@ export function maskEmailInput(value: string): string {
     '',
   )
 }
+
+/** Moeda BRL para input: só dígitos → formato 1.234,56 */
+export function maskMoedaBrl(value: string): string {
+  const digits = value.replace(/\D/g, '')
+  if (!digits.length) return ''
+
+  const reais = Number(digits) / 100
+  return reais.toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+}
+
+/** Converte valor mascarado para número (API) */
+export function parseMoedaBrl(value: string): number {
+  const digits = value.replace(/\D/g, '')
+  if (!digits.length) return NaN
+  return Number(digits) / 100
+}
+
+/** Número da API → string mascarada para o formulário */
+export function formatMoedaBrlFromNumber(valor: number): string {
+  if (!Number.isFinite(valor) || valor < 0) return ''
+  const cents = Math.round(valor * 100)
+  return maskMoedaBrl(String(cents))
+}

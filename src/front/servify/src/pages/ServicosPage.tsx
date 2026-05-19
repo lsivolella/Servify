@@ -40,6 +40,7 @@ import {
   type Servico,
   type ServicoFormPayload,
 } from '../services/servicos'
+import { formatMoedaBrlFromNumber } from '../utils/masks'
 import { ServicoIcone } from '../utils/servicoIcones'
 
 const NAVY = '#1e3a5f'
@@ -49,7 +50,7 @@ const PAGE_BG = '#f8fafc'
 function servicoToFormValues(s: Servico): ServicoFormValues {
   return {
     nome: s.nome,
-    valor: String(s.valor),
+    valor: formatMoedaBrlFromNumber(s.valor),
     duracaoMinutos: String(s.duracaoMinutos),
     icone: s.icone,
     ativo: s.ativo,
