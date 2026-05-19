@@ -32,7 +32,7 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito n
 
 O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O subprocesso se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço, selecionar um serviço existente para edição ou selecionar um serviço existente para exclusão.
 
-![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/GestaodeServicosBPMN.drawio "Modelo BPMN do Processo 2 - Subprocesso - Gerenciamento de Serviços")
+![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/GestaodeServicosBPMN.drawio.png")
 
 ### Detalhamento das atividades
 
@@ -104,8 +104,6 @@ O subprocesso de **Cadastro de Serviço** se inicia com o administrador acionand
 ## Subprocesso 3 – Edição de Serviço
 
 O subprocesso **Edição de Serviço** se inicia com o administrador acionando o botão de edição de um serviço. O sistema exibe o modal de edição com os campos preenchidos com os dados atuais do serviço selecionado e os botões de Salvar e Cancelar. O administrador modifica os campos do formulário de edição do serviço selecionado e clica em "Salvar". Após a confirmação das alterações pelo administrador, o registro existente é atualizado e o usuário retorna automaticamente para a tela de listagem com o serviço ajustado. Caso o administrador opte por cancelar a operação, o modal de edição é fechado e o usuário retorna automaticamente para a tela de listagem. Caso haja algum erro na edição, uma mensagem de erro aparece para o usuário.
-
-![Edição de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-edicao-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Edição de Serviço")
 
 ### Detalhamento das atividades
 
