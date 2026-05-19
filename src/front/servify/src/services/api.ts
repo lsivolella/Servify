@@ -161,6 +161,32 @@ export async function apiPostJson<T>(
   return (await res.json()) as T
 }
 
+export async function apiPutJson<T>(
+  path: string,
+  body: unknown,
+  init?: Omit<RequestInit, 'method' | 'body'>,
+): Promise<T> {
+  const url = joinUrl(API_BASE_URL, path)
+  const res = await fetch(url, {
+    ...init,
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...(init?.headers ?? {}),
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!res.ok) {
+    const err = new Error(await parseErrorMessage(res)) as ApiError
+    err.status = res.status
+    throw err
+  }
+
+  return (await res.json()) as T
+}
+
 export async function apiDelete(
   path: string,
   init?: Omit<RequestInit, 'method'>,

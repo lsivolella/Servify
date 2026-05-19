@@ -5,6 +5,7 @@ import ClientesPage from './pages/ClientesPage'
 import GerenciarColaboradorPage from './pages/GerenciarColaboradorPage'
 import LoginPage from './pages/LoginPage'
 import PlaceholderPage from './pages/PlaceholderPage'
+import ServicosPage from './pages/ServicosPage'
 import RegisterPage from './pages/RegisterPage'
 import CompletarCadastroConvitePage from './pages/CompletarCadastroConvitePage'
 import GoogleMailOAuthCallbackPage from './pages/GoogleMailOAuthCallbackPage'
@@ -37,10 +38,7 @@ const router = createBrowserRouter([
             path: '/dashboard',
             element: <PlaceholderPage title="Dashboard" />,
           },
-          {
-            path: '/servicos',
-            element: <PlaceholderPage title="Serviços" />,
-          },
+          { path: '/servicos', element: <ServicosPage /> },
           {
             path: '/comissao',
             element: <PlaceholderPage title="Comissão" />,
