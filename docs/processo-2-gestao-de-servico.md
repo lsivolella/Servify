@@ -32,9 +32,7 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito n
 
 O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O subprocesso se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço, selecionar um serviço existente para edição ou selecionar um serviço existente para exclusão.
 
-![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-gerenciamento-servicos.png "Modelo BPMN do Processo 2 - Subprocesso - Gerenciamento de Serviços")
-
-![Busca de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-busca-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Busca de Serviço")
+![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/GestaodeServicosBPMN.drawio "Modelo BPMN do Processo 2 - Subprocesso - Gerenciamento de Serviços")
 
 ### Detalhamento das atividades
 
@@ -67,13 +65,13 @@ O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o
 
 ### Wireframes
 
-![Tela Gerenciar Serviços](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_gerenciar-servico.jpg)
+![Tela Gerenciar Serviços](images/wireframe/gestao-de-servico/Gerenciar_servicos.jpg)
 
 ## Subrocesso 2 – Cadastro de Serviço
 
 O subprocesso de **Cadastro de Serviço** se inicia com o administrador acionando o botão "Adicionar". O sistema exibe o modal de cadastro de novo serviço com todos os campos em branco, aguardando preenchimento sendo eles: nome do serviço, valor, duração, ícone e status. O administrador preenche os campos do formulário de cadastro de novo serviço. Caso haja algum erro, o usuário recebe uma mensagem de erro indicando quais campos estão incorretos ou incompletos. O administrador então retorna ao formulário para efetuar as correções necessárias. Após a validação bem-sucedida dos dados, uma mensagem de serviço registrado com sucesso aparece e ele retorna automaticamente para a tela de listagem com o serviço incluído.
 
-![Cadastro de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-cadastro-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Cadastro de Serviço")
+![Tela Buscar Serviços](images/wireframe/gestao-de-servico/buscar_servico.jpg)
 
 ### Detalhamento das atividades
 
@@ -101,7 +99,7 @@ O subprocesso de **Cadastro de Serviço** se inicia com o administrador acionand
 
 ### Wireframes
 
-![Tela Cadastrar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_cadastrar-servico.jpg)
+![Tela Cadastrar Serviço](images/wireframe/gestao-de-servico/adicionar_servico.jpg)
 
 ## Subprocesso 3 – Edição de Serviço
 
@@ -135,7 +133,7 @@ O subprocesso **Edição de Serviço** se inicia com o administrador acionando o
  
 ### Wireframes
 
-![Tela Editar Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_editar-servico.jpg)
+![Tela Editar Serviço](images/wireframe/gestao-de-servico/editar_servico.jpg)
 
 ## Subprocesso 4 – Exclusão de Serviço
 
@@ -160,8 +158,6 @@ O subprocesso de **Exclusão de Serviço** se inicia com o administrador acionan
 | Serviço excluído       | Toast de "Serviço excluído com sucesso." e Atividade "Exibir lista de serviços"            |
 | Operação cancelada    | Atividade "Exibir lista de serviços" |
 
-![Exclusão de Serviço](images/bpmn/gestao-de-servico/bpmn-gestao-de-servico-exclusao-servico.png "Modelo BPMN do Processo 2 - Subprocesso - Exclusão de Serviço")
-
 ### Wireframes
 
-![Tela Excluir Serviço](images/wireframe/gestao-de-servico/wireframe_gestao-de-servicos_excluir-servico.jpg)
+![Tela Excluir Serviço](images/wireframe/gestao-de-servico/excluir_servico.jpg)
