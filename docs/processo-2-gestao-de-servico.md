@@ -32,7 +32,7 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito n
 
 O subprocesso de **Gerenciamento de Serviços** tem como objetivo permitir que o administrador gerencie e visualize os serviços oferecidos pelo estabelecimento. O subprocesso se inicia na tela principal do módulo de gerenciamento de serviços em que apresenta a relação de todos os serviços cadastrados no sistema, com suporte a busca por nome. A partir desta tela, o administrador pode adicionar um novo serviço, selecionar um serviço existente para edição ou selecionar um serviço existente para exclusão.
 
-![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/GestaodeServicosBPMN.png")
+![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/GestaodeServicosBPMN.png)
 
 ### Detalhamento das atividades
 
