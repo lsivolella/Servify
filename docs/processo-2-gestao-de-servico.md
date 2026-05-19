@@ -30,9 +30,9 @@ Em seguida, apresenta-se o modelo do processo de Gestão de Serviço, descrito n
 
 ![Gerenciamento de Serviço](images/bpmn/gestao-de-servico/GestaodeServicosBPMN.png)
 
-## Processo Gerenciamento de Serviços
+## Processo Gestão de Serviço
 
-O processo de **Gerenciamento de Serviços** se inicia com o administrador acessando a tela gerenciamento de serviços em que se apresenta a relação de todos os serviços cadastrados no sistema. A partir desta tela, o administrador pode buscar um serviço, adicionar um novo serviço, selecionar um serviço existente para edição ou selecionar um serviço existente para exclusão conforme opções mostradas a seguir.
+O processo de **Gestão de Serviço** se inicia com o administrador acessando a tela de gerenciamento de serviços em que se apresenta a relação de todos os serviços cadastrados no sistema. A partir desta tela, o administrador pode buscar um serviço, adicionar um novo serviço, selecionar um serviço existente para edição ou selecionar um serviço existente para exclusão conforme opções mostradas a seguir.
 
 - Buscar serviço: Ele pode utilizar o campo "Buscar serviços" para filtrar um nome de serviço na lista e apagar a digitação do campo para retornar ao status nativo da lista. 
 - Adicionar serviço: Ao clicar no botão "Adicionar", abre-se o modal "Adicionar serviço", onde ele preenche o "Nome do serviço", "Valor", "Duração", seleciona o ícone do serviço e o status do serviço e então pode utilizar o botão "Adicionar" para cadastrar o serviço ou o botão "Cancelar" ou "X" para cancelar a operação. 
