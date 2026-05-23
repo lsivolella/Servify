@@ -1,6 +1,7 @@
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import AppShell from './layout/AppShell'
 import AgendamentosPage from './pages/AgendamentosPage'
+import ComissaoPage from './pages/ComissaoPage'
 import ClientesPage from './pages/ClientesPage'
 import GerenciarColaboradorPage from './pages/GerenciarColaboradorPage'
 import LoginPage from './pages/LoginPage'
@@ -41,7 +42,7 @@ const router = createBrowserRouter([
           { path: '/servicos', element: <ServicosPage /> },
           {
             path: '/comissao',
-            element: <PlaceholderPage title="Comissão" />,
+            element: <ComissaoPage />,
           },
           {
             path: '/relatorio',
