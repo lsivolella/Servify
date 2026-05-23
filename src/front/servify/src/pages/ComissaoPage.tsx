@@ -13,6 +13,10 @@ import { useSidebarLayout } from '../context/SidebarLayoutContext'
 import { Box, Container, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import ViewSidebarOutlined from '@mui/icons-material/ViewSidebarOutlined'
 import { ArrowBackOutlined, EditOutlined, LocalOfferOutlined, Search } from "@mui/icons-material"
+import ComissaoFormModal, {
+    type ComissaoFormValues,
+}
+    from "../components/ComissaoFormModal"
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -26,6 +30,7 @@ export default function ComissaoPage() {
     const [loading, setLoading] = useState(true)
 
     const [formOpen, setFormOpen] = useState(false)
+    const [formInitial, setFormInitial] = useState<ComissaoFormValues | undefined>()
     const [editingColaborador, setEditingColaborador] = useState<ColaboradorComissao | null>(null)
 
 
@@ -60,11 +65,17 @@ export default function ComissaoPage() {
     function abrirEditar(row: ColaboradorComissao) {
         setFormOpen(true)
         setEditingColaborador(row)
+        setFormInitial({
+            usuarioId: row.usuarioId,
+            nome: row.usuarioNome,
+            valor: row.valor,
+        })
     }
 
     function fecharForm() {
         setFormOpen(false)
         setEditingColaborador(null)
+        setFormInitial(undefined)
     }
 
     async function handleSalvarForm(payload: ComissaoPayload) {
@@ -283,6 +294,12 @@ export default function ComissaoPage() {
                         : `${filtrados.length} colaborador${filtrados.length === 1 ? '' : 'es'} encontrado${filtrados.length === 1 ? '' : 's'}`}
                 </Typography>
             </Container>
+            <ComissaoFormModal
+                open={formOpen}
+                initial={formInitial}
+                onClose={fecharForm}
+                onSubmit={handleSalvarForm}
+            />
         </Box >
     )
 }
