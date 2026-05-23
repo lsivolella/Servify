@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +21,7 @@ public class Comissao {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false, foreignKey = @ForeignKey(name = "fk_comissao_usuario", foreignKeyDefinition = "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE"))
     private Usuario usuario;
 
     @Column(nullable = false, precision = 5, scale = 4)
