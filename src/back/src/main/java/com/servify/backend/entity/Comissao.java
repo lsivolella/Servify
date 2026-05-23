@@ -23,10 +23,10 @@ public class Comissao {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @Column(nullable = false, precision = 3, scale = 2)
-    @DecimalMin(value = "0.00")
-    @DecimalMax(value = "1.00")
-    @Digits(integer = 1, fraction = 2)
+    @Column(nullable = false, precision = 5, scale = 4)
+    @DecimalMin(value = "0.0000")
+    @DecimalMax(value = "1.0000")
+    @Digits(integer = 1, fraction = 4)
     private BigDecimal valor = BigDecimal.ZERO;
 
     public Comissao() {

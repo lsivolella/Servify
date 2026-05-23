@@ -11,8 +11,8 @@ public class ComissaoRequestDTO {
     private Long usuarioId;
 
     @NotNull
-    @DecimalMin(value = "0.00")
-    @DecimalMax(value = "1.00")
+    @DecimalMin(value = "0.0000")
+    @DecimalMax(value = "1.0000")
     private BigDecimal valor;
 
     public Long getUsuarioId() {
