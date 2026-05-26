@@ -70,18 +70,31 @@ Ao selecionar a opção "Criar conta", o sistema redireciona o usuário para a t
 O registro tem como objetivo coletar as informações de um novo usuário. Na tela "Cadastro de Cliente", o usuário visualiza um formulário e pode preencher seus dados:
 
 • Nome completo;
+
 • E-mail;
+
 • Telefone;
+
 • Data de nascimento;
+
 • CPF;
+
 • CEP;
+
 • Logradouro;
+
 • Número;
+
 • Complemento;
+
 • Bairro;
+
 • Cidade;
+
 • UF;
+
 • Senha;
+
 • Confirmar senha.
 
 Após o preenchimento, o usuário pressiona o botão "Cadastrar Cliente" para finalizar a criação da conta. Caso o usuário já possua uma conta e tenha acessado a tela por engano, ele pode utilizar o comando "Já tem uma conta? Fazer login" para retornar à tela inicial.
