@@ -26,11 +26,11 @@ A informatização do processo de Gestão de Comissão traz as seguintes oportun
 
 Em seguida, apresenta-se o modelo do processo de Gestão de Comissão, descrito no padrão BPMN:
 
-![Modelo BPMN do Processo 4](images/bpmn/gestao-de-comissao/Comissao.drawio.png")
+![Modelo BPMN do Processo 4](images/bpmn/gestao-de-comissao/Comissao.png")
 
 ## Processo Gestão de Comissão
 
-O processo de **Gestão de Comissão** tem como objetivo permitir que o administrador visualize, cadastre, edite, exclua e confirme o pagamento das comissões dos funcionários. O processo se inicia com o administrador acessando a tela de Comissão em que se apresente a listagem de todas as comissões cadastradas no sistema. A partir desta tela, o administrador pode buscar uma comissão, adicionar uma nova comissão, selecionar uma comissão existente para edição ou selecionar uma comissão existente para exclusão conforme opções mostradas a seguir.
+O processo de **Gestão de Comissão** tem como objetivo permitir que o administrador visualize, cadastre, edite, exclua e confirme o pagamento das comissões dos funcionários. O processo se inicia com o administrador acessando a tela de Comissão em que se apresente a listagem de todas as comissões cadastradas no sistema. A partir desta tela, o administrador pode buscar uma comissão, adicionar uma nova comissão, selecionar uma comissão existente para edição, selecionar uma comissão existente para confirmação de pagamento ou selecionar uma comissão existente para exclusão conforme opções mostradas a seguir.
 
 - Listar comissões: Ele pode utilizar o campo "Buscar comissões" digitando um nome de funcionário na lista para retonar a listagem filtrada e apagar a digitação do campo para retornar retornar à listagem completa.
 - Cadastrar comissão: Ao clicar no botão "Adicionar", abre-se o modal "Adicionar Comissão", onde ele preenche o "Nome do funcionário", "Nome do serviço", "Valor do serviço", "Percentual de comissão" e "Data", e então pode utilizar o botão "Adicionar" para cadastrar a comissão ou o botão "Cancelar" ou "X" para cancelar a operação.
