@@ -103,7 +103,7 @@ Após o preenchimento, o usuário pressiona o botão **"Cadastrar Cliente"** par
 ## Modelagem
 Em seguida, apresentam-se o modelo do processo de Gestão de Usuário, descrito no padrão BPMN:
 
-![bpmn 2](docs/diagrams/ColaboradorAdmin.drawio (2).png)
+![bpmn 2](diagrams/ColaboradorAdmin.png)
 
 ### Descrições Detalhadas Alinhadas aos Wireframes
 
