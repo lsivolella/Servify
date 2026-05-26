@@ -32,8 +32,9 @@ Em seguida, apresentam-se os modelos do processo de Gestão de Usuário, descrit
 ### Descrições Detalhadas Alinhadas aos Wireframes
 
 #### Autenticação de Cliente
-A etapa de autenticação tem como objetivo permitir que um cliente acesse o sistema. O fluxo inicia na tela de login, onde o cliente tem duas opções de ação baseadas nos wireframes: utilizar os campos **"Login"** e **"Senha"** para inserir credenciais já existentes e clicar no botão **"Entrar"**, ou clicar no link **Criar conta** caso seja um novo usuário. 
-Optando por **"Criar conta"**, o sistema o redireciona para a tela de **Cadastro de Cliente**. Já ao clicar em **"Entrar"**, o sistema processa a autenticação e, sendo bem-sucedida, concede o acesso. Se as credenciais forem inválidas, um prompt de erro exibe a mensagem *"Usuário ou senha inválidos"* na própria tela, permitindo uma nova tentativa.
+A etapa de autenticação tem como objetivo permitir que um cliente acesse o sistema. O fluxo inicia na tela de login, onde o cliente possui duas opções de ação baseadas nos wireframes: utilizar os campos "Login" e "Senha" para inserir credenciais já existentes e clicar no botão "Entrar", ou clicar no link "Criar conta" caso seja um novo usuário.
+
+Ao selecionar a opção "Criar conta", o sistema redireciona o usuário para a tela de Cadastro de Cliente. Já ao clicar em "Entrar", o sistema processa a autenticação e, sendo bem-sucedida, concede acesso ao sistema. Caso as credenciais estejam incorretas, o sistema exibe um alerta visual com a mensagem "Usuário ou senha inválidos.", permitindo uma nova tentativa de login.
 
 ### Detalhamento das atividades
 
@@ -41,18 +42,18 @@ Optando por **"Criar conta"**, o sistema o redireciona para a tela de **Cadastro
 
 | **Campo** | **Tipo**       | **Restrições** | **Valor padrão** |
 | --------- | -------------- | -------------- | ---------------- |
-| Login    | Caixa de texto | obrigatório    | vazio            |
+| Login     | Caixa de texto | obrigatório    | vazio            |
 | Senha     | Caixa de texto | obrigatório    | vazio            |
 
-| **Comandos** | **Destino**                        | **Tipo** |
-| ------------ | ---------------------------------- | -------- |
-| Entrar       | Atividade "Acessar meus agendamentos"    | padrão   |
-| Criar conta    | Atividade "Criar conta"       | padrão   |
+| **Comandos** | **Destino**                | **Tipo** |
+| ------------ | -------------------------- | -------- |
+| Entrar       | Área interna da plataforma | padrão   |
+| Criar conta  | Atividade "Criar conta"    | padrão   |
 
-| **Resultado**       | **Destino**     |
-| ------------------- | --------------- |
-| Sessão criada (cliente)     | Atividade "Acessar meus agendamentos - Cliente" |
-| Prompt de erro    | "Usuário ou senha inválidos." |
+| **Resultado**               | **Destino**                   |
+| --------------------------- | ----------------------------- |
+| Login realizado com sucesso | Área interna da plataforma    |
+| Prompt de erro              | "Usuário ou senha inválidos." |
 
 ### Wireframes
 
@@ -66,41 +67,58 @@ Optando por **"Criar conta"**, o sistema o redireciona para a tela de **Cadastro
 
 ## Registro de Cliente
 
-O registro tem como objetivo coletar as informações de um novo usuário. Na tela **"Cadastro de Cliente"**, o usuário visualiza um formulário e pode preencher seus dados (Nome completo, E-mail, Telefone, Data de nascimento, CPF, CEP, Logradouro, Número, Complemento, Bairro, Cidade, UF, Senha e Confirmar senha).  
+O registro tem como objetivo coletar as informações de um novo usuário. Na tela "Cadastro de Cliente", o usuário visualiza um formulário e pode preencher seus dados:
 
-Após o preenchimento, o usuário pressiona o botão **"Cadastrar Cliente"** para finalizar a criação da conta. Caso o usuário já possua uma conta e tenha acessado a tela por engano, ele pode utilizar o comando **"Já tem uma conta? Fazer login"** para retornar à tela inicial. Após o cadastro bem-sucedido, ele recebe um aviso de sucesso e retorna ao login.  
+• Nome completo;
+• E-mail;
+• Telefone;
+• Data de nascimento;
+• CPF;
+• CEP;
+• Logradouro;
+• Número;
+• Complemento;
+• Bairro;
+• Cidade;
+• UF;
+• Senha;
+• Confirmar senha.
+
+Após o preenchimento, o usuário pressiona o botão "Cadastrar Cliente" para finalizar a criação da conta. Caso o usuário já possua uma conta e tenha acessado a tela por engano, ele pode utilizar o comando "Já tem uma conta? Fazer login" para retornar à tela inicial.
+
+Após o cadastro realizado com sucesso, o sistema exibe uma mensagem de confirmação e redireciona o usuário para a tela de login.
 
 
 ### Detalhamento das atividades
 
 #### Preencher formulário
 
-| **Campo**          | **Tipo**       | **Restrições**       | **Valor padrão** |
-| ------------------ | -------------- | -------------------- | ---------------- |
-| Nome completo      | Caixa de texto | obrigatório          | vazio            |
-| E-mail             | Caixa de texto | obrigatório e único; deve ter formato válido  | vazio            |
-| Telefone           | Caixa de texto | obrigatório; deve ter formato válido          | vazio            |
+| **Campo**          | **Tipo**       | **Restrições**                               | **Valor padrão** |
+| ------------------ | -------------- | -------------------------------------------- | ---------------- |
+| Nome completo      | Caixa de texto | obrigatório                                  | vazio            |
+| E-mail             | Caixa de texto | obrigatório e único; deve ter formato válido | vazio            |
+| Telefone           | Caixa de texto | obrigatório; deve ter formato válido         | vazio            |
 | Data de nascimento | Data           | obrigatório; deve ter formato válido         | vazio            |
-| CPF                | Caixa de texto | obrigatório e único  | vazio            |
+| CPF                | Caixa de texto | obrigatório e único                          | vazio            |
 | CEP                | Caixa de texto | obrigatório; deve ter formato válido         | vazio            |
-| Logradouro         | Caixa de texto | obrigatório          | vazio            |
-| Número             | Caixa de texto | obrigatório          | vazio            |
-| Complemento        | Caixa de texto | obrigatório          | vazio            |
-| Bairro             | Caixa de texto | obrigatório          | vazio            |
-| Cidade             | Caixa de texto | obrigatório          | vazio            |
-| UF                 | Seleção única  | obrigatório          | vazio            |
-| Senha              | Caixa de texto | obrigatório          | vazio            |
-| Confirmar senha    | Caixa de texto | obrigatório; deve ser igual ao campo senha | vazio |
+| Logradouro         | Caixa de texto | obrigatório                                  | vazio            |
+| Número             | Caixa de texto | obrigatório                                  | vazio            |
+| Complemento        | Caixa de texto | opcional                                     | vazio            |
+| Bairro             | Caixa de texto | obrigatório                                  | vazio            |
+| Cidade             | Caixa de texto | obrigatório                                  | vazio            |
+| UF                 | Seleção única  | obrigatório                                  | vazio            |
+| Senha              | Caixa de texto | obrigatório                                  | vazio            |
+| Confirmar senha    | Caixa de texto | obrigatório; deve ser igual ao campo senha   | vazio            |
 
-| **Comandos**  | **Destino**                       | **Tipo** |
-| ------------- | --------------------------------- | -------- |
-| Cadastrar Cliente     | Atividade "Acessar a aplicação"   | padrão   |
-| Fazer login   | Atividade "Acessar a aplicação"     | padrão |
+| **Comandos**      | **Destino**                     | **Tipo** |
+| ----------------- | ------------------------------- | -------- |
+| Cadastrar Cliente | Atividade "Acessar a aplicação" | padrão   |
+| Fazer login       | Tela de autenticação            | padrão   |
 
-| **Resultado**        | **Destino**                          |
-| -------------------- | ------------------------------------ |
-| Cadastro realizado  | Toast "Cadastro realizado com sucesso." e Atividade "Acessar a aplicação"  |
-| Prompt de erro    | "Campo inválido." |
+| **Resultado**      | **Destino**                                                               |
+| ------------------ | ------------------------------------------------------------------------- |
+| Cadastro realizado | Toast "Cadastro realizado com sucesso." e Atividade "Acessar a aplicação" |
+| Prompt de erro     | "Campo inválido."                                                         |
 
 ### Wireframes
 
@@ -123,22 +141,22 @@ Todas as ações em modais podem ser abortadas clicando no botão **"Cancelar"**
 
 #### Acessar a página de gerenciamento de colaboradores e admins
 
-| **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
-| ----------------- | -------------- | ------------------------------------- | ---------------- |
-| Buscar colaboradores           | Caixa de texto | vazio  | vazio            |
+| **Campo**            | **Tipo**       | **Restrições** | **Valor padrão** |
+| -------------------- | -------------- | -------------- | ---------------- |
+| Buscar colaboradores | Caixa de texto | vazio          | vazio            |
 
-| **Comandos** | **Destino**                                   | **Tipo** |
-| ---          | ---                                           | -------- |
-| Convidar     | Atividade "Convidar novo usuário"          | padrão   |
-| Editar (lápis)       | Atividade "Editar perfil"   | padrão   |
-| Excluir (lixeira)      | Atividade "Excluir perfil" | padrão   |
+| **Comandos**      | **Destino**                       | **Tipo** |
+| ----------------- | --------------------------------- | -------- |
+| Convidar          | Atividade "Convidar novo usuário" | padrão   |
+| Editar (lápis)    | Atividade "Editar perfil"         | padrão   |
+| Excluir (lixeira) | Atividade "Excluir perfil"        | padrão   |
 
-| **Resultado**       | **Destino**     |
-| ------------------- | --------------- |
-| Colaborador encontrado     | Colaborador filtrado. |
-| Modal convite     | Atividade "Convidar novo usuário" |
-| Modal edição     | Atividade "Editar perfil" |
-| Modal exclusão    | Atividade "Excluir perfil" |
+| **Resultado**          | **Destino**                       |
+| ---------------------- | --------------------------------- |
+| Colaborador encontrado | Colaborador filtrado              |
+| Modal convite          | Atividade "Convidar novo usuário" |
+| Modal edição           | Atividade "Editar perfil"         |
+| Modal exclusão         | Atividade "Excluir perfil"        |
 
 ---
 
