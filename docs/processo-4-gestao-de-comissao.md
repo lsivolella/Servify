@@ -26,7 +26,7 @@ A informatização do processo de Gestão de Comissão traz as seguintes oportun
 
 Em seguida, apresenta-se o modelo do processo de Gestão de Comissão, descrito no padrão BPMN:
 
-![Modelo BPMN do Processo 4](images/bpmn/gestao-de-comissao/Comissao.png")
+![Modelo BPMN do Processo 4](images/bpmn/gestao-de-comissao/Comissao.png)
 
 ## Processo Gestão de Comissão
 
