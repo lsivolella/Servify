@@ -39,7 +39,8 @@ public class UsuarioService {
     }
 
     /**
-     * Cadastro público em {@code /cadastro}: sempre perfil Cliente (id 3), ignorando
+     * Cadastro público em {@code /cadastro}: sempre perfil Cliente (id 3),
+     * ignorando
      * {@code perfilId} do corpo para evitar escolha incorreta ou manipulação.
      */
     public UsuarioResponseDTO cadastroClientePublico(UsuarioRequestDTO dto) {
@@ -66,8 +67,10 @@ public class UsuarioService {
     }
 
     /**
-     * Pré-cadastro ao enviar convite: e-mail + perfil + senha já criptografada (BCrypt),
-     * demais campos preenchidos com placeholders até {@link #completarPreCadastroConvidado}.
+     * Pré-cadastro ao enviar convite: e-mail + perfil + senha já criptografada
+     * (BCrypt),
+     * demais campos preenchidos com placeholders até
+     * {@link #completarPreCadastroConvidado}.
      */
     public void criarPreCadastroConvidado(String email, Perfil perfil, String senhaPlana) {
         Usuario usuario = new Usuario();
@@ -223,6 +226,7 @@ public class UsuarioService {
         dto.setCidade(usuario.getCidade());
         dto.setUf(usuario.getUf());
         dto.setCadastroPendente(usuario.isCadastroPendente());
+        dto.setDataCriacao(usuario.getDataCriacao());
         return dto;
     }
 }
