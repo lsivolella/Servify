@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.servify.backend.constants.PerfilConstants;
 import com.servify.backend.dto.CompletarConviteCadastroDTO;
 import com.servify.backend.dto.UsuarioRequestDTO;
 import com.servify.backend.dto.UsuarioResponseDTO;
@@ -44,7 +45,7 @@ public class UsuarioService {
      * {@code perfilId} do corpo para evitar escolha incorreta ou manipulação.
      */
     public UsuarioResponseDTO cadastroClientePublico(UsuarioRequestDTO dto) {
-        Perfil perfil = perfilRepository.findById(3)
+        Perfil perfil = perfilRepository.findById(PerfilConstants.CLIENTE)
                 .orElseThrow(() -> new RuntimeException("Perfil Cliente não encontrado"));
         return salvarNovoUsuario(dto, perfil);
     }
@@ -140,7 +141,7 @@ public class UsuarioService {
     }
 
     public List<UsuarioResponseDTO> listarClientes() {
-        return usuarioRepository.findByPerfil_Id(3)
+        return usuarioRepository.findByPerfil_Id(PerfilConstants.CLIENTE)
                 .stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
@@ -148,8 +149,8 @@ public class UsuarioService {
 
     public List<UsuarioResponseDTO> listarColaboradores() {
         return Stream.concat(
-                usuarioRepository.findByPerfil_Id(1).stream(),
-                usuarioRepository.findByPerfil_Id(2).stream())
+                usuarioRepository.findByPerfil_Id(PerfilConstants.ADMIN).stream(),
+                usuarioRepository.findByPerfil_Id(PerfilConstants.COLABORADOR).stream())
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }

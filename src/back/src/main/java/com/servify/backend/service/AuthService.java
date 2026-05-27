@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.servify.backend.constants.PerfilConstants;
 import com.servify.backend.dto.LoginResponseDTO;
 import com.servify.backend.entity.Convite;
 import com.servify.backend.entity.Usuario;
@@ -26,10 +27,14 @@ public class AuthService {
   }
 
   private static String cargoFromPerfilId(Integer perfilId) {
-    if (perfilId == null) return "";
-    if (perfilId == 1) return "adm";
-    if (perfilId == 2) return "colaborador";
-    if (perfilId == 3) return "cliente";
+    if (perfilId == null)
+      return "";
+    if (perfilId == PerfilConstants.ADMIN)
+      return "adm";
+    if (perfilId == PerfilConstants.COLABORADOR)
+      return "colaborador";
+    if (perfilId == PerfilConstants.CLIENTE)
+      return "cliente";
     return "";
   }
 
@@ -70,4 +75,3 @@ public class AuthService {
     return dto;
   }
 }
-
