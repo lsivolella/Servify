@@ -24,15 +24,15 @@ A informatização do processo de Gestão de Usuário traz as seguintes oportuni
 ## Modelagem
 Em seguida, apresentam-se os modelos do processo de Gestão de Usuário, descritos no padrão BPMN:
 
-![bpmn](docs/diagrams/ClienteServify.drawio (1).png)
+![bpmn](diagrams/ClienteServify.png)
 
 ### Descrições Detalhadas Alinhadas aos Wireframes
 
-O processo se inicia na tela de login, onde o cliente tem duas opções de ação baseadas nos wireframes: utilizar os campos **"Login"** e **"Senha"** para inserir credenciais já existentes e clicar no botão **"Entrar"**, ou clicar no link **Criar conta** caso seja um novo usuário. 
-Optando por **"Criar conta"**, o sistema o redireciona para a tela de **Cadastro de Cliente**. Já ao clicar em **"Entrar"**, o sistema processa a autenticação e, sendo bem-sucedida, concede o acesso. Se as credenciais forem inválidas, um prompt de erro exibe a mensagem *"Usuário ou senha inválidos"* na própria tela, permitindo uma nova tentativa.
-Na tela **"Cadastro de Cliente"**, o usuário visualiza um formulário e pode preencher seus dados (Nome completo, E-mail, Telefone, Data de nascimento, CPF, CEP, Logradouro, Número, Complemento, Bairro, Cidade, UF, Senha e Confirmar senha).  
+O processo se inicia com o usuário acessando a aplicação através da tela de login, onde o usuário tem duas opções de ação baseadas nos wireframes: utilizar os campos **"Login"** e **"Senha"** para inserir credenciais já existentes e clicar no botão **"Entrar"**, ou clicar no link **Criar conta** caso seja um novo usuário. 
+Optando por **"Criar conta"**, o sistema o redireciona para a tela de **Cadastro**. Já ao clicar em **"Entrar"**, o sistema processa a autenticação e, sendo bem-sucedida, concede o acesso. Se as credenciais forem inválidas, um prompt de erro exibe a mensagem *"Usuário ou senha inválidos"* na própria tela, permitindo uma nova tentativa.
+Na tela de **"Cadastro"**, o usuário visualiza um formulário e pode preencher seus dados (Nome completo, E-mail, Telefone, Data de nascimento, CPF, CEP, Logradouro, Número, Complemento, Bairro, Cidade, UF, Senha e Confirmar senha).  
 
-Após o preenchimento, o usuário pressiona o botão **"Cadastrar Cliente"** para finalizar a criação da conta. Caso o usuário já possua uma conta e tenha acessado a tela por engano, ele pode utilizar o comando **"Já tem uma conta? Fazer login"** para retornar à tela inicial. Após o cadastro bem-sucedido, ele recebe um aviso de sucesso e retorna ao login.  
+Após o preenchimento, o usuário pressiona o botão **"Cadastrar"** para finalizar a criação da conta. Caso o usuário já possua uma conta e tenha acessado a tela por engano, ele pode utilizar o comando **"Já tem uma conta? Fazer login"** para retornar à tela inicial. Após o cadastro bem-sucedido, ele recebe um aviso de sucesso e retorna ao login.  
 
 ### Detalhamento das atividades
 
@@ -50,7 +50,7 @@ Após o preenchimento, o usuário pressiona o botão **"Cadastrar Cliente"** par
 
 | **Resultado**       | **Destino**     |
 | ------------------- | --------------- |
-| Sessão criada (cliente)     | Atividade "Acessar meus agendamentos - Cliente" |
+| Sessão criada     | Atividade "Acessar meus agendamentos" |
 | Prompt de erro    | "Usuário ou senha inválidos." |
 
 ### Wireframes
@@ -103,17 +103,17 @@ Após o preenchimento, o usuário pressiona o botão **"Cadastrar Cliente"** par
 ## Modelagem
 Em seguida, apresentam-se o modelo do processo de Gestão de Usuário, descrito no padrão BPMN:
 
-![bpmn 2](docs/diagrams/ColaboradorAdmin.drawio (2).png)
+![bpmn 2](diagrams/ColaboradorAdmin.png)
 
 ### Descrições Detalhadas Alinhadas aos Wireframes
 
 O processo se inicia com administrador acessando a tela **"Gerenciar Colaboradores"** para controlar a equipe. A interface apresenta uma listagem com Nome, Email, Cargo, Status e Ações. 
 
 A partir dessa tela, o administrador tem quatro ações principais:
-* **Buscar:** Ele pode utilizar o campo **"Buscar colaboradores"** para filtrar a lista.  
-* **Convidar:** Ao clicar no botão **"Convidar"**, abre-se o modal **"Convidar Colaborador"**, onde ele preenche o *"Email do colaborador"*, seleciona o *"Cargo"* e utiliza o botão **"Enviar Convite"**. O usuário que recebeu o convite acessa o link e é direcionado para a tela **"Cadastrar Cliente"** onde completa seu cadastro retornando ao processo de usuário.   
-* **Editar:** Ao clicar no ícone de **lápis** (na coluna Ações), um modal é aberto com os dados atuais preenchidos para alteração, confirmando a ação no botão **"Salvar"**.  
-* **Excluir:** Ao clicar no ícone de **lixeira**, o sistema exibe um prompt de exclusão, confirmando a ação no botão **"Excluir"**.  
+* **Buscar colaborador:** Ele pode utilizar o campo **"Buscar colaboradores"** para filtrar a lista.  
+* **Convidar novo usuário:** Ao clicar no botão **"Convidar"**, abre-se o modal **"Convidar Colaborador"**, onde ele preenche o *"Email do colaborador"*, seleciona o *"Cargo"* e utiliza o botão **"Enviar Convite"**. O usuário que recebeu o convite acessa o link e é direcionado para a tela **"Cadastrar Cliente"** onde completa seu cadastro retornando ao processo de usuário.   
+* **Editar perfil:** Ao clicar no ícone de **lápis** (na coluna Ações), um modal é aberto com os dados atuais preenchidos para alteração, confirmando a ação no botão **"Salvar"**.  
+* **Excluir perfil:** Ao clicar no ícone de **lixeira**, o sistema exibe um prompt de exclusão, confirmando a ação no botão **"Excluir"**.  
 
 Todas as ações em modais podem ser abortadas clicando no botão **"Cancelar"** ou no **"X"**.  
 

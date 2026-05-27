@@ -21,7 +21,7 @@ A informatização do processo de Gestão de Agendamento traz as seguintes oport
 
 ## Modelagem
 
-![Modelo BPMN do Processo 3](images/bpmn/gestao-de-agendamento/bpmn-gestao-de-agendamento.png "Modelo BPMN do Processo 3.")
+![Modelo BPMN do Processo 3](images/bpmn/gestao-de-agendamento/GestaoAgendamento_V1905.png "Modelo BPMN do Processo 3.")
 
 ### Detalhamento das atividades
  
