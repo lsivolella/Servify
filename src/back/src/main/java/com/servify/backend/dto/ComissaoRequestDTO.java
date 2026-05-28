@@ -6,28 +6,8 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
-public class ComissaoRequestDTO {
-    @NotNull
-    private Long usuarioId;
+public record ComissaoRequestDTO(
+        @NotNull @DecimalMin(value = "0.0000") @DecimalMax(value = "1.0000") BigDecimal valor
 
-    @NotNull
-    @DecimalMin(value = "0.0000")
-    @DecimalMax(value = "1.0000")
-    private BigDecimal valor;
-
-    public Long getUsuarioId() {
-        return usuarioId;
-    }
-
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
+) {
 }

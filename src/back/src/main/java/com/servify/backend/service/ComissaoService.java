@@ -1,6 +1,5 @@
 package com.servify.backend.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -25,33 +24,11 @@ public class ComissaoService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public ComissaoResponseDTO criar(ComissaoRequestDTO dto) {
-        if (comissaoRepository.findByUsuario_Id(dto.getUsuarioId()).isPresent()) {
-            throw new RuntimeException("Usuário já possui comissão");
-        }
-
-        Usuario usuario = usuarioRepository
-                .findById(dto.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        Comissao comissao = new Comissao();
-
-        comissao.setUsuario(usuario);
-        comissao.setValor(dto.getValor());
-
-        return toResponseDTO(comissaoRepository.save(comissao));
-    }
-
     public ComissaoResponseDTO atualizar(Long id, ComissaoRequestDTO dto) {
         Comissao comissao = comissaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comissão não encontrada"));
 
-        Usuario usuario = usuarioRepository
-                .findById(dto.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        comissao.setUsuario(usuario);
-        comissao.setValor(dto.getValor());
+        comissao.setValor(dto.valor());
 
         return toResponseDTO(comissaoRepository.save(comissao));
     }
@@ -71,15 +48,14 @@ public class ComissaoService {
                 .map(usuario -> {
                     Comissao comissao = comissaoRepository
                             .findByUsuario_Id(usuario.getId())
-                            .orElse(null);
+                            .orElseThrow(() -> new RuntimeException(
+                                    "Colaborador sem comissão"));
 
                     return new ColaboradorComissaoDTO(
                             usuario.getId(),
                             usuario.getNome(),
-                            comissao != null ? comissao.getId() : null,
-                            comissao != null
-                                    ? comissao.getValor()
-                                    : BigDecimal.ZERO);
+                            comissao.getId(),
+                            comissao.getValor());
                 })
                 .toList();
     }
@@ -100,12 +76,10 @@ public class ComissaoService {
     }
 
     public ComissaoResponseDTO toResponseDTO(Comissao comissao) {
-        ComissaoResponseDTO dto = new ComissaoResponseDTO(
+        return new ComissaoResponseDTO(
                 comissao.getId(),
                 comissao.getUsuario().getId(),
                 comissao.getUsuario().getNome(),
                 comissao.getValor());
-
-        return dto;
     }
 }

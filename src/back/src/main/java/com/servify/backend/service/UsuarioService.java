@@ -1,5 +1,6 @@
 package com.servify.backend.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,23 +17,32 @@ import com.servify.backend.dto.CompletarConviteCadastroDTO;
 import com.servify.backend.dto.UsuarioRequestDTO;
 import com.servify.backend.dto.UsuarioResponseDTO;
 import com.servify.backend.dto.UsuarioUpdateDTO;
+import com.servify.backend.entity.Comissao;
 import com.servify.backend.entity.Perfil;
 import com.servify.backend.entity.Usuario;
+import com.servify.backend.repository.ComissaoRepository;
 import com.servify.backend.repository.PerfilRepository;
 import com.servify.backend.repository.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PerfilRepository perfilRepository;
+    private final ComissaoRepository comissaoRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PerfilRepository perfilRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository,
+            PerfilRepository perfilRepository,
+            ComissaoRepository comissaoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.perfilRepository = perfilRepository;
+        this.comissaoRepository = comissaoRepository;
     }
 
+    @Transactional
     public UsuarioResponseDTO criar(UsuarioRequestDTO dto) {
         Perfil perfil = perfilRepository.findById(dto.getPerfilId())
                 .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
@@ -44,6 +54,7 @@ public class UsuarioService {
      * ignorando
      * {@code perfilId} do corpo para evitar escolha incorreta ou manipulação.
      */
+    @Transactional
     public UsuarioResponseDTO cadastroClientePublico(UsuarioRequestDTO dto) {
         Perfil perfil = perfilRepository.findById(PerfilConstants.CLIENTE)
                 .orElseThrow(() -> new RuntimeException("Perfil Cliente não encontrado"));
@@ -64,7 +75,9 @@ public class UsuarioService {
         popularUsuario(dto, usuario, perfil);
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         usuario.setCadastroPendente(false);
-        return toResponseDTO(usuarioRepository.save(usuario));
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
+        criarComissao(usuarioSalvo);
+        return toResponseDTO(usuarioSalvo);
     }
 
     /**
@@ -93,12 +106,14 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
     }
 
+    @Transactional
     public UsuarioResponseDTO completarPreCadastroConvidado(Long usuarioId, CompletarConviteCadastroDTO dto) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         if (!usuario.isCadastroPendente()) {
             throw new RuntimeException("Este usuário não aguarda conclusão de cadastro.");
         }
+
         String novoCpf = dto.getCpf().replaceAll("\\D", "");
         usuarioRepository.findByCpf(novoCpf)
                 .filter(u -> !u.getId().equals(usuarioId))
@@ -119,6 +134,9 @@ public class UsuarioService {
         usuario.setCidade(dto.getCidade());
         usuario.setUf(dto.getUf());
         usuario.setCadastroPendente(false);
+
+        criarComissao(usuario);
+
         return toResponseDTO(usuarioRepository.save(usuario));
     }
 
@@ -147,7 +165,7 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public List<UsuarioResponseDTO> listarColaboradores() {
+    public List<UsuarioResponseDTO> listarUsuariosOperacionais() {
         return Stream.concat(
                 usuarioRepository.findByPerfil_Id(PerfilConstants.ADMIN).stream(),
                 usuarioRepository.findByPerfil_Id(PerfilConstants.COLABORADOR).stream())
@@ -167,6 +185,11 @@ public class UsuarioService {
         Perfil perfil = perfilRepository.findById(dto.getPerfilId())
                 .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
 
+        if (!usuario.getPerfil().getId().equals(dto.getPerfilId())) {
+            throw new RuntimeException(
+                    "Alteração de perfil não é permitida");
+        }
+
         popularUsuario(dto, usuario, perfil);
 
         return toResponseDTO(usuarioRepository.save(usuario));
@@ -176,6 +199,21 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         usuarioRepository.delete(usuario);
+    }
+
+    private void criarComissao(Usuario usuario) {
+        if (usuario.getPerfil().getId() == PerfilConstants.COLABORADOR) {
+            if (comissaoRepository
+                    .findByUsuario_Id(usuario.getId())
+                    .isEmpty()) {
+                Comissao comissao = new Comissao();
+
+                comissao.setUsuario(usuario);
+                comissao.setValor(BigDecimal.ZERO);
+
+                comissaoRepository.save(comissao);
+            }
+        }
     }
 
     private void popularUsuario(UsuarioRequestDTO dto, Usuario usuario, Perfil perfil) {

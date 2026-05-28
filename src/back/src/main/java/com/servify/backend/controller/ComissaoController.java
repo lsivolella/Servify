@@ -15,7 +15,6 @@ import com.servify.backend.service.ComissaoService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +26,6 @@ public class ComissaoController {
 
     public ComissaoController(ComissaoService service) {
         this.service = service;
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ComissaoResponseDTO criar(
-            @RequestBody @Valid ComissaoRequestDTO dto) {
-
-        return service.criar(dto);
     }
 
     @PutMapping("/{id}")

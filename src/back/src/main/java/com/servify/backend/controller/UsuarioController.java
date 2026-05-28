@@ -50,7 +50,7 @@ public class UsuarioController {
 
     @GetMapping("/colaboradores")
     public List<UsuarioResponseDTO> listarColaboradores() {
-        return service.listarColaboradores();
+        return service.listarUsuariosOperacionais();
     }
 
     @GetMapping("/{id}")
