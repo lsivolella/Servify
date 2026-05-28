@@ -20,6 +20,8 @@ public record AgendamentoResponseDTO(
 
         LocalDateTime dataHora,
 
+        Integer duracaoMinutos,
+
         BigDecimal valor,
 
         BigDecimal desconto,

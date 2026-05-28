@@ -41,6 +41,9 @@ public class Agendamento {
     @Column(nullable = false)
     private LocalDateTime dataHora;
 
+    @Column(nullable = false)
+    private Integer duracaoMinutos;
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal valor;
 
@@ -96,6 +99,14 @@ public class Agendamento {
 
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
+    }
+
+    public Integer getDuracaoMinutos() {
+        return duracaoMinutos;
+    }
+
+    public void setDuracaoMinutos(Integer duracaoMinutos) {
+        this.duracaoMinutos = duracaoMinutos;
     }
 
     public BigDecimal getValor() {
