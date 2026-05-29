@@ -12,7 +12,7 @@ public enum AgendamentoStatus {
         this.descricao = descricao;
     }
 
-    public String toString() {
+    public String getDescricao() {
         return descricao;
     }
 }
