@@ -12,7 +12,7 @@ import com.servify.backend.service.AgendamentoService;
 
 import jakarta.validation.Valid;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,10 +38,11 @@ public class AgendamentoController {
 
     @GetMapping
     public List<AgendamentoResponseDTO> listar(
-            @RequestParam(required = false) LocalDate inicio,
-            @RequestParam(required = false) LocalDate fim,
+            @RequestParam(required = false) LocalDateTime inicio,
+            @RequestParam(required = false) LocalDateTime fim,
             @RequestParam(required = false) Long clienteId,
             @RequestParam(required = false) Long colaboradorId,
+            @RequestParam(required = false) Long servicoId,
             @RequestParam(required = false) AgendamentoStatus status) {
 
         return service.listar(
@@ -49,16 +50,18 @@ public class AgendamentoController {
                 fim,
                 clienteId,
                 colaboradorId,
+                servicoId,
                 status);
     }
 
     @GetMapping("/{id}")
-    public AgendamentoResponseDTO buscar(@RequestParam Long id) {
+    public AgendamentoResponseDTO buscar(@PathVariable Long id) {
         return service.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public AgendamentoResponseDTO editar(@PathVariable Long id, @RequestBody AgendamentoRequestDTO dto) {
+    public AgendamentoResponseDTO editar(@PathVariable Long id,
+            @Valid @RequestBody AgendamentoRequestDTO dto) {
         return service.atualizar(id, dto);
     }
 

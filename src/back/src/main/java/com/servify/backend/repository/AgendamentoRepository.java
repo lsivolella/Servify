@@ -9,17 +9,34 @@ import com.servify.backend.entity.Agendamento;
 import com.servify.backend.enums.AgendamentoStatus;
 
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
-        List<Agendamento> findByDataHoraBetween(
-                        LocalDateTime inicio,
-                        LocalDateTime fim);
+    List<Agendamento> findByCliente_Id(Long clienteId);
 
-        List<Agendamento> findByUsuario_IdAndAgendamentoStatus(
-                        Long usuarioId,
-                        AgendamentoStatus status);
+    List<Agendamento> findByColaborador_Id(Long colaboradorId);
 
-        List<Agendamento> findByUsuario_IdAndDataHoraBetweenAndAgendamentoStatusNot(
-                        Long usuarioId,
-                        LocalDateTime inicio,
-                        LocalDateTime fim,
-                        AgendamentoStatus status);
+    List<Agendamento> findByAgendamentoStatus(
+            AgendamentoStatus status);
+
+    List<Agendamento> findByDataHoraBetween(
+            LocalDateTime inicio,
+            LocalDateTime fim);
+
+    List<Agendamento> findByCliente_IdAndAgendamentoStatus(
+            Long clienteId,
+            AgendamentoStatus status);
+
+    List<Agendamento> findByColaborador_IdAndAgendamentoStatus(
+            Long colaboradorId,
+            AgendamentoStatus status);
+
+    List<Agendamento> findByCliente_IdAndDataHoraBetweenAndAgendamentoStatusNot(
+            Long clienteId,
+            LocalDateTime inicio,
+            LocalDateTime fim,
+            AgendamentoStatus status);
+
+    List<Agendamento> findByColaborador_IdAndDataHoraBetweenAndAgendamentoStatusNot(
+            Long colaboradorId,
+            LocalDateTime inicio,
+            LocalDateTime fim,
+            AgendamentoStatus status);
 }

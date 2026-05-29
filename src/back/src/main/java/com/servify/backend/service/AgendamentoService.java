@@ -63,19 +63,57 @@ public class AgendamentoService {
 
         validarDesconto(dto, servico);
 
-        validarConflitoHorarioUsuario(cliente, servico, dto.dataHora(), null);
+        validarConflitoHorarioCliente(
+                cliente,
+                servico,
+                dto.dataHora(),
+                null);
 
-        validarConflitoHorarioUsuario(colaborador, servico, dto.dataHora(), null);
+        validarConflitoHorarioColaborador(
+                colaborador,
+                servico,
+                dto.dataHora(),
+                null);
 
         Agendamento agendamento = criarAgendamento(dto, cliente, colaborador, servico, comissao);
 
         return toResponseDto(agendamentoRepository.save(agendamento));
     }
 
-    public List<AgendamentoResponseDTO> listar(LocalDateTime inicio, LocalDateTime fim, Long clienteId,
-            Long colaboradorId, AgendamentoStatus status) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listar'");
+    public List<AgendamentoResponseDTO> listar(
+            LocalDateTime inicio,
+            LocalDateTime fim,
+            Long clienteId,
+            Long colaboradorId,
+            Long servicoId,
+            AgendamentoStatus status) {
+
+        validarConsultaHorario(inicio, fim);
+
+        return agendamentoRepository.findAll()
+                .stream()
+
+                .filter(a -> clienteId == null
+                        || a.getCliente().getId().equals(clienteId))
+
+                .filter(a -> colaboradorId == null
+                        || a.getColaborador().getId().equals(colaboradorId))
+
+                .filter(a -> servicoId == null
+                        || a.getServico().getId().equals(servicoId))
+
+                .filter(a -> status == null
+                        || a.getAgendamentoStatus() == status)
+
+                .filter(a -> inicio == null
+                        || !a.getDataHora().isBefore(inicio))
+
+                .filter(a -> fim == null
+                        || !a.getDataHora().isAfter(fim))
+
+                .map(this::toResponseDto)
+
+                .toList();
     }
 
     public AgendamentoResponseDTO buscarPorId(Long id) {
@@ -112,9 +150,17 @@ public class AgendamentoService {
 
         validarPrazoDeTolerancia(agendamento);
 
-        validarConflitoHorarioUsuario(cliente, servico, dto.dataHora(), id);
+        validarConflitoHorarioCliente(
+                cliente,
+                servico,
+                dto.dataHora(),
+                id);
 
-        validarConflitoHorarioUsuario(colaborador, servico, dto.dataHora(), id);
+        validarConflitoHorarioColaborador(
+                colaborador,
+                servico,
+                dto.dataHora(),
+                id);
 
         atualizarAgendamento(dto, agendamento, cliente, colaborador, servico, comissao);
 
@@ -126,6 +172,8 @@ public class AgendamentoService {
     @Transactional
     public void deletar(Long id) {
         Agendamento agendamento = buscarAgendamento(id);
+
+        validarStatusAgendamento(agendamento);
 
         agendamento.setAgendamentoStatus(AgendamentoStatus.CANCELADO);
 
@@ -179,31 +227,88 @@ public class AgendamentoService {
         }
     }
 
-    private void validarConflitoHorarioUsuario(
-            Usuario usuario,
+    private void validarStatusAgendamento(Agendamento agendamento) {
+        if (agendamento.getAgendamentoStatus() == AgendamentoStatus.CANCELADO) {
+            throw new RuntimeException("Não é possível atualizar um agendamento cancelado");
+        }
+
+        if (agendamento.getAgendamentoStatus() == AgendamentoStatus.EM_ANDAMENTO) {
+            throw new RuntimeException("Não é possível atualizar um agendamento em andamento");
+        }
+
+        if (agendamento.getAgendamentoStatus() == AgendamentoStatus.CONCLUIDO) {
+            throw new RuntimeException("Não é possível atualizar um agendamento concluído");
+        }
+    }
+
+    private void validarConflitoHorarioCliente(
+            Usuario cliente,
             Servico servico,
             LocalDateTime inicioAgendamento,
             Long agendamentoIdIgnorado) {
-
-        LocalDateTime fimNovo = inicioAgendamento.plusMinutes(
-                servico.getDuracaoMinutos());
 
         LocalDateTime inicioDia = inicioAgendamento.toLocalDate().atStartOfDay();
 
         LocalDateTime fimDia = inicioAgendamento.toLocalDate().atTime(23, 59, 59);
 
         List<Agendamento> agendamentosExistentes = agendamentoRepository
-                .findByUsuario_IdAndDataHoraBetweenAndAgendamentoStatusNot(
-                        usuario.getId(),
+                .findByCliente_IdAndDataHoraBetweenAndAgendamentoStatusNot(
+                        cliente.getId(),
                         inicioDia,
                         fimDia,
                         AgendamentoStatus.CANCELADO);
 
+        validarOverlap(
+                agendamentosExistentes,
+                servico,
+                inicioAgendamento,
+                agendamentoIdIgnorado,
+                "Cliente já possui um agendamento nesse horário");
+    }
+
+    private void validarConflitoHorarioColaborador(
+            Usuario colaborador,
+            Servico servico,
+            LocalDateTime inicioAgendamento,
+            Long agendamentoIdIgnorado) {
+
+        LocalDateTime inicioDia = inicioAgendamento.toLocalDate().atStartOfDay();
+
+        LocalDateTime fimDia = inicioAgendamento.toLocalDate().atTime(23, 59, 59);
+
+        List<Agendamento> agendamentosExistentes = agendamentoRepository
+                .findByColaborador_IdAndDataHoraBetweenAndAgendamentoStatusNot(
+                        colaborador.getId(),
+                        inicioDia,
+                        fimDia,
+                        AgendamentoStatus.CANCELADO);
+
+        validarOverlap(
+                agendamentosExistentes,
+                servico,
+                inicioAgendamento,
+                agendamentoIdIgnorado,
+                "Colaborador já possui um agendamento nesse horário");
+    }
+
+    private void validarOverlap(
+            List<Agendamento> agendamentosExistentes,
+            Servico servico,
+            LocalDateTime inicioAgendamento,
+            Long agendamentoIdIgnorado,
+            String mensagemErro) {
+
+        LocalDateTime fimNovo = inicioAgendamento.plusMinutes(
+                servico.getDuracaoMinutos());
+
         for (Agendamento agendamento : agendamentosExistentes) {
+
             if (agendamentoIdIgnorado != null
-                    && agendamento.getId().equals(agendamentoIdIgnorado)) {
-                continue; // Ignora o agendamento que está sendo atualizado
+                    && agendamento.getId().equals(
+                            agendamentoIdIgnorado)) {
+                continue;
             }
+
             LocalDateTime inicioExistente = agendamento.getDataHora();
 
             LocalDateTime fimExistente = inicioExistente.plusMinutes(
@@ -213,19 +318,8 @@ public class AgendamentoService {
                     && fimNovo.isAfter(inicioExistente);
 
             if (possuiConflito) {
-                throw new RuntimeException(
-                        "Usuário já possui um agendamento nesse horário");
+                throw new RuntimeException(mensagemErro);
             }
-        }
-    }
-
-    private void validarStatusAgendamento(Agendamento agendamento) {
-        if (agendamento.getAgendamentoStatus() == AgendamentoStatus.CANCELADO) {
-            throw new RuntimeException("Não é possível atualizar um agendamento cancelado");
-        }
-
-        if (agendamento.getAgendamentoStatus() == AgendamentoStatus.CONCLUIDO) {
-            throw new RuntimeException("Não é possível atualizar um agendamento concluído");
         }
     }
 
@@ -236,6 +330,16 @@ public class AgendamentoService {
 
             throw new RuntimeException(
                     "Este agendamento não pode mais ser alterado");
+        }
+    }
+
+    private void validarConsultaHorario(LocalDateTime inicio, LocalDateTime fim) {
+        if (inicio != null
+                && fim != null
+                && inicio.isAfter(fim)) {
+
+            throw new RuntimeException(
+                    "Data inicial não pode ser posterior à data final");
         }
     }
     // #endregion
