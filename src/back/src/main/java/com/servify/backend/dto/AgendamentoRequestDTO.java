@@ -16,7 +16,7 @@ public record AgendamentoRequestDTO(
 
         @NotNull LocalDateTime dataHora,
 
-        @DecimalMin("0.00") BigDecimal desconto
+        @NotNull @DecimalMin("0.00") BigDecimal desconto
 
 ) {
 }

@@ -1,6 +1,5 @@
 package com.servify.backend.service;
 
-import com.servify.backend.controller.AgendamentoController;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,10 +19,13 @@ import com.servify.backend.repository.ComissaoRepository;
 import com.servify.backend.repository.ServicoRepository;
 import com.servify.backend.repository.UsuarioRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AgendamentoService {
 
-    private final AgendamentoController agendamentoController;
+    private static final long LIMITE_ALTERACAO_MINUTOS = 60;
+
     private final AgendamentoRepository agendamentoRepository;
     private final UsuarioRepository usuarioRepository;
     private final ServicoRepository servicoRepository;
@@ -32,40 +34,38 @@ public class AgendamentoService {
     public AgendamentoService(AgendamentoRepository agendamentoRepository,
             UsuarioRepository usuarioRepository,
             ServicoRepository servicoRepository,
-            ComissaoRepository comissaoRepository, AgendamentoController agendamentoController) {
+            ComissaoRepository comissaoRepository) {
         this.agendamentoRepository = agendamentoRepository;
         this.usuarioRepository = usuarioRepository;
         this.servicoRepository = servicoRepository;
         this.comissaoRepository = comissaoRepository;
-        this.agendamentoController = agendamentoController;
     }
 
+    @Transactional
     public AgendamentoResponseDTO criar(AgendamentoRequestDTO dto) {
-        Usuario cliente = usuarioRepository.findById(dto.clienteId())
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        Usuario cliente = buscarUsuario(dto.clienteId());
+
+        Usuario colaborador = buscarUsuario(dto.colaboradorId());
+
+        Servico servico = buscarServico(dto.servicoId());
+
+        Comissao comissao = buscarComissaoPorColaborador(colaborador.getId());
 
         validarCliente(cliente);
 
-        Usuario colaborador = usuarioRepository.findById(dto.colaboradorId())
-                .orElseThrow(() -> new RuntimeException("Colaborador não encontrado"));
-
         validarColaborador(colaborador);
-
-        Servico servico = servicoRepository.findById(dto.servicoId())
-                .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
 
         validarServico(servico);
 
-        Comissao comissao = comissaoRepository.findByUsuario_Id(colaborador.getId())
-                .orElseThrow(() -> new RuntimeException("Comissão do colaborador não encontrada"));
-
         validarComissao(comissao);
 
-        validarDataHora(dto);
+        validarDataHora(dto.dataHora());
 
         validarDesconto(dto, servico);
 
-        validarConflitoHorario(dto, colaborador, servico);
+        validarConflitoHorarioUsuario(cliente, servico, dto.dataHora(), null);
+
+        validarConflitoHorarioUsuario(colaborador, servico, dto.dataHora(), null);
 
         Agendamento agendamento = criarAgendamento(dto, cliente, colaborador, servico, comissao);
 
@@ -79,18 +79,57 @@ public class AgendamentoService {
     }
 
     public AgendamentoResponseDTO buscarPorId(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buscarPorId'");
+        Agendamento agendamento = buscarAgendamento(id);
+
+        return toResponseDto(agendamento);
     }
 
+    @Transactional
     public AgendamentoResponseDTO atualizar(Long id, AgendamentoRequestDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'atualizar'");
+        Agendamento agendamento = buscarAgendamento(id);
+
+        Usuario cliente = buscarUsuario(dto.clienteId());
+
+        Usuario colaborador = buscarUsuario(dto.colaboradorId());
+
+        Servico servico = buscarServico(dto.servicoId());
+
+        Comissao comissao = buscarComissaoPorColaborador(colaborador.getId());
+
+        validarCliente(cliente);
+
+        validarColaborador(colaborador);
+
+        validarServico(servico);
+
+        validarComissao(comissao);
+
+        validarDataHora(dto.dataHora());
+
+        validarDesconto(dto, servico);
+
+        validarStatusAgendamento(agendamento);
+
+        validarPrazoDeTolerancia(agendamento);
+
+        validarConflitoHorarioUsuario(cliente, servico, dto.dataHora(), id);
+
+        validarConflitoHorarioUsuario(colaborador, servico, dto.dataHora(), id);
+
+        atualizarAgendamento(dto, agendamento, cliente, colaborador, servico, comissao);
+
+        return toResponseDto(
+                agendamentoRepository.save(
+                        agendamento));
     }
 
+    @Transactional
     public void deletar(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deletar'");
+        Agendamento agendamento = buscarAgendamento(id);
+
+        agendamento.setAgendamentoStatus(AgendamentoStatus.CANCELADO);
+
+        agendamentoRepository.save(agendamento);
     }
 
     // #region Validações
@@ -117,68 +156,115 @@ public class AgendamentoService {
     }
 
     private void validarComissao(Comissao comissao) {
-        if (comissao.getValor() == null || comissao.getValor().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("Comissão do colaborador deve ser maior que zero");
+        if (comissao.getValor() == null || comissao.getValor().compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Comissão do colaborador não pode ser negativa");
         }
         if (comissao.getValor().compareTo(BigDecimal.ONE) > 0) {
             throw new RuntimeException("Comissão do colaborador deve ser um valor entre 0 e 1");
         }
     }
 
-    private void validarDataHora(AgendamentoRequestDTO dto) {
-        if (dto.dataHora().isBefore(LocalDateTime.now())) {
+    private void validarDataHora(LocalDateTime dataHora) {
+        if (dataHora.isBefore(LocalDateTime.now())) {
             throw new RuntimeException("Data e hora do agendamento devem ser futuras");
         }
     }
 
     private void validarDesconto(AgendamentoRequestDTO dto, Servico servico) {
-        if (dto.desconto() != null) {
-            if (dto.desconto().compareTo(servico.getValor()) > 0) {
-                throw new RuntimeException("Desconto não pode ser maior que o valor do serviço");
-            }
-            if (dto.desconto().compareTo(java.math.BigDecimal.ZERO) < 0) {
-                throw new RuntimeException("Desconto não pode ser negativo");
-            }
+        if (dto.desconto().compareTo(servico.getValor()) > 0) {
+            throw new RuntimeException("Desconto não pode ser maior que o valor do serviço");
+        }
+        if (dto.desconto().compareTo(java.math.BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Desconto não pode ser negativo");
         }
     }
 
-    private void validarConflitoHorario(AgendamentoRequestDTO dto, Usuario colaborador, Servico servico) {
-        LocalDateTime inicioNovo = dto.dataHora();
+    private void validarConflitoHorarioUsuario(
+            Usuario usuario,
+            Servico servico,
+            LocalDateTime inicioAgendamento,
+            Long agendamentoIdIgnorado) {
 
-        LocalDateTime fimNovo = inicioNovo.plusMinutes(
+        LocalDateTime fimNovo = inicioAgendamento.plusMinutes(
                 servico.getDuracaoMinutos());
 
-        LocalDateTime inicioDia = inicioNovo.toLocalDate().atStartOfDay();
+        LocalDateTime inicioDia = inicioAgendamento.toLocalDate().atStartOfDay();
 
-        LocalDateTime fimDia = inicioNovo.toLocalDate().atTime(23, 59, 59);
+        LocalDateTime fimDia = inicioAgendamento.toLocalDate().atTime(23, 59, 59);
 
         List<Agendamento> agendamentosExistentes = agendamentoRepository
-                .findByColaborador_IdAndDataHoraBetweenAndAgendamentoStatusNot(
-                        colaborador.getId(),
+                .findByUsuario_IdAndDataHoraBetweenAndAgendamentoStatusNot(
+                        usuario.getId(),
                         inicioDia,
                         fimDia,
                         AgendamentoStatus.CANCELADO);
 
         for (Agendamento agendamento : agendamentosExistentes) {
-
+            if (agendamentoIdIgnorado != null
+                    && agendamento.getId().equals(agendamentoIdIgnorado)) {
+                continue; // Ignora o agendamento que está sendo atualizado
+            }
             LocalDateTime inicioExistente = agendamento.getDataHora();
 
             LocalDateTime fimExistente = inicioExistente.plusMinutes(
                     agendamento.getDuracaoMinutos());
 
-            boolean possuiConflito = inicioNovo.isBefore(fimExistente)
+            boolean possuiConflito = inicioAgendamento.isBefore(fimExistente)
                     && fimNovo.isAfter(inicioExistente);
 
             if (possuiConflito) {
-
                 throw new RuntimeException(
-                        "Colaborador já possui um agendamento nesse horário");
+                        "Usuário já possui um agendamento nesse horário");
             }
+        }
+    }
+
+    private void validarStatusAgendamento(Agendamento agendamento) {
+        if (agendamento.getAgendamentoStatus() == AgendamentoStatus.CANCELADO) {
+            throw new RuntimeException("Não é possível atualizar um agendamento cancelado");
+        }
+
+        if (agendamento.getAgendamentoStatus() == AgendamentoStatus.CONCLUIDO) {
+            throw new RuntimeException("Não é possível atualizar um agendamento concluído");
+        }
+    }
+
+    private void validarPrazoDeTolerancia(Agendamento agendamento) {
+        if (agendamento.getDataHora()
+                .minusMinutes(LIMITE_ALTERACAO_MINUTOS)
+                .isBefore(LocalDateTime.now())) {
+
+            throw new RuntimeException(
+                    "Este agendamento não pode mais ser alterado");
         }
     }
     // #endregion
 
     // #region Helpers
+    private Usuario buscarUsuario(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return usuario;
+    }
+
+    private Agendamento buscarAgendamento(Long id) {
+        Agendamento agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+        return agendamento;
+    }
+
+    private Servico buscarServico(Long servicoId) {
+        Servico servico = servicoRepository.findById(servicoId)
+                .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
+        return servico;
+    }
+
+    private Comissao buscarComissaoPorColaborador(Long colaboradorId) {
+        Comissao comissao = comissaoRepository.findByUsuario_Id(colaboradorId)
+                .orElseThrow(() -> new RuntimeException("Comissão do colaborador não encontrada"));
+        return comissao;
+    }
+
     private Agendamento criarAgendamento(AgendamentoRequestDTO dto, Usuario cliente, Usuario colaborador,
             Servico servico,
             Comissao comissao) {
@@ -195,16 +281,37 @@ public class AgendamentoService {
         agendamento.setDuracaoMinutos(
                 servico.getDuracaoMinutos());
 
-        agendamento.setDesconto(
-                dto.desconto() != null
-                        ? dto.desconto()
-                        : BigDecimal.ZERO);
+        agendamento.setDesconto(dto.desconto());
 
         agendamento.setComissao(comissao.getValor());
 
         agendamento.setAgendamentoStatus(
                 AgendamentoStatus.AGENDADO);
         return agendamento;
+    }
+
+    private void atualizarAgendamento(AgendamentoRequestDTO dto, Agendamento agendamento, Usuario cliente,
+            Usuario colaborador,
+            Servico servico, Comissao comissao) {
+        agendamento.setCliente(cliente);
+
+        agendamento.setColaborador(colaborador);
+
+        agendamento.setServico(servico);
+
+        agendamento.setDataHora(dto.dataHora());
+
+        agendamento.setComissao(
+                comissao.getValor());
+
+        agendamento.setValor(
+                servico.getValor());
+
+        agendamento.setDuracaoMinutos(
+                servico.getDuracaoMinutos());
+
+        agendamento.setDesconto(
+                dto.desconto());
     }
 
     private AgendamentoResponseDTO toResponseDto(Agendamento agendamento) {
