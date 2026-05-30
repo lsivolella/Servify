@@ -1,5 +1,10 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { getSession, isAuthenticated } from '../auth/session'
+import {
+  canAccessPrivateRoute,
+  getDefaultAuthenticatedRoute,
+  getSession,
+  isAuthenticated,
+} from '../auth/session'
 
 export default function RequireAuth() {
   const location = useLocation()
@@ -11,6 +16,9 @@ export default function RequireAuth() {
   const token = session?.user?.conviteToken?.trim()
   if (pendente && token && !location.pathname.startsWith('/convite/')) {
     return <Navigate to={`/convite/${encodeURIComponent(token)}`} replace />
+  }
+  if (!canAccessPrivateRoute(session?.user, location.pathname)) {
+    return <Navigate to={getDefaultAuthenticatedRoute()} replace />
   }
   return <Outlet />
 }

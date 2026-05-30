@@ -12,7 +12,11 @@ import InputAdornment from '@mui/material/InputAdornment'
 import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import LockOutlined from '@mui/icons-material/LockOutlined'
 import { toastError } from '../components/showAlert'
-import { setSession } from '../auth/session'
+import {
+  canAccessPrivateRoute,
+  getDefaultAuthenticatedRoute,
+  setSession,
+} from '../auth/session'
 import { mensagemDeErroCapturado } from '../services/api'
 import { loginApi } from '../services/auth'
 import './styles/LoginPage.css'
@@ -54,7 +58,10 @@ export default function LoginPage() {
       }
 
       const from = (location.state as { from?: { pathname?: string } } | null)?.from
-      const target = from?.pathname && typeof from.pathname === 'string' ? from.pathname : '/agendamentos'
+      const fromPath = from?.pathname && typeof from.pathname === 'string' ? from.pathname : ''
+      const target = fromPath && canAccessPrivateRoute(user, fromPath)
+        ? fromPath
+        : getDefaultAuthenticatedRoute()
       navigate(target, { replace: true })
     } catch (e: unknown) {
       toastError(
