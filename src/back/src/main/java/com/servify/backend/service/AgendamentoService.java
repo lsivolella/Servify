@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.servify.backend.constants.PerfilConstants;
 import com.servify.backend.dto.AgendamentoRequestDTO;
@@ -24,7 +26,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class AgendamentoService {
 
-    private static final long LIMITE_ALTERACAO_MINUTOS = 60;
+    private static final long LIMITE_ALTERACAO_MINUTOS = 45;
 
     private final AgendamentoRepository agendamentoRepository;
     private final UsuarioRepository usuarioRepository;
@@ -183,61 +185,66 @@ public class AgendamentoService {
     // #region Validações
     private void validarCliente(Usuario cliente) {
         if (cliente.isCadastroPendente()) {
-            throw new RuntimeException("Cliente com cadastro pendente");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente com cadastro pendente");
         }
     }
 
     private void validarColaborador(Usuario colaborador) {
         if (colaborador.getPerfil().getId() != PerfilConstants.COLABORADOR) {
-            throw new RuntimeException("Usuário informado não é um colaborador");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário informado não é um colaborador");
         }
 
         if (colaborador.isCadastroPendente()) {
-            throw new RuntimeException("Colaborador com cadastro pendente");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Colaborador com cadastro pendente");
         }
     }
 
     private void validarServico(Servico servico) {
         if (!servico.isAtivo()) {
-            throw new RuntimeException("Serviço está inativo");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Serviço está inativo");
         }
     }
 
     private void validarComissao(Comissao comissao) {
         if (comissao.getValor() == null || comissao.getValor().compareTo(BigDecimal.ZERO) < 0) {
-            throw new RuntimeException("Comissão do colaborador não pode ser negativa");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comissão do colaborador não pode ser negativa");
         }
         if (comissao.getValor().compareTo(BigDecimal.ONE) > 0) {
-            throw new RuntimeException("Comissão do colaborador deve ser um valor entre 0 e 1");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Comissão do colaborador deve ser um valor entre 0 e 1");
         }
     }
 
     private void validarDataHora(LocalDateTime dataHora) {
         if (dataHora.isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Data e hora do agendamento devem ser futuras");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data e hora do agendamento devem ser futuras");
         }
     }
 
     private void validarDesconto(AgendamentoRequestDTO dto, Servico servico) {
         if (dto.desconto().compareTo(servico.getValor()) > 0) {
-            throw new RuntimeException("Desconto não pode ser maior que o valor do serviço");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Desconto não pode ser maior que o valor do serviço");
         }
         if (dto.desconto().compareTo(java.math.BigDecimal.ZERO) < 0) {
-            throw new RuntimeException("Desconto não pode ser negativo");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Desconto não pode ser negativo");
         }
     }
 
     private void validarStatusAgendamento(Agendamento agendamento) {
         if (agendamento.getAgendamentoStatus() == AgendamentoStatus.CANCELADO) {
-            throw new RuntimeException("Não é possível atualizar um agendamento cancelado");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Não é possível atualizar um agendamento cancelado");
         }
 
         if (agendamento.getAgendamentoStatus() == AgendamentoStatus.EM_ANDAMENTO) {
-            throw new RuntimeException("Não é possível atualizar um agendamento em andamento");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Não é possível atualizar um agendamento em andamento");
         }
 
         if (agendamento.getAgendamentoStatus() == AgendamentoStatus.CONCLUIDO) {
-            throw new RuntimeException("Não é possível atualizar um agendamento concluído");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Não é possível atualizar um agendamento concluído");
         }
     }
 
@@ -318,7 +325,7 @@ public class AgendamentoService {
                     && fimNovo.isAfter(inicioExistente);
 
             if (possuiConflito) {
-                throw new RuntimeException(mensagemErro);
+                throw new ResponseStatusException(HttpStatus.CONFLICT, mensagemErro);
             }
         }
     }
@@ -328,7 +335,7 @@ public class AgendamentoService {
                 .minusMinutes(LIMITE_ALTERACAO_MINUTOS)
                 .isBefore(LocalDateTime.now())) {
 
-            throw new RuntimeException(
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Este agendamento não pode mais ser alterado");
         }
     }
@@ -338,7 +345,7 @@ public class AgendamentoService {
                 && fim != null
                 && inicio.isAfter(fim)) {
 
-            throw new RuntimeException(
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Data inicial não pode ser posterior à data final");
         }
     }
@@ -347,25 +354,26 @@ public class AgendamentoService {
     // #region Helpers
     private Usuario buscarUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
         return usuario;
     }
 
     private Agendamento buscarAgendamento(Long id) {
         Agendamento agendamento = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Agendamento não encontrado"));
         return agendamento;
     }
 
     private Servico buscarServico(Long servicoId) {
         Servico servico = servicoRepository.findById(servicoId)
-                .orElseThrow(() -> new RuntimeException("Serviço não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Serviço não encontrado"));
         return servico;
     }
 
     private Comissao buscarComissaoPorColaborador(Long colaboradorId) {
         Comissao comissao = comissaoRepository.findByUsuario_Id(colaboradorId)
-                .orElseThrow(() -> new RuntimeException("Comissão do colaborador não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Comissão do colaborador não encontrada"));
         return comissao;
     }
 

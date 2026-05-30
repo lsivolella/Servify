@@ -40,7 +40,7 @@ public class ConviteService {
      * Senha provisória fixa (texto plano no e-mail; armazenada com BCrypt em
      * convite e em usuário).
      */
-    private static final String SENHA_PROVISORIA_CONVITE = "12345";
+    private static final String SENHA_PROVISORIA_CONVITE = "123456";
 
     public ConviteService(ConviteRepository conviteRepository,
             UsuarioRepository usuarioRepository,
