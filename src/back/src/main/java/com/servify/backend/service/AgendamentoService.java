@@ -88,12 +88,19 @@ public class AgendamentoService {
             Long clienteId,
             Long colaboradorId,
             Long servicoId,
-            AgendamentoStatus status) {
+            AgendamentoStatus status,
+            Long usuarioLogadoId,
+            Integer usuarioLogadoPerfilId,
+            String usuarioLogadoCargo) {
 
         validarConsultaHorario(inicio, fim);
+        Integer perfilIdAcesso = resolverPerfilIdAcesso(usuarioLogadoPerfilId, usuarioLogadoCargo);
+        validarContextoAcesso(usuarioLogadoId, perfilIdAcesso);
 
         return agendamentoRepository.findAll()
                 .stream()
+
+                .filter(a -> podeAcessarAgendamento(a, usuarioLogadoId, perfilIdAcesso))
 
                 .filter(a -> clienteId == null
                         || a.getCliente().getId().equals(clienteId))
@@ -348,6 +355,46 @@ public class AgendamentoService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Data inicial não pode ser posterior à data final");
         }
+    }
+
+    private void validarContextoAcesso(Long usuarioLogadoId, Integer perfilIdAcesso) {
+        if (perfilIdAcesso == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Perfil do usuário logado não informado");
+        }
+
+        if (perfilIdAcesso != PerfilConstants.ADMIN && usuarioLogadoId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário logado não informado");
+        }
+    }
+
+    private Integer resolverPerfilIdAcesso(Integer usuarioLogadoPerfilId, String usuarioLogadoCargo) {
+        if (usuarioLogadoPerfilId != null) {
+            return usuarioLogadoPerfilId;
+        }
+
+        String cargo = usuarioLogadoCargo == null ? "" : usuarioLogadoCargo.trim().toLowerCase();
+        return switch (cargo) {
+            case "adm", "administrador" -> PerfilConstants.ADMIN;
+            case "colaborador" -> PerfilConstants.COLABORADOR;
+            case "cliente" -> PerfilConstants.CLIENTE;
+            default -> null;
+        };
+    }
+
+    private boolean podeAcessarAgendamento(Agendamento agendamento, Long usuarioLogadoId, Integer perfilIdAcesso) {
+        if (perfilIdAcesso == PerfilConstants.ADMIN) {
+            return true;
+        }
+
+        if (perfilIdAcesso == PerfilConstants.CLIENTE) {
+            return agendamento.getCliente().getId().equals(usuarioLogadoId);
+        }
+
+        if (perfilIdAcesso == PerfilConstants.COLABORADOR) {
+            return agendamento.getColaborador().getId().equals(usuarioLogadoId);
+        }
+
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Perfil sem acesso a agendamentos");
     }
     // #endregion
 

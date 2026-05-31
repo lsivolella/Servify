@@ -1,4 +1,5 @@
 import { apiDelete, apiGetJson, apiPostJson, apiPutJson } from './api'
+import { cargoFromUser, getSession } from '../auth/session'
 
 export type AgendamentoApi = Record<string, unknown>
 
@@ -148,12 +149,18 @@ export async function getAgendamentos(
   params: GetAgendamentosParams = {},
 ): Promise<Agendamento[]> {
   const qs = new URLSearchParams()
+  const sessionUser = getSession()?.user
   if (params.inicio) qs.set('inicio', params.inicio)
   if (params.fim) qs.set('fim', params.fim)
   if (params.clienteId) qs.set('clienteId', params.clienteId)
   if (params.colaboradorId) qs.set('colaboradorId', params.colaboradorId)
   if (params.servicoId) qs.set('servicoId', params.servicoId)
   if (params.status) qs.set('status', params.status)
+  if (sessionUser) {
+    qs.set('usuarioLogadoId', String(sessionUser.id))
+    qs.set('usuarioLogadoPerfilId', String(sessionUser.perfilId))
+    qs.set('usuarioLogadoCargo', cargoFromUser(sessionUser))
+  }
 
   const path = qs.size ? `/agendamentos?${qs.toString()}` : '/agendamentos'
   const data = await apiGetJson<unknown>(path)

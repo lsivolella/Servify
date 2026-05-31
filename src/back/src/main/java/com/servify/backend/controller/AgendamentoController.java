@@ -43,7 +43,10 @@ public class AgendamentoController {
             @RequestParam(required = false) Long clienteId,
             @RequestParam(required = false) Long colaboradorId,
             @RequestParam(required = false) Long servicoId,
-            @RequestParam(required = false) AgendamentoStatus status) {
+            @RequestParam(required = false) AgendamentoStatus status,
+            @RequestParam(required = false) Long usuarioLogadoId,
+            @RequestParam(required = false) Integer usuarioLogadoPerfilId,
+            @RequestParam(required = false) String usuarioLogadoCargo) {
 
         return service.listar(
                 inicio,
@@ -51,7 +54,10 @@ public class AgendamentoController {
                 clienteId,
                 colaboradorId,
                 servicoId,
-                status);
+                status,
+                usuarioLogadoId,
+                usuarioLogadoPerfilId,
+                usuarioLogadoCargo);
     }
 
     @GetMapping("/{id}")
