@@ -1,6 +1,7 @@
 package com.servify.backend.service;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,14 +13,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.servify.backend.constants.AgendaDisponibilidadeConstants;
 import com.servify.backend.constants.PerfilConstants;
 import com.servify.backend.dto.CompletarConviteCadastroDTO;
 import com.servify.backend.dto.UsuarioRequestDTO;
 import com.servify.backend.dto.UsuarioResponseDTO;
 import com.servify.backend.dto.UsuarioUpdateDTO;
+import com.servify.backend.entity.AgendaDisponibilidade;
 import com.servify.backend.entity.Comissao;
 import com.servify.backend.entity.Perfil;
 import com.servify.backend.entity.Usuario;
+import com.servify.backend.repository.AgendaDisponibilidadeRepository;
 import com.servify.backend.repository.ComissaoRepository;
 import com.servify.backend.repository.PerfilRepository;
 import com.servify.backend.repository.UsuarioRepository;
@@ -32,14 +36,18 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PerfilRepository perfilRepository;
     private final ComissaoRepository comissaoRepository;
+    private final AgendaDisponibilidadeRepository agendaDisponibilidadeRepository;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UsuarioService(UsuarioRepository usuarioRepository,
             PerfilRepository perfilRepository,
-            ComissaoRepository comissaoRepository) {
+            ComissaoRepository comissaoRepository,
+            AgendaDisponibilidadeRepository agendaDisponibilidadeRepository) {
         this.usuarioRepository = usuarioRepository;
         this.perfilRepository = perfilRepository;
         this.comissaoRepository = comissaoRepository;
+        this.agendaDisponibilidadeRepository = agendaDisponibilidadeRepository;
     }
 
     @Transactional
@@ -77,6 +85,7 @@ public class UsuarioService {
         usuario.setCadastroPendente(false);
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
         criarComissao(usuarioSalvo);
+        criarAgendaDisponibilidade(usuarioSalvo);
         return toResponseDTO(usuarioSalvo);
     }
 
@@ -136,6 +145,7 @@ public class UsuarioService {
         usuario.setCadastroPendente(false);
 
         criarComissao(usuario);
+        criarAgendaDisponibilidade(usuario);
 
         return toResponseDTO(usuarioRepository.save(usuario));
     }
@@ -206,6 +216,7 @@ public class UsuarioService {
             if (comissaoRepository
                     .findByUsuario_Id(usuario.getId())
                     .isEmpty()) {
+
                 Comissao comissao = new Comissao();
 
                 comissao.setUsuario(usuario);
@@ -213,6 +224,31 @@ public class UsuarioService {
 
                 comissaoRepository.save(comissao);
             }
+        }
+    }
+
+    private void criarAgendaDisponibilidade(Usuario usuario) {
+        if (usuario.getPerfil().getId() != PerfilConstants.COLABORADOR) {
+            return;
+        }
+
+        if (!agendaDisponibilidadeRepository
+                .findByColaborador_Id(usuario.getId())
+                .isEmpty()) {
+            return;
+        }
+
+        for (DayOfWeek dia : DayOfWeek.values()) {
+
+            AgendaDisponibilidade agendaDisponibilidade = new AgendaDisponibilidade();
+            agendaDisponibilidade.setColaborador(usuario);
+            agendaDisponibilidade.setDiaSemana(dia);
+            boolean disponivel = !AgendaDisponibilidadeConstants.DIAS_SEM_DISPONIBILIDADE_PADRAO.contains(dia);
+            agendaDisponibilidade.setDisponivel(disponivel);
+            agendaDisponibilidade.setHoraInicio(AgendaDisponibilidadeConstants.HORA_INICIO_PADRAO);
+            agendaDisponibilidade.setHoraFim(AgendaDisponibilidadeConstants.HORA_FIM_PADRAO);
+
+            agendaDisponibilidadeRepository.save(agendaDisponibilidade);
         }
     }
 
