@@ -22,6 +22,8 @@ import com.servify.backend.dto.UsuarioResponseDTO;
 import com.servify.backend.dto.UsuarioUpdateDTO;
 import com.servify.backend.entity.Perfil;
 import com.servify.backend.entity.Usuario;
+import com.servify.backend.repository.AgendaDisponibilidadeRepository;
+import com.servify.backend.repository.AgendamentoRepository;
 import com.servify.backend.repository.ComissaoRepository;
 import com.servify.backend.repository.PerfilRepository;
 import com.servify.backend.repository.UsuarioRepository;
@@ -36,6 +38,12 @@ public class UsuarioServiceTest {
         @Mock
         private ComissaoRepository comissaoRepository;
 
+        @Mock
+        private AgendamentoRepository agendamentoRepository;
+
+        @Mock
+        private AgendaDisponibilidadeRepository agendaDisponibilidadeRepository;
+
         private UsuarioService service;
 
         @BeforeEach
@@ -43,7 +51,9 @@ public class UsuarioServiceTest {
                 MockitoAnnotations.openMocks(this);
                 service = new UsuarioService(usuarioRepository,
                                 perfilRepository,
-                                comissaoRepository);
+                                comissaoRepository,
+                                agendamentoRepository,
+                                agendaDisponibilidadeRepository);
         }
 
         private Perfil criarPerfilMock() {

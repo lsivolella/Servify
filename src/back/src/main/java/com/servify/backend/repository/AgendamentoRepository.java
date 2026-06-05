@@ -39,4 +39,8 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
             LocalDateTime inicio,
             LocalDateTime fim,
             AgendamentoStatus status);
+
+    boolean existsByColaborador_Id(Long id);
+
+    boolean existsByCliente_Id(Long id);
 }

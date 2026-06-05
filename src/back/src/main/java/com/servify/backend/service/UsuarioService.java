@@ -24,6 +24,7 @@ import com.servify.backend.entity.Comissao;
 import com.servify.backend.entity.Perfil;
 import com.servify.backend.entity.Usuario;
 import com.servify.backend.repository.AgendaDisponibilidadeRepository;
+import com.servify.backend.repository.AgendamentoRepository;
 import com.servify.backend.repository.ComissaoRepository;
 import com.servify.backend.repository.PerfilRepository;
 import com.servify.backend.repository.UsuarioRepository;
@@ -36,6 +37,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PerfilRepository perfilRepository;
     private final ComissaoRepository comissaoRepository;
+    private final AgendamentoRepository agendamentoRepository;
     private final AgendaDisponibilidadeRepository agendaDisponibilidadeRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -43,10 +45,12 @@ public class UsuarioService {
     public UsuarioService(UsuarioRepository usuarioRepository,
             PerfilRepository perfilRepository,
             ComissaoRepository comissaoRepository,
+            AgendamentoRepository agendamentoRepository,
             AgendaDisponibilidadeRepository agendaDisponibilidadeRepository) {
         this.usuarioRepository = usuarioRepository;
         this.perfilRepository = perfilRepository;
         this.comissaoRepository = comissaoRepository;
+        this.agendamentoRepository = agendamentoRepository;
         this.agendaDisponibilidadeRepository = agendaDisponibilidadeRepository;
     }
 
@@ -208,6 +212,15 @@ public class UsuarioService {
     public void deletar(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (agendamentoRepository.existsByColaborador_Id(id)
+                || agendamentoRepository.existsByCliente_Id(id)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Usuário possui agendamentos associados");
+        }
+
         usuarioRepository.delete(usuario);
     }
 

@@ -3,6 +3,7 @@ package com.servify.backend.service;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -421,9 +422,8 @@ public class AgendamentoService {
     /**
      * O colaborador precisa estar disponível
      * apenas no momento de início do atendimento.
-     *
-     * O horário de término da disponibilidade
-     * não é considerado nesta validação.
+     * Um serviço pode estender-se além do horário de disponibilidade, mas não pode
+     * começar fora do horário.
      * 
      * @param disponibilidade A disponibilidade do colaborador para o dia da semana
      *                        do agendamento
@@ -437,7 +437,10 @@ public class AgendamentoService {
                     "Colaborador não está disponível no dia selecionado");
         }
 
-        if (dataHora.toLocalTime().isBefore(disponibilidade.getHoraInicio())) {
+        LocalTime horaInicioAgendamento = dataHora.toLocalTime();
+
+        if (horaInicioAgendamento.isBefore(disponibilidade.getHoraInicio())
+                || horaInicioAgendamento.isAfter(disponibilidade.getHoraFim())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Colaborador não está disponível no horário selecionado");
         }
