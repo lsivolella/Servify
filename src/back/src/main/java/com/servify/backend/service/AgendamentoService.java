@@ -1,6 +1,7 @@
 package com.servify.backend.service;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,11 +12,13 @@ import org.springframework.web.server.ResponseStatusException;
 import com.servify.backend.constants.PerfilConstants;
 import com.servify.backend.dto.AgendamentoRequestDTO;
 import com.servify.backend.dto.AgendamentoResponseDTO;
+import com.servify.backend.entity.AgendaDisponibilidade;
 import com.servify.backend.entity.Agendamento;
 import com.servify.backend.entity.Comissao;
 import com.servify.backend.entity.Servico;
 import com.servify.backend.entity.Usuario;
 import com.servify.backend.enums.AgendamentoStatus;
+import com.servify.backend.repository.AgendaDisponibilidadeRepository;
 import com.servify.backend.repository.AgendamentoRepository;
 import com.servify.backend.repository.ComissaoRepository;
 import com.servify.backend.repository.ServicoRepository;
@@ -32,15 +35,19 @@ public class AgendamentoService {
     private final UsuarioRepository usuarioRepository;
     private final ServicoRepository servicoRepository;
     private final ComissaoRepository comissaoRepository;
+    private final AgendaDisponibilidadeRepository agendaDisponibilidadeRepository;
 
     public AgendamentoService(AgendamentoRepository agendamentoRepository,
             UsuarioRepository usuarioRepository,
             ServicoRepository servicoRepository,
-            ComissaoRepository comissaoRepository) {
+            ComissaoRepository comissaoRepository,
+            AgendaDisponibilidadeRepository agendaDisponibilidadeRepository) {
+
         this.agendamentoRepository = agendamentoRepository;
         this.usuarioRepository = usuarioRepository;
         this.servicoRepository = servicoRepository;
         this.comissaoRepository = comissaoRepository;
+        this.agendaDisponibilidadeRepository = agendaDisponibilidadeRepository;
     }
 
     @Transactional
@@ -52,6 +59,9 @@ public class AgendamentoService {
         Servico servico = buscarServico(dto.servicoId());
 
         Comissao comissao = buscarComissaoPorColaborador(colaborador.getId());
+
+        AgendaDisponibilidade disponibilidade = buscarDisponibilidadePorColaboradorEDiaSemana(
+                colaborador, dto.dataHora().getDayOfWeek());
 
         validarCliente(cliente);
 
@@ -76,6 +86,10 @@ public class AgendamentoService {
                 servico,
                 dto.dataHora(),
                 null);
+
+        validarDisponibilidadeColaborador(
+                disponibilidade,
+                dto.dataHora());
 
         Agendamento agendamento = criarAgendamento(dto, cliente, colaborador, servico, comissao);
 
@@ -143,6 +157,9 @@ public class AgendamentoService {
 
         Comissao comissao = buscarComissaoPorColaborador(colaborador.getId());
 
+        AgendaDisponibilidade disponibilidade = buscarDisponibilidadePorColaboradorEDiaSemana(
+                colaborador, dto.dataHora().getDayOfWeek());
+
         validarCliente(cliente);
 
         validarColaborador(colaborador);
@@ -170,6 +187,10 @@ public class AgendamentoService {
                 servico,
                 dto.dataHora(),
                 id);
+
+        validarDisponibilidadeColaborador(
+                disponibilidade,
+                dto.dataHora());
 
         atualizarAgendamento(dto, agendamento, cliente, colaborador, servico, comissao);
 
@@ -396,6 +417,31 @@ public class AgendamentoService {
 
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Perfil sem acesso a agendamentos");
     }
+
+    /**
+     * O colaborador precisa estar disponível
+     * apenas no momento de início do atendimento.
+     *
+     * O horário de término da disponibilidade
+     * não é considerado nesta validação.
+     * 
+     * @param disponibilidade A disponibilidade do colaborador para o dia da semana
+     *                        do agendamento
+     * @param dataHora        A data e hora de início do agendamento
+     */
+    private void validarDisponibilidadeColaborador(AgendaDisponibilidade disponibilidade,
+            LocalDateTime dataHora) {
+
+        if (!disponibilidade.getDisponivel()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Colaborador não está disponível no dia selecionado");
+        }
+
+        if (dataHora.toLocalTime().isBefore(disponibilidade.getHoraInicio())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Colaborador não está disponível no horário selecionado");
+        }
+    }
     // #endregion
 
     // #region Helpers
@@ -422,6 +468,15 @@ public class AgendamentoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Comissão do colaborador não encontrada"));
         return comissao;
+    }
+
+    private AgendaDisponibilidade buscarDisponibilidadePorColaboradorEDiaSemana(
+            Usuario colaborador,
+            DayOfWeek dayOfWeek) {
+        return agendaDisponibilidadeRepository
+                .findByColaborador_IdAndDiaSemana(colaborador.getId(), dayOfWeek)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Agenda de disponibilidade do colaborador não encontrada"));
     }
 
     private Agendamento criarAgendamento(AgendamentoRequestDTO dto, Usuario cliente, Usuario colaborador,
