@@ -5,6 +5,8 @@ CREATE TABLE agenda_disponibilidade (
 
     dia_semana VARCHAR(20) NOT NULL,
 
+    disponivel BOOLEAN NOT NULL,
+
     hora_inicio TIME NOT NULL,
 
     hora_fim TIME NOT NULL,
