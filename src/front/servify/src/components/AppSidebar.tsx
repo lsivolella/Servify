@@ -204,6 +204,12 @@ export default function AppSidebar() {
       sx={{
         width: collapsed ? COLLAPSED_W : EXPANDED_W,
         flexShrink: 0,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        height: '100vh',
+        maxHeight: '100vh',
         minHeight: '100vh',
         bgcolor: BG,
         display: 'flex',
