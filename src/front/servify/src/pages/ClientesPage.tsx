@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import EditarPessoaModal from '../components/EditarPessoaModal'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
@@ -22,76 +22,15 @@ import {
   confirmDeleteRecord,
   toastCadastroSucesso,
   toastSuccess,
+  toastError,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
+import { getClientes, deleteClientePorId, type Cliente } from '../services/clientes'
+import { mensagemDeErroCapturado } from '../services/api'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
 const PAGE_BG = '#f8fafc'
-
-type Cliente = {
-  id: string
-  nome: string
-  email: string
-  telefone: string
-  cpf: string
-  cidade: string
-  ativo: boolean
-  cep: string
-  logradouro: string
-  numero: string
-  complemento: string
-  bairro: string
-  uf: string
-}
-
-const CLIENTES_MOCK: Cliente[] = [
-  {
-    id: '1',
-    nome: 'João Pereira',
-    email: 'joao@email.com',
-    telefone: '(11) 99999-0001',
-    cpf: '',
-    cidade: 'São Paulo - SP',
-    ativo: true,
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    uf: 'SP',
-  },
-  {
-    id: '2',
-    nome: 'Maria Santos',
-    email: 'maria.santos@email.com',
-    telefone: '(21) 98888-2222',
-    cpf: '321.654.987-10',
-    cidade: 'Rio de Janeiro - RJ',
-    ativo: true,
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    uf: 'RJ',
-  },
-  {
-    id: '3',
-    nome: 'Pedro Henrique',
-    email: 'pedro@empresa.com',
-    telefone: '',
-    cpf: '',
-    cidade: 'Curitiba - PR',
-    ativo: false,
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    uf: 'PR',
-  },
-]
 
 function rowToEditValues(row: Cliente): EditarPessoaValues {
   return {
@@ -99,6 +38,7 @@ function rowToEditValues(row: Cliente): EditarPessoaValues {
     email: row.email,
     telefone: row.telefone,
     cpf: row.cpf,
+    dataNascimento: row.dataNascimento,
     cidade: row.cidade,
     cargo: '',
     ativo: row.ativo,
@@ -114,7 +54,8 @@ function rowToEditValues(row: Cliente): EditarPessoaValues {
 export default function ClientesPage() {
   const { sidebarExpanded, toggleSidebar } = useSidebarLayout()
   const [busca, setBusca] = useState('')
-  const [clientes, setClientes] = useState<Cliente[]>(CLIENTES_MOCK)
+  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [loading, setLoading] = useState(true)
 
   const [editOpen, setEditOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -123,6 +64,7 @@ export default function ClientesPage() {
     email: '',
     telefone: '',
     cpf: '',
+    dataNascimento: '',
     cidade: '',
     cargo: '',
     ativo: true,
@@ -133,6 +75,31 @@ export default function ClientesPage() {
     bairro: '',
     uf: '',
   })
+
+  useEffect(() => {
+    let alive = true
+    void (async () => {
+      try {
+        const data = await getClientes()
+        if (!alive) return
+        setClientes(data)
+      } catch (e: unknown) {
+        if (!alive) return
+        toastError(
+          e instanceof Error
+            ? e.message
+            : 'Não foi possível carregar os clientes.',
+        )
+      } finally {
+        queueMicrotask(() => {
+          if (alive) setLoading(false)
+        })
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [])
 
   function abrirEditar(row: Cliente) {
     setEditingId(row.id)
@@ -145,17 +112,85 @@ export default function ClientesPage() {
     setEditingId(null)
   }
 
-  function handleSalvarEdicao(data: EditarPessoaValues) {
+  async function handleSalvarEdicao(data: EditarPessoaValues) {
     if (!editingId) return
-    setClientes((prev) =>
-      prev.map((c) =>
-        c.id === editingId
-          ? {
+
+    const nome = data.nome.trim()
+    const email = data.email.trim()
+    const cpfDigits = data.cpf.replace(/\D/g, '')
+
+    if (!nome) {
+      toastError('Informe o nome completo.')
+      return
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toastError('Informe um e-mail válido.')
+      return
+    }
+
+    if (cpfDigits.length !== 11) {
+      toastError('CPF deve ter 11 dígitos.')
+      return
+    }
+
+    const dataNasc = data.dataNascimento.trim()
+    if (!dataNasc || !/^\d{4}-\d{2}-\d{2}$/.test(dataNasc)) {
+      toastError('Informe uma data de nascimento válida.')
+      return
+    }
+
+    const cidadeApi = (() => {
+      const t = data.cidade.trim()
+      const idx = t.lastIndexOf(' - ')
+      if (idx > 0) return t.slice(0, idx).trim()
+      return t
+    })()
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/usuarios/${editingId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            perfilId: 3,
+            nome,
+            email,
+            telefone: data.telefone.replace(/\D/g, ''),
+            dataNascimento: dataNasc,
+            cep: data.cep.replace(/\D/g, ''),
+            logradouro: data.logradouro,
+            numero: data.numero,
+            complemento: data.complemento,
+            bairro: data.bairro,
+            cidade: cidadeApi,
+            uf: data.uf,
+          }),
+        },
+      )
+
+      if (!response.ok) {
+        //throw new Error('Erro ao atualizar cliente')
+        const errorText = await response.text()
+
+        console.error('Erro backend:', errorText)
+
+        throw new Error(errorText)
+      }
+
+      setClientes((prev) =>
+        prev.map((c) =>
+          c.id === editingId
+            ? {
               ...c,
               nome: data.nome,
               email: data.email,
               telefone: data.telefone,
               cpf: data.cpf,
+              dataNascimento: data.dataNascimento,
               cidade: data.cidade,
               ativo: data.ativo,
               cep: data.cep,
@@ -165,20 +200,32 @@ export default function ClientesPage() {
               bairro: data.bairro,
               uf: data.uf,
             }
-          : c,
-      ),
-    )
-    fecharEditar()
-    toastCadastroSucesso('Cliente atualizado com sucesso.')
+            : c,
+        ),
+      )
+
+      fecharEditar()
+      toastCadastroSucesso('Cliente atualizado com sucesso.')
+    } catch {
+      toastError('Não foi possível atualizar o cliente.')
+    }
   }
 
   async function solicitarRemocao(row: Cliente) {
     const subtitulo = `${row.nome} (${row.email}) será removido da lista.`
     const ok = await confirmDeleteRecord('Remover cliente?', subtitulo)
     if (!ok) return
-    if (editingId === row.id) fecharEditar()
-    setClientes((prev) => prev.filter((c) => c.id !== row.id))
-    toastSuccess('Cliente removido.')
+    try {
+      await deleteClientePorId(row.id)
+      if (editingId === row.id) fecharEditar()
+      const data = await getClientes()
+      setClientes(data)
+      toastSuccess('Cliente removido.')
+    } catch (e: unknown) {
+      toastError(
+        mensagemDeErroCapturado(e, 'Não foi possível remover o cliente.'),
+      )
+    }
   }
 
   const filtrados = useMemo(() => {
@@ -251,6 +298,7 @@ export default function ClientesPage() {
           placeholder="Buscar clientes..."
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
+          disabled={loading}
           slotProps={{
             input: {
               startAdornment: (
@@ -380,6 +428,15 @@ export default function ClientesPage() {
                   </TableCell>
                 </TableRow>
               ))}
+              {!loading && filtrados.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5} sx={{ py: 4 }}>
+                    <Typography sx={{ color: '#64748b', textAlign: 'center' }}>
+                      Nenhum cliente encontrado.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -388,8 +445,10 @@ export default function ClientesPage() {
           variant="body2"
           sx={{ mt: 2, color: '#94a3b8', fontSize: '0.875rem' }}
         >
-          {filtrados.length} cliente{filtrados.length === 1 ? '' : 's'}{' '}
-          encontrado{filtrados.length === 1 ? '' : 's'}
+          {loading
+            ? 'Carregando clientes...'
+            : `${filtrados.length} cliente${filtrados.length === 1 ? '' : 's'} encontrado${filtrados.length === 1 ? '' : 's'
+            }`}
         </Typography>
       </Container>
 

@@ -14,6 +14,8 @@ import MenuItem from '@mui/material/MenuItem'
 import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import dayjs from 'dayjs'
 import BadgeOutlined from '@mui/icons-material/BadgeOutlined'
 import CloseOutlined from '@mui/icons-material/CloseOutlined'
 import EditOutlined from '@mui/icons-material/EditOutlined'
@@ -23,7 +25,12 @@ import HomeOutlined from '@mui/icons-material/HomeOutlined'
 import LocationOnOutlined from '@mui/icons-material/LocationOnOutlined'
 import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import PhoneOutlined from '@mui/icons-material/PhoneOutlined'
-import SignpostOutlined from '@mui/icons-material/SignpostOutlined'
+import CalendarMonthOutlined from '@mui/icons-material/CalendarMonthOutlined'
+import ApartmentOutlined from '@mui/icons-material/ApartmentOutlined'
+import LocationCityOutlined from '@mui/icons-material/LocationCityOutlined'
+import MapOutlined from '@mui/icons-material/MapOutlined'
+import PublicOutlined from '@mui/icons-material/PublicOutlined'
+import TagOutlined from '@mui/icons-material/TagOutlined'
 import WorkOutlineOutlined from '@mui/icons-material/WorkOutlineOutlined'
 import type { EditarPessoaValues } from '../types/editarPessoa'
 import {
@@ -37,6 +44,11 @@ import {
   formatCepDisplay,
 } from '../services/viacep'
 import { maskCpf, maskEmailInput, maskPhoneBr } from '../utils/masks'
+import {
+  labelPerfilColaborador,
+  perfilColaboradorFromInitial,
+  PERFIS_COLABORADOR,
+} from '../utils/perfilColaborador'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -50,7 +62,6 @@ type EditarPessoaModalProps = {
   open: boolean
   tipo: 'cliente' | 'colaborador'
   initial: EditarPessoaValues
-  cargos?: readonly string[]
   onClose: () => void
   onSave: (data: EditarPessoaValues) => void
 }
@@ -68,7 +79,6 @@ export default function EditarPessoaModal({
   open,
   tipo,
   initial,
-  cargos = [],
   onClose,
   onSave,
 }: EditarPessoaModalProps) {
@@ -77,6 +87,7 @@ export default function EditarPessoaModal({
   const [email, setEmail] = useState('')
   const [telefone, setTelefone] = useState('')
   const [cpf, setCpf] = useState('')
+  const [dataNascimento, setDataNascimento] = useState('')
   const [cidadeInput, setCidadeInput] = useState('')
   const [cargo, setCargo] = useState('')
   const [ativo, setAtivo] = useState(true)
@@ -98,32 +109,39 @@ export default function EditarPessoaModal({
 
   useEffect(() => {
     if (!open) return
-    setNome(initial.nome)
-    setEmail(initial.email)
-    setTelefone(initial.telefone)
-    setCpf(initial.cpf)
-    setCidadeInput(initial.cidade)
-    setCargo(initial.cargo)
-    setAtivo(initial.ativo)
-    setCep(initial.cep ?? '')
-    setLogradouro(initial.logradouro ?? '')
-    setNumero(initial.numero ?? '')
-    setComplemento(initial.complemento ?? '')
-    setBairro(initial.bairro ?? '')
-    setUf(initial.uf ?? '')
-    setErroLocal(null)
-    const temEndereco =
-      Boolean(initial.cep?.trim()) ||
-      Boolean(initial.logradouro?.trim()) ||
-      Boolean(initial.bairro?.trim())
-    setEnderecoExpandido(temEndereco)
+    queueMicrotask(() => {
+      setNome(initial.nome)
+      setEmail(initial.email)
+      setTelefone(maskPhoneBr(initial.telefone ?? ''))
+      setCpf(maskCpf(initial.cpf ?? ''))
+      setDataNascimento(initial.dataNascimento ?? '')
+      setCidadeInput(initial.cidade)
+      setCargo(perfilColaboradorFromInitial(initial.cargo))
+      setAtivo(initial.ativo)
+      setCep(initial.cep ?? '')
+      setLogradouro(initial.logradouro ?? '')
+      setNumero(initial.numero ?? '')
+      setComplemento(initial.complemento ?? '')
+      setBairro(initial.bairro ?? '')
+      setUf(initial.uf ?? '')
+      setErroLocal(null)
+      const temEndereco =
+        Boolean(initial.cep?.trim()) ||
+        Boolean(initial.logradouro?.trim()) ||
+        Boolean(initial.bairro?.trim()) ||
+        Boolean(initial.cidade?.trim())
+      setEnderecoExpandido(temEndereco)
+    })
   }, [open, initial])
 
   useEffect(() => {
     if (!open) return
     let cancel = false
-    setMunLoading(true)
-    setMunErro(null)
+    queueMicrotask(() => {
+      if (cancel) return
+      setMunLoading(true)
+      setMunErro(null)
+    })
     fetchMunicipiosBrasil()
       .then((list) => {
         if (!cancel) setMunicipios(list)
@@ -134,7 +152,11 @@ export default function EditarPessoaModal({
         }
       })
       .finally(() => {
-        if (!cancel) setMunLoading(false)
+        if (!cancel) {
+          queueMicrotask(() => {
+            if (!cancel) setMunLoading(false)
+          })
+        }
       })
     return () => {
       cancel = true
@@ -161,9 +183,9 @@ export default function EditarPessoaModal({
           setLogradouro(addr.logradouro)
           setBairro(addr.bairro)
           setUf(addr.uf)
-          setCidadeInput(`${addr.cidade} - ${addr.uf}`)
+          setCidadeInput(addr.cidade)
         })
-        .catch(() => {})
+        .catch(() => { })
     }, 450)
 
     return () => {
@@ -185,7 +207,15 @@ export default function EditarPessoaModal({
       return
     }
     if (isColaborador && !cargo.trim()) {
-      setErroLocal('Selecione um cargo.')
+      setErroLocal('Selecione um perfil.')
+      return
+    }
+    if (cpf.replace(/\D/g, '').length !== 11) {
+      setErroLocal('CPF deve ter 11 dígitos.')
+      return
+    }
+    if (!dataNascimento.trim()) {
+      setErroLocal('Informe a data de nascimento.')
       return
     }
     setErroLocal(null)
@@ -194,6 +224,7 @@ export default function EditarPessoaModal({
       email: emailTrim,
       telefone: telefone.trim(),
       cpf: cpf.trim(),
+      dataNascimento: dataNascimento.trim(),
       cidade: cidadeInput.trim(),
       cargo: isColaborador ? cargo.trim() : '',
       ativo,
@@ -391,119 +422,141 @@ export default function EditarPessoaModal({
               sx={fieldShellSx()}
             />
           </Box>
-          <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 1' } }}>
-            <FieldLabel htmlFor="ep-cidade-autocomplete">Cidade</FieldLabel>
-            <Autocomplete
-              id="ep-cidade-autocomplete"
-              freeSolo
-              options={municipiosFiltrados}
-              loading={munLoading}
-              getOptionLabel={(o) =>
-                typeof o === 'string' ? o : o.label
-              }
-              filterOptions={(x) => x}
-              inputValue={cidadeInput}
-              onInputChange={(_, v, reason) => {
-                if (reason === 'input' || reason === 'clear') {
-                  setCidadeInput(v)
-                }
+          {isColaborador ? (
+            <Box
+              sx={{
+                gridColumn: '1 / -1',
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  sm: 'repeat(2, minmax(0, 1fr))',
+                },
+                gap: 2.25,
+                alignItems: 'flex-start',
               }}
-              onChange={(_, v) => {
-                if (v && typeof v === 'object') {
-                  setCidadeInput(v.label)
-                  setUf(v.uf)
-                }
-              }}
-              renderInput={(params) => (
+            >
+              <Box sx={{ minWidth: 0 }}>
+                <FieldLabel htmlFor="ep-nasc">Data de nascimento</FieldLabel>
+                <DatePicker
+                  format="DD/MM/YYYY"
+                  openTo="day"
+                  views={['year', 'month', 'day']}
+                  value={dataNascimento ? dayjs(dataNascimento) : null}
+                  onChange={(newValue) => {
+                    setDataNascimento(
+                      newValue && dayjs(newValue).isValid()
+                        ? dayjs(newValue).format('YYYY-MM-DD')
+                        : '',
+                    )
+                  }}
+                  maxDate={dayjs()}
+                  minDate={dayjs().subtract(120, 'year')}
+                  slotProps={{
+                    textField: {
+                      id: 'ep-nasc',
+                      name: 'dataNascimento',
+                      fullWidth: true,
+                      size: 'small',
+                      variant: 'outlined',
+                      placeholder: 'DD/MM/AAAA',
+                      slotProps: {
+                        input: {
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <CalendarMonthOutlined sx={{ color: '#9ca3af', fontSize: 20 }} />
+                            </InputAdornment>
+                          ),
+                        },
+                      },
+                      sx: fieldShellSx(),
+                    },
+                  }}
+                />
+              </Box>
+              <Box sx={{ minWidth: 0 }}>
+                <FieldLabel htmlFor="ep-perfil">Perfil</FieldLabel>
                 <TextField
-                  {...params}
-                  name="cidade"
-                  placeholder={
-                    munLoading
-                      ? 'Carregando cidades…'
-                      : 'Busque cidade em todo o Brasil'
-                  }
+                  id="ep-perfil"
+                  name="cargo"
+                  select
+                  fullWidth
+                  size="small"
+                  value={cargo}
+                  onChange={(e) => setCargo(e.target.value)}
                   variant="outlined"
                   slotProps={{
-                    ...params.slotProps,
+                    select: {
+                      displayEmpty: true,
+                      renderValue: (v: unknown) =>
+                        v === '' || v == null ? (
+                          <Typography component="span" sx={{ color: '#9ca3af' }}>
+                            Selecione o perfil
+                          </Typography>
+                        ) : (
+                          labelPerfilColaborador(String(v))
+                        ),
+                    },
                     input: {
-                      ...params.slotProps.input,
                       startAdornment: (
-                        <>
-                          <InputAdornment position="start">
-                            <LocationOnOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
-                          </InputAdornment>
-                          {params.slotProps.input.startAdornment}
-                        </>
-                      ),
-                      endAdornment: (
-                        <>
-                          {munLoading ? (
-                            <CircularProgress
-                              color="inherit"
-                              size={20}
-                              sx={{ mr: 1 }}
-                            />
-                          ) : null}
-                          {params.slotProps.input.endAdornment}
-                        </>
+                        <InputAdornment position="start">
+                          <WorkOutlineOutlined sx={{ color: '#9ca3af', fontSize: 20 }} />
+                        </InputAdornment>
                       ),
                     },
                   }}
                   sx={fieldShellSx()}
-                />
-              )}
-            />
-            {munErro ? (
-              <Typography variant="caption" sx={{ color: '#b45309', mt: 0.5, display: 'block' }}>
-                {munErro} Você ainda pode digitar a cidade manualmente.
-              </Typography>
-            ) : null}
-          </Box>
-          {isColaborador ? (
-            <Box>
-              <FieldLabel htmlFor="ep-cargo">Cargo</FieldLabel>
-              <TextField
-                id="ep-cargo"
-                name="cargo"
-                select
-                fullWidth
-                value={cargo}
-                onChange={(e) => setCargo(e.target.value)}
-                variant="outlined"
+                >
+                  <MenuItem value="" disabled sx={{ color: '#9ca3af' }}>
+                    Selecione o perfil
+                  </MenuItem>
+                  {PERFIS_COLABORADOR.map((p) => (
+                    <MenuItem key={p.value} value={p.value}>
+                      {p.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </Box>
+          ) : (
+            <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 2' }, minWidth: 0 }}>
+              <FieldLabel htmlFor="ep-nasc">Data de nascimento</FieldLabel>
+              <DatePicker
+                format="DD/MM/YYYY"
+                openTo="day"
+                views={['year', 'month', 'day']}
+                value={dataNascimento ? dayjs(dataNascimento) : null}
+                onChange={(newValue) => {
+                  setDataNascimento(
+                    newValue && dayjs(newValue).isValid()
+                      ? dayjs(newValue).format('YYYY-MM-DD')
+                      : '',
+                  )
+                }}
+                maxDate={dayjs()}
+                minDate={dayjs().subtract(120, 'year')}
                 slotProps={{
-                  select: {
-                    displayEmpty: true,
-                    renderValue: (v: unknown) =>
-                      v === '' || v == null ? (
-                        <Typography component="span" sx={{ color: '#9ca3af' }}>
-                          Selecione o cargo
-                        </Typography>
-                      ) : (
-                        String(v)
-                      ),
-                  },
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <WorkOutlineOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
-                      </InputAdornment>
-                    ),
+                  textField: {
+                    id: 'ep-nasc',
+                    name: 'dataNascimento',
+                    fullWidth: true,
+                    size: 'small',
+                    variant: 'outlined',
+                    placeholder: 'DD/MM/AAAA',
+                    slotProps: {
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <CalendarMonthOutlined sx={{ color: '#9ca3af', fontSize: 20 }} />
+                          </InputAdornment>
+                        ),
+                      },
+                    },
+                    sx: fieldShellSx(),
                   },
                 }}
-                sx={fieldShellSx()}
-              >
-                <MenuItem value="" disabled sx={{ color: '#9ca3af' }}>
-                  Selecione o cargo
-                </MenuItem>
-                {cargos.map((c) => (
-                  <MenuItem key={c} value={c}>
-                    {c}
-                  </MenuItem>
-                ))}
-              </TextField>
+              />
             </Box>
-          ) : null}
+          )}
 
           <Box sx={{ gridColumn: '1 / -1' }}>
             <Accordion
@@ -530,19 +583,34 @@ export default function EditarPessoaModal({
                     Mais opções de endereço
                   </Typography>
                   <Typography variant="body2" sx={{ color: '#64748b' }}>
-                    CEP, logradouro, número e bairro (preenchimento automático por CEP)
+                    CEP, logradouro, número, complemento, bairro, cidade e UF (preenchimento automático por CEP)
                   </Typography>
                 </Box>
               </AccordionSummary>
-              <AccordionDetails sx={{ px: 2, pb: 2.5, pt: 0 }}>
+              <AccordionDetails sx={{ px: 2, pb: 2.5, pt: 1 }}>
+                <Typography
+                  component="h3"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    color: '#334155',
+                    mb: 2,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  Endereço
+                </Typography>
                 <Box
                   sx={{
                     display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
                     gap: 2,
+                    gridTemplateColumns: {
+                      xs: '1fr',
+                      sm: 'repeat(12, minmax(0, 1fr))',
+                    },
                   }}
                 >
-                  <Box>
+                  <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 3' } }}>
                     <FieldLabel htmlFor="ep-cep">CEP</FieldLabel>
                     <TextField
                       id="ep-cep"
@@ -558,7 +626,7 @@ export default function EditarPessoaModal({
                         input: {
                           startAdornment: (
                             <InputAdornment position="start">
-                              <SignpostOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                              <LocationOnOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
                             </InputAdornment>
                           ),
                         },
@@ -566,7 +634,164 @@ export default function EditarPessoaModal({
                       sx={fieldShellSx()}
                     />
                   </Box>
-                  <Box>
+                  <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 9' } }}>
+                    <FieldLabel htmlFor="ep-logra">Logradouro</FieldLabel>
+                    <TextField
+                      id="ep-logra"
+                      name="logradouro"
+                      fullWidth
+                      value={logradouro}
+                      onChange={(e) => setLogradouro(e.target.value)}
+                      placeholder="Rua, Avenida..."
+                      variant="outlined"
+                      slotProps={{
+                        input: {
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <HomeOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                      sx={fieldShellSx()}
+                    />
+                  </Box>
+                  <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 2' } }}>
+                    <FieldLabel htmlFor="ep-num">Número</FieldLabel>
+                    <TextField
+                      id="ep-num"
+                      name="numero"
+                      fullWidth
+                      value={numero}
+                      onChange={(e) => setNumero(e.target.value)}
+                      placeholder="# Nº"
+                      variant="outlined"
+                      slotProps={{
+                        input: {
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <TagOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                      sx={fieldShellSx()}
+                    />
+                  </Box>
+                  <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 5' } }}>
+                    <FieldLabel htmlFor="ep-comp">Complemento</FieldLabel>
+                    <TextField
+                      id="ep-comp"
+                      name="complemento"
+                      fullWidth
+                      value={complemento}
+                      onChange={(e) => setComplemento(e.target.value)}
+                      placeholder="Apto, Bloco..."
+                      variant="outlined"
+                      slotProps={{
+                        input: {
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <ApartmentOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                      sx={fieldShellSx()}
+                    />
+                  </Box>
+                  <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 5' } }}>
+                    <FieldLabel htmlFor="ep-bairro">Bairro</FieldLabel>
+                    <TextField
+                      id="ep-bairro"
+                      name="bairro"
+                      fullWidth
+                      value={bairro}
+                      onChange={(e) => setBairro(e.target.value)}
+                      placeholder="Bairro"
+                      variant="outlined"
+                      slotProps={{
+                        input: {
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <MapOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                      sx={fieldShellSx()}
+                    />
+                  </Box>
+                  <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 7' } }}>
+                    <FieldLabel htmlFor="ep-cidade-autocomplete">Cidade</FieldLabel>
+                    <Autocomplete
+                      id="ep-cidade-autocomplete"
+                      freeSolo
+                      options={municipiosFiltrados}
+                      loading={munLoading}
+                      getOptionLabel={(o) =>
+                        typeof o === 'string' ? o : o.label
+                      }
+                      filterOptions={(x) => x}
+                      inputValue={cidadeInput}
+                      onInputChange={(_, v, reason) => {
+                        if (reason === 'input' || reason === 'clear') {
+                          setCidadeInput(v)
+                        }
+                      }}
+                      onChange={(_, v) => {
+                        if (v && typeof v === 'object') {
+                          setCidadeInput(v.label)
+                          setUf(v.uf)
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          name="cidade"
+                          placeholder={
+                            munLoading
+                              ? 'Carregando cidades…'
+                              : 'Cidade'
+                          }
+                          variant="outlined"
+                          slotProps={{
+                            ...params.slotProps,
+                            input: {
+                              ...params.slotProps.input,
+                              startAdornment: (
+                                <>
+                                  <InputAdornment position="start">
+                                    <LocationCityOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                                  </InputAdornment>
+                                  {params.slotProps.input.startAdornment}
+                                </>
+                              ),
+                              endAdornment: (
+                                <>
+                                  {munLoading ? (
+                                    <CircularProgress
+                                      color="inherit"
+                                      size={20}
+                                      sx={{ mr: 1 }}
+                                    />
+                                  ) : null}
+                                  {params.slotProps.input.endAdornment}
+                                </>
+                              ),
+                            },
+                          }}
+                          sx={fieldShellSx()}
+                        />
+                      )}
+                    />
+                    {munErro ? (
+                      <Typography variant="caption" sx={{ color: '#b45309', mt: 0.5, display: 'block' }}>
+                        {munErro} Você ainda pode digitar a cidade manualmente.
+                      </Typography>
+                    ) : null}
+                  </Box>
+                  <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 5' } }}>
                     <FieldLabel htmlFor="ep-uf">UF</FieldLabel>
                     <TextField
                       id="ep-uf"
@@ -577,10 +802,21 @@ export default function EditarPessoaModal({
                       onChange={(e) => setUf(e.target.value)}
                       variant="outlined"
                       slotProps={{
+                        select: {
+                          displayEmpty: true,
+                          renderValue: (v: unknown) =>
+                            v === '' || v == null ? (
+                              <Typography component="span" sx={{ color: '#9ca3af' }}>
+                                Selecione
+                              </Typography>
+                            ) : (
+                              String(v)
+                            ),
+                        },
                         input: {
                           startAdornment: (
                             <InputAdornment position="start">
-                              <LocationOnOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                              <PublicOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
                             </InputAdornment>
                           ),
                         },
@@ -596,67 +832,6 @@ export default function EditarPessoaModal({
                         </MenuItem>
                       ))}
                     </TextField>
-                  </Box>
-                  <Box sx={{ gridColumn: { xs: 'span 1', sm: '1 / -1' } }}>
-                    <FieldLabel htmlFor="ep-logra">Logradouro</FieldLabel>
-                    <TextField
-                      id="ep-logra"
-                      name="logradouro"
-                      fullWidth
-                      value={logradouro}
-                      onChange={(e) => setLogradouro(e.target.value)}
-                      placeholder="Rua, avenida…"
-                      variant="outlined"
-                      slotProps={{
-                        input: {
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <HomeOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
-                            </InputAdornment>
-                          ),
-                        },
-                      }}
-                      sx={fieldShellSx()}
-                    />
-                  </Box>
-                  <Box>
-                    <FieldLabel htmlFor="ep-num">Número</FieldLabel>
-                    <TextField
-                      id="ep-num"
-                      name="numero"
-                      fullWidth
-                      value={numero}
-                      onChange={(e) => setNumero(e.target.value)}
-                      placeholder="Nº"
-                      variant="outlined"
-                      sx={fieldShellSx()}
-                    />
-                  </Box>
-                  <Box>
-                    <FieldLabel htmlFor="ep-comp">Complemento</FieldLabel>
-                    <TextField
-                      id="ep-comp"
-                      name="complemento"
-                      fullWidth
-                      value={complemento}
-                      onChange={(e) => setComplemento(e.target.value)}
-                      placeholder="Apto, bloco…"
-                      variant="outlined"
-                      sx={fieldShellSx()}
-                    />
-                  </Box>
-                  <Box sx={{ gridColumn: { xs: 'span 1', sm: '1 / -1' } }}>
-                    <FieldLabel htmlFor="ep-bairro">Bairro</FieldLabel>
-                    <TextField
-                      id="ep-bairro"
-                      name="bairro"
-                      fullWidth
-                      value={bairro}
-                      onChange={(e) => setBairro(e.target.value)}
-                      placeholder="Bairro"
-                      variant="outlined"
-                      sx={fieldShellSx()}
-                    />
                   </Box>
                 </Box>
               </AccordionDetails>

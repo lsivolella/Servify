@@ -1,8 +1,9 @@
 # 3.3.1 Processo 1 – GESTÃO DE USUÁRIO
 
-O processo de **Gestão de Usuário** tem como objetivo permitir o cadastro e manutenção das informações dos colaboradores e clientes da empresa, garantindo maior organização dos dados, rastreabilidade e apoio aos demais processos do sistema, como agendamento, prestação de serviços e cálculo de comissão.
-
-Atualmente, em muitos pequenos negócios, o controle de colaboradores é feito de maneira informal ou por meio de planilhas, o que pode gerar inconsistências cadastrais, retrabalho e dificuldade de integração com outros processos da operação. Com a informatização desse processo, será possível centralizar as informações dos profissionais, melhorar a confiabilidade dos dados e aumentar a eficiência administrativa do negócio.
+O processo de **Gestão de Usuário** permite o cadastro, acesso e manutenção das informações de colaboradores e clientes da empresa. O fluxo de atividades ocorre de acordo com o papel de cada usuário no sistema:  
+* Cliente: Acessa a aplicação web e decide se deseja realizar login com credenciais existentes ou registrar uma nova conta, preenchendo seus dados pessoais e de endereço.  
+* Administrador: Acessa as páginas de gerenciamento para controlar o acesso ao sistema. Ele pode visualizar as listas de colaboradores e clientes, buscar perfis específicos, editar informações cadastrais, excluir contas e convidar novos colaboradores enviando um link de acesso por e-mail.  
+* Usuário Convidado (Colaborador): Recebe o convite enviado pelo administrador, acessa o link e completa o seu cadastro preenchendo os dados restantes exigidos pelo sistema.  
 
 ## Oportunidades de melhoria
 
@@ -21,14 +22,18 @@ A informatização do processo de Gestão de Usuário traz as seguintes oportuni
 • melhor rastreabilidade das alterações realizadas no cadastro.
 
 ## Modelagem
+Em seguida, apresentam-se os modelos do processo de Gestão de Usuário, descritos no padrão BPMN:
 
-Em seguida, apresentam-se os modelos dos sub-processos do processo de Gestão de Usuário, descritos no padrão BPMN:
+![bpmn](images/bpmn/gestao-de-usuario/BPMN_GestaoUsuarios-1205.png)
 
-## Subprocesso 1 – Autenticação de Cliente
 
-O subprocesso de **Autenticação de Cliente** tem como objetivo permitir que um cliente acesse o sistema por meio do cadastro de uma nova conta ou pela autenticação com credenciais já existentes. O subprocesso garante que apenas usuários com credenciais válidas obtenham acesso ao sistema. O subprocesso se inicia com o cliente acessando a aplicação Web e apresentando a ele as opções disponíveis: o botão de "Criar conta" para criar uma nova conta ou digitar credenciais de acesso já existentes nos campos de "Login" e "Senha". Caso o usuário acione a opção de criação de uma nova conta, o sistema redireciona para o subprocesso **Registro de Cliente** de cadastro responsável pelo preenchimento e validação dos dados cadastrais do novo cliente. O detalhamento interno deste subprocesso está descrito em **Subprocesso 2 – Registro de Cliente**. Já na opção de digitar credenciais, o usuário insere suas credenciais de acesso ao sistema (e-mail e senha) e clica no botão de "Entrar". Esta atividade é inicializada tanto pelo fluxo de login direto quanto após a conclusão do cadastro em Registro de Cliente. Caso haja algum problema com as credenciais de modo que elas sejam inválidas, o usuário recebe um prompt de erro informando que as credenciais inseridas são inválidas. Então o usuário é redirecionado para tentar novamente. Caso a validação das credenciais seja bem-sucedida, uma sessão autenticada é criada para o usuário, concedendo a ele acesso ao sistema.
 
-![Autenticação e Registro de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp1.png "Modelo BPMN do Processo 1 - Subprocesso - Autenticação e Registro de Cliente.")
+
+### Descrições Detalhadas Alinhadas aos Wireframes
+
+#### Autenticação de Cliente
+A etapa de autenticação tem como objetivo permitir que um cliente acesse o sistema. O fluxo inicia na tela de login, onde o cliente tem duas opções de ação baseadas nos wireframes: utilizar os campos **"Login"** e **"Senha"** para inserir credenciais já existentes e clicar no botão **"Entrar"**, ou clicar no link **Criar conta** caso seja um novo usuário. 
+Optando por **"Criar conta"**, o sistema o redireciona para a tela de **Cadastro de Cliente**. Já ao clicar em **"Entrar"**, o sistema processa a autenticação e, sendo bem-sucedida, concede o acesso. Se as credenciais forem inválidas, um prompt de erro exibe a mensagem *"Usuário ou senha inválidos"* na própria tela, permitindo uma nova tentativa.
 
 ### Detalhamento das atividades
 
@@ -59,11 +64,12 @@ O subprocesso de **Autenticação de Cliente** tem como objetivo permitir que um
 
 ---
 
-## Subprocesso 2 – Registro de Cliente
+## Registro de Cliente
 
-O subprocesso de **Registro de Cliente** corresponde ao subprocesso de cadastro referenciado no Subprocesso 1. Ele tem como objetivo coletar, validar e registrar as informações de um novo cliente, criando uma credencial de acesso a ele ao final do cadastro bem-sucedido. O subprocesso se inicia com o cliente acessando o formulário de cadastro e apresentando a ele as opções disponíveis: o botão de "Fazer login" para retornar a tela de acesso do Subprocesso 1 ou preencher seus dados pessoais de acesso (nome completo, e-mail, telefone, data de nascimento, CPF, CEP, logradouro, número, complemento, bairro, cidade, UF, senha e confirmação de senha). Após isso, o cliente pressioa o botão de "Cadastrar Cliente" para enviar o seu formulário de cadastro do sistema. Caso haja algum erro com alguma informação sendo inválida, o usuário recebe um prompt de erro indicando quais campos precisam ser corrigidos. O usuário retorna ao formulário para efetuar os ajustes necessários. Caso o usuário clique em cadastrar e a validação seja bem-sucedida, o cliente é redirecionado para a tela de login retornando ao **Subprocesso 1 – Autenticação de Cliente** e recebe uma mensagem de "Cadastro realizado com sucesso" no topo superior direito da tela.
+O registro tem como objetivo coletar as informações de um novo usuário. Na tela **"Cadastro de Cliente"**, o usuário visualiza um formulário e pode preencher seus dados (Nome completo, E-mail, Telefone, Data de nascimento, CPF, CEP, Logradouro, Número, Complemento, Bairro, Cidade, UF, Senha e Confirmar senha).  
 
-![Subprocesso - Registro de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp2.png "Modelo BPMN do Processo 1 - Subprocesso - Registro de Cliente.")
+Após o preenchimento, o usuário pressiona o botão **"Cadastrar Cliente"** para finalizar a criação da conta. Caso o usuário já possua uma conta e tenha acessado a tela por engano, ele pode utilizar o comando **"Já tem uma conta? Fazer login"** para retornar à tela inicial. Após o cadastro bem-sucedido, ele recebe um aviso de sucesso e retorna ao login.  
+
 
 ### Detalhamento das atividades
 
@@ -102,18 +108,16 @@ O subprocesso de **Registro de Cliente** corresponde ao subprocesso de cadastro 
 
 ---
 
-## Subprocesso 3 – Gerenciamento de Colaboradores
+## Gerenciar Colaboradores
 
-O subprocesso de **Gerenciamento de Colaboradores** tem como objetivo permitir que um administrador gerencie perfis de colaboradores e admins existentes e convide novos usuários para o sistema. O ato de gerenciamento permite que o administrador exclua um perfil, adicione um perfil ou realize a edição de alguma de suas informações. O subprocesso se inicia com o administrador acessando a página de Gerenciamento de Colaboradores e Admins e exibindo a ele a listagem de usuários cadastrados no sistema e as seguintes opções: buscar um usuário, convidar um usuário, editar um usuário ou excluir um usuário. 
-- Caso o admin queira buscar um usuário, ele digita na barra de pesquisa o nome do colaborador de modo que o sistema retorna a listagem filtrada pelo resultado de pesquisa. O usuário pode apagar a digitação de modo a retornar para a listagem total padrão.
-- Caso o admin queira convidar um usuário, ele pressiona o botão de "Convidar" e depois com o modal aberto, ele pode digitar o e-mail do colaborador, o cargo, o nível de acesso e clicar em "Enviar convite". Caso o e-mail seja válido e já não esteja cadastrado, o modal altera para uma mensagem de 'Convite enviado com sucesso' para o administrador. Caso o e-mail seja inválido, uma mensagem de "E-mail inválido." aparece para o admin e ele pode tentar digitar novamente para enviar o convite. O administrador, ainda pode no modal, clicar no "X" para fechar o modal ou "Cancelar" para cancelar a operação e fechar o modal.
-- Caso o admin queira editar um usuário, ele pode clicar no ícone de lápis e adaptar a informação atual do sistema daquele usuário referente a e-mail, cargo, nível de acesso ou status e depois clicar em "Salvar". Caso tenha sucesso, uma mensagem de sucesso aparece no canto superior direito para o admin. O administrador, ainda pode no modal, clicar no "X" para fechar o modal ou "Cancelar" para cancelar a operação e fechar o modal.
-- Caso o admin queira excluir um usuário, ele pode clicar no ícone da lixeira e depois com o modal aberto, pressionar o botão "Excluir" para confirmar a exclusão daquele usuário e seu acesso do sistema. O administrador, ainda pode no modal, clicar no "X" para fechar o modal ou "Cancelar" para cancelar a operação e fechar o modal.
+O administrador acessa a tela **"Gerenciar Colaboradores"** para controlar a equipe. A interface apresenta uma listagem com Nome, Email, Cargo, Status e Ações. Ele pode utilizar o campo **"Buscar colaboradores"** para filtrar a lista.  
 
+A partir dessa tela, o administrador tem três ações principais:
+* **Convidar:** Ao clicar no botão **"Convidar"**, abre-se o modal **"Convidar Colaborador"**, onde ele preenche o *"Email do colaborador"*, seleciona o *"Cargo"* e utiliza o botão **"Enviar Convite"**.  
+* **Editar:** Ao clicar no ícone de **lápis** (na coluna Ações), um modal é aberto com os dados atuais preenchidos para alteração, confirmando a ação no botão **"Salvar"**.  
+* **Excluir:** Ao clicar no ícone de **lixeira**, o sistema exibe um prompt de exclusão, confirmando a ação no botão **"Excluir"**.  
 
-![Criação de Convite para Colaborador](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp3.png "Modelo BPMN do Processo 1 - Criação de Convite para Colaborador")
-
-
+Todas as ações em modais podem ser abortadas clicando no botão **"Cancelar"** ou no **"X"**.  
 
 ### Detalhamento das atividades
 
@@ -222,11 +226,12 @@ O subprocesso de **Gerenciamento de Colaboradores** tem como objetivo permitir q
 
 ---
 
-### Subprocesso 4 – Registro de Usuário Convidado
+### Registro de Usuário Convidado
 
-O subprocesso de **Registro de Usuário Convidado** tem como objetivo permitir que um usuário que recebeu um convite por e-mail conclua seu cadastro no sistema. O subprocesso se inicia com o usuário acessando o link de convite recebido por e-mail. Em caso de sucesso, o usuário acessa a aplicação na tela de "Completar Cadastro" referente ao nível de acesso correspondente. Logo em seguida, o sistema exibe o formulário de cadastro para o perfil de administrador ou o formulário de cadastro para o perfil de colaborador a depender do acesso. Então o usuário preenche o formulário de cadastro exibido conforme seu perfil de acesso. Esta atividade é compartilhada pelos fluxos de admin e colaborador. Depois há uma atividade do sistema em que os dados preenchidos no formulário são verificados quanto ao cumprimento das restrições definidas. Em caso de negativa, o sistema exibe uma mensagem de erro indicando quais campos precisam ser corrigidos e o usuário retorna ao formulário para efetuar os ajustes. Em caso de validação bem-sucedida dos dados, o novo cadastro é efetuado, o token de convite é invalidado e uma sessão autenticada é criada automaticamente para o usuário.
+O usuário que recebeu o convite acessa o link e é direcionado para a tela **"Completar Cadastro"**. A interface exibe os campos restantes para a ativação do perfil (Nome completo, Telefone, Data de nascimento, CPF, Endereço completo, Senha e Confirmar senha).  
 
-![Registro de Usuário Convidado](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp4.png "Modelo BPMN do Processo 1 -Registro de Usuário Convidado.")
+Após o preenchimento, o usuário clica no botão **"Cadastrar"**. Em caso de sucesso, o cadastro é concluído e o acesso ao sistema é liberado.  
+
 
 ### Detalhamento das atividades
 
@@ -262,15 +267,11 @@ O subprocesso de **Registro de Usuário Convidado** tem como objetivo permitir q
 
 ![Tela Registro de Cliente](images/wireframe/gestao-de-usuario/cadastroColaboradorServify.png)
 
-## Subprocesso 5 – Gerenciamento de Cliente
+## Gerenciar Clientes
 
-O subprocesso de **Gerenciamento de Cliente** tem como objetivo permitir que um usuário administrador possa excluir a conta de um cliente. O subprocesso se inicia com o administrador acessando a página de Gerenciamento de Clientes e exibindo a ele a listagem de clientes cadastrados no sistema e as seguintes opções: buscar um cliente, editar um cliente ou excluir um cliente. 
-- Caso o admin queira buscar um cliente, ele digita na barra de pesquisa o nome do cliente de modo que o sistema retorna a listagem filtrada pelo resultado de pesquisa. O usuário pode apagar a digitação de modo a retornar para a listagem total padrão.
-- Caso o admin queira editar um usuário de cliente, ele pode clicar no ícone de lápis e adaptar a informação atual do sistema daquele usuário e depois clicar em "Salvar". Caso tenha sucesso, uma mensagem de sucesso aparece no canto superior direito para o admin. O administrador, ainda pode no modal, clicar no "X" para fechar o modal ou "Cancelar" para cancelar a operação e fechar o modal.
-- Caso o admin queira excluir um usuário de cliente, ele pode clicar no ícone da lixeira e depois com o modal aberto, pressionar o botão "Excluir" para confirmar a exclusão daquele cliente e seu cadastro e acesso do sistema. O administrador, ainda pode no modal, clicar no "X" para fechar o modal ou "Cancelar" para cancelar a operação e fechar o modal.
+Na tela **"Gerenciar Clientes"**, o administrador visualiza a lista de usuários (com Nome, Email, Telefone, Status e Ações) e pode usar o campo **"Buscar cliente..."** para filtros.  
 
-![Gerenciamento de Cliente](images/bpmn/gestao-de-usuario/bpmn-gestao-de-usuario-sp5.png "Modelo BPMN do Processo 1 - Gerenciamento de Cliente.")
-
+Na coluna de Ações, o administrador pode clicar no ícone de **lápis** para editar as informações (confirmando no botão **"Salvar"**) ou no ícone de **lixeira** para deletar a conta (confirmando no botão **"Excluir"**). As ações nos modais podem ser interrompidas pelo botão **"Cancelar"**.
 ### Detalhamento das atividades
 
 #### Acessar a página de gerenciamento de clientes

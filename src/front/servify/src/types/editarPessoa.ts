@@ -4,6 +4,8 @@ export type EditarPessoaValues = {
   email: string
   telefone: string
   cpf: string
+  /** ISO `YYYY-MM-DD` */
+  dataNascimento: string
   cidade: string
   /** Cargo do colaborador. Preenchido apenas para colaborador; vazio para cliente. */
   cargo: string

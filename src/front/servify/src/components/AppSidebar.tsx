@@ -16,6 +16,14 @@ import GroupsOutlined from '@mui/icons-material/GroupsOutlined'
 import LogoutOutlined from '@mui/icons-material/LogoutOutlined'
 import PercentOutlined from '@mui/icons-material/PercentOutlined'
 import PersonOutlined from '@mui/icons-material/PersonOutlined'
+import {
+  canAccessPrivateRoute,
+  clearSession,
+  formatPerfilAcesso,
+  getSession,
+  initialsFromNome,
+  isAdminUser,
+} from '../auth/session'
 import { useSidebarLayout } from '../context/SidebarLayoutContext'
 
 const BG = '#0B1E3B'
@@ -24,6 +32,35 @@ const SECTION = '#708090'
 
 const EXPANDED_W = 280
 const COLLAPSED_W = 76
+
+const NAV_SECTIONS = [
+  {
+    label: 'Principal',
+    items: [
+      {
+        to: '/agendamentos',
+        icon: <CalendarMonthOutlined />,
+        label: 'Agendamentos',
+      },
+      { to: '/dashboard', icon: <GridViewOutlined />, label: 'Dashboard' },
+    ],
+  },
+  {
+    label: 'Operacional',
+    items: [
+      { to: '/servicos', icon: <DesignServicesOutlined />, label: 'Serviços' },
+      { to: '/comissao', icon: <PercentOutlined />, label: 'Comissão' },
+      { to: '/relatorio', icon: <AssessmentOutlined />, label: 'Relatório' },
+    ],
+  },
+  {
+    label: 'Gestão',
+    items: [
+      { to: '/colaboradores', icon: <GroupsOutlined />, label: 'Colaboradores' },
+      { to: '/clientes', icon: <PersonOutlined />, label: 'Clientes' },
+    ],
+  },
+] as const
 
 function navButtonSx(collapsed: boolean) {
   return {
@@ -144,6 +181,22 @@ export default function AppSidebar() {
   const { sidebarExpanded } = useSidebarLayout()
   const collapsed = !sidebarExpanded
 
+  const sessionUser = getSession()?.user
+  const displayName = sessionUser?.nome?.trim() || sessionUser?.email || 'Usuário'
+  const perfilLabel = sessionUser ? formatPerfilAcesso(sessionUser) : '—'
+  const avatarLetters = initialsFromNome(displayName)
+  const visibleSections = isAdminUser(sessionUser)
+    ? NAV_SECTIONS
+    : NAV_SECTIONS.map((section) => ({
+        ...section,
+        items: section.items.filter((item) => canAccessPrivateRoute(sessionUser, item.to)),
+      })).filter((section) => section.items.length > 0)
+
+  function handleLogout() {
+    clearSession()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <Box
       component="nav"
@@ -151,6 +204,12 @@ export default function AppSidebar() {
       sx={{
         width: collapsed ? COLLAPSED_W : EXPANDED_W,
         flexShrink: 0,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        height: '100vh',
+        maxHeight: '100vh',
         minHeight: '100vh',
         bgcolor: BG,
         display: 'flex',
@@ -163,53 +222,20 @@ export default function AppSidebar() {
       }}
     >
       <Box sx={{ flex: 1, overflow: 'auto', overflowX: 'hidden' }}>
-        <SectionLabel collapsed={collapsed}>Principal</SectionLabel>
-        <NavRow
-          to="/agendamentos"
-          icon={<CalendarMonthOutlined />}
-          label="Agendamentos"
-          collapsed={collapsed}
-        />
-        <NavRow
-          to="/dashboard"
-          icon={<GridViewOutlined />}
-          label="Dashboard"
-          collapsed={collapsed}
-        />
-
-        <SectionLabel collapsed={collapsed}>Operacional</SectionLabel>
-        <NavRow
-          to="/servicos"
-          icon={<DesignServicesOutlined />}
-          label="Serviços"
-          collapsed={collapsed}
-        />
-        <NavRow
-          to="/comissao"
-          icon={<PercentOutlined />}
-          label="Comissão"
-          collapsed={collapsed}
-        />
-        <NavRow
-          to="/relatorio"
-          icon={<AssessmentOutlined />}
-          label="Relatório"
-          collapsed={collapsed}
-        />
-
-        <SectionLabel collapsed={collapsed}>Gestão</SectionLabel>
-        <NavRow
-          to="/colaboradores"
-          icon={<GroupsOutlined />}
-          label="Colaboradores"
-          collapsed={collapsed}
-        />
-        <NavRow
-          to="/clientes"
-          icon={<PersonOutlined />}
-          label="Clientes"
-          collapsed={collapsed}
-        />
+        {visibleSections.map((section) => (
+          <Box key={section.label}>
+            <SectionLabel collapsed={collapsed}>{section.label}</SectionLabel>
+            {section.items.map((item) => (
+              <NavRow
+                key={item.to}
+                to={item.to}
+                icon={item.icon}
+                label={item.label}
+                collapsed={collapsed}
+              />
+            ))}
+          </Box>
+        ))}
       </Box>
 
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)', my: 2 }} />
@@ -226,7 +252,11 @@ export default function AppSidebar() {
           }}
         >
           <Tooltip
-            title={collapsed ? 'Waltinho' : ''}
+            title={
+              collapsed
+                ? `${displayName}${perfilLabel !== '—' ? ` · ${perfilLabel}` : ''}`
+                : ''
+            }
             placement="right"
             disableHoverListener={!collapsed}
             arrow
@@ -241,30 +271,36 @@ export default function AppSidebar() {
                 fontWeight: 700,
               }}
             >
-              WA
+              {avatarLetters}
             </Avatar>
           </Tooltip>
           {!collapsed ? (
-            <Box sx={{ minWidth: 0 }}>
+            <Box sx={{ minWidth: 0, flex: 1 }}>
               <Typography
                 sx={{
                   color: '#FFFFFF',
                   fontWeight: 600,
                   fontSize: '0.9375rem',
                   lineHeight: 1.2,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                Waltinho
+                {displayName}
               </Typography>
-              <Box
+              <Typography
                 sx={{
-                  mt: 0.75,
-                  width: 36,
-                  height: 2,
-                  borderRadius: 1,
-                  bgcolor: 'rgba(255, 255, 255, 0.22)',
+                  mt: 0.35,
+                  color: 'rgba(255, 255, 255, 0.55)',
+                  fontSize: '0.6875rem',
+                  fontWeight: 500,
+                  lineHeight: 1.25,
+                  letterSpacing: '0.02em',
                 }}
-              />
+              >
+                {perfilLabel}
+              </Typography>
             </Box>
           ) : null}
         </Box>
@@ -272,7 +308,7 @@ export default function AppSidebar() {
         {collapsed ? (
           <Tooltip title="Sair" placement="right" arrow enterDelay={400}>
             <IconButton
-              onClick={() => navigate('/login')}
+              onClick={handleLogout}
               aria-label="Sair"
               sx={{
                 width: '100%',
@@ -296,7 +332,7 @@ export default function AppSidebar() {
             startIcon={
               <LogoutOutlined sx={{ fontSize: 20, color: '#fff !important' }} />
             }
-            onClick={() => navigate('/login')}
+            onClick={handleLogout}
             sx={{
               borderRadius: '10px',
               py: 1.1,

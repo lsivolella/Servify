@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ColaboradorFormModal from '../components/ColaboradorFormModal'
 import EditarPessoaModal from '../components/EditarPessoaModal'
+import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
@@ -25,106 +26,25 @@ import {
   confirmDeleteRecord,
   toastCadastroSucesso,
   toastSuccess,
+  toastError,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
+import { labelPerfilColaborador, perfilIdParaConvite } from '../utils/perfilColaborador'
+import {
+  deleteUsuarioPorId,
+  getColaboradores,
+  type Colaborador,
+} from '../services/colaboradores'
+import { criarConvite } from '../services/convites'
+import {
+  fetchGmailOAuthStatus,
+  getGmailAuthorizeUrl,
+  type GmailOAuthStatus,
+} from '../services/gmailOAuth'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
 const PAGE_BG = '#f8fafc'
-
-type StatusColaborador = 'ativo' | 'pendente'
-
-type Colaborador = {
-  id: string
-  nome: string | null
-  email: string
-  telefone: string
-  cpf: string
-  cidade: string
-  cargo: string
-  status: StatusColaborador
-  cep: string
-  logradouro: string
-  numero: string
-  complemento: string
-  bairro: string
-  uf: string
-}
-
-const CARGOS_DISPONIVEIS = [
-  'Cabeleireiro(a)',
-  'Manicure',
-  'Atendente',
-  'Gerente',
-  'Recepcionista',
-] as const
-
-const COLABORADORES_MOCK: Colaborador[] = [
-  {
-    id: '1',
-    nome: 'Carlos Silva',
-    email: 'carlos@empresa.com',
-    telefone: '(11) 98765-4321',
-    cpf: '123.456.789-09',
-    cidade: 'São Paulo - SP',
-    cargo: 'Cabeleireiro(a)',
-    status: 'ativo',
-    cep: '01310100',
-    logradouro: 'Av. Paulista',
-    numero: '1000',
-    complemento: '',
-    bairro: 'Bela Vista',
-    uf: 'SP',
-  },
-  {
-    id: '2',
-    nome: 'Ana Oliveira',
-    email: 'ana@empresa.com',
-    telefone: '(31) 98765-4321',
-    cpf: '123.456.789-09',
-    cidade: 'Belo Horizonte - MG',
-    cargo: 'Manicure',
-    status: 'pendente',
-    cep: '30860330',
-    logradouro: 'Rua Caitité',
-    numero: '1001',
-    complemento: 'Apto 101',
-    bairro: 'Gloria',
-    uf: 'SP',
-  },
-  {
-    id: '3',
-    nome: 'Patricia Oliveira',
-    email: 'patricia@empresa.com',
-    telefone: '(21) 97777-1111',
-    cpf: '987.654.321-00',
-    cidade: 'Belo Horizonte - MG',
-    cargo: 'Atendente',
-    status: 'pendente',
-    cep: '30860330',
-    logradouro: 'Rua Caitité',
-    numero: '1001',
-    complemento: '',
-    bairro: 'Gloria',
-    uf: 'MG',
-  },
-  {
-    id: '4',
-    nome: 'Ricardo Mendes',
-    email: 'ricardo@empresa.com',
-    telefone: '(31) 99999-8888',
-    cpf: '456.789.123-45',
-    cidade: 'Belo Horizonte - MG',
-    cargo: 'Gerente',
-    status: 'ativo',
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    uf: 'MG',
-  },
-]
 
 function rowToEditValues(row: Colaborador): EditarPessoaValues {
   return {
@@ -132,6 +52,7 @@ function rowToEditValues(row: Colaborador): EditarPessoaValues {
     email: row.email,
     telefone: row.telefone,
     cpf: row.cpf,
+    dataNascimento: row.dataNascimento,
     cidade: row.cidade,
     cargo: row.cargo,
     ativo: row.status === 'ativo',
@@ -144,32 +65,11 @@ function rowToEditValues(row: Colaborador): EditarPessoaValues {
   }
 }
 
-function StatusBadge({ status }: { status: StatusColaborador }) {
-  const isAtivo = status === 'ativo'
-  return (
-    <Typography
-      component="span"
-      sx={{
-        display: 'inline-block',
-        px: 1.5,
-        py: 0.5,
-        borderRadius: '999px',
-        fontSize: '0.8125rem',
-        fontWeight: 600,
-        bgcolor: isAtivo ? '#dcfce7' : '#fef3c7',
-        color: isAtivo ? '#166534' : '#92400e',
-      }}
-    >
-      {isAtivo ? 'Ativo' : 'Pendente'}
-    </Typography>
-  )
-}
-
 export default function GerenciarColaboradorPage() {
   const { sidebarExpanded, toggleSidebar } = useSidebarLayout()
   const [busca, setBusca] = useState('')
-  const [colaboradores, setColaboradores] =
-    useState<Colaborador[]>(COLABORADORES_MOCK)
+  const [colaboradores, setColaboradores] = useState<Colaborador[]>([])
+  const [loading, setLoading] = useState(true)
 
   const [conviteOpen, setConviteOpen] = useState(false)
   const [formEmail, setFormEmail] = useState('')
@@ -177,11 +77,15 @@ export default function GerenciarColaboradorPage() {
 
   const [editOpen, setEditOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [gmailOAuthStatus, setGmailOAuthStatus] = useState<
+    GmailOAuthStatus | null | undefined
+  >(undefined)
   const [editInitial, setEditInitial] = useState<EditarPessoaValues>({
     nome: '',
     email: '',
     telefone: '',
     cpf: '',
+    dataNascimento: '',
     cidade: '',
     cargo: '',
     ativo: true,
@@ -192,6 +96,61 @@ export default function GerenciarColaboradorPage() {
     bairro: '',
     uf: '',
   })
+
+  useEffect(() => {
+    let alive = true
+    void (async () => {
+      try {
+        const data = await getColaboradores()
+        if (!alive) return
+        setColaboradores(data)
+      } catch (e: unknown) {
+        if (!alive) return
+        toastError(
+          e instanceof Error
+            ? e.message
+            : 'Não foi possível carregar os colaboradores.',
+        )
+      } finally {
+        queueMicrotask(() => {
+          if (alive) setLoading(false)
+        })
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let alive = true
+    void (async () => {
+      try {
+        const s = await fetchGmailOAuthStatus()
+        if (!alive) return
+        setGmailOAuthStatus(s)
+      } catch {
+        if (!alive) return
+        setGmailOAuthStatus(null)
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  async function iniciarOAuthGmail() {
+    try {
+      const url = await getGmailAuthorizeUrl()
+      window.location.href = url
+    } catch (e: unknown) {
+      toastError(
+        e instanceof Error
+          ? e.message
+          : 'Não foi possível iniciar o login com Google.',
+      )
+    }
+  }
 
   function abrirConvidar() {
     setFormEmail('')
@@ -214,31 +173,20 @@ export default function GerenciarColaboradorPage() {
     setEditingId(null)
   }
 
-  function handleSubmitConvite() {
+  async function handleSubmitConvite() {
     const email = formEmail.trim()
     const cargo = formCargo.trim()
-    setColaboradores((prev) => [
-      ...prev,
-      {
-        id: `novo-${Date.now()}`,
-        nome: null,
-        email,
-        telefone: '',
-        cpf: '',
-        cidade: '',
-        cargo,
-        status: 'pendente',
-        cep: '',
-        logradouro: '',
-        numero: '',
-        complemento: '',
-        bairro: '',
-        uf: '',
-      },
-    ])
+    const perfilId = perfilIdParaConvite(cargo)
+    if (perfilId == null) {
+      throw new Error('Selecione um perfil válido.')
+    }
+
+    await criarConvite({ email, perfilId })
+    const data = await getColaboradores()
+    setColaboradores(data)
     fecharConvite()
     toastCadastroSucesso(
-      'Convite registrado. O envio por e-mail será integrado à API.',
+      'Convite salvo com token. E-mail com token e senha provisória é enviado quando o servidor Gmail estiver configurado. Caso não receba o e-mail, verifique se o servidor Gmail está configurado e se o e-mail está na lista de permitidos.',
     )
   }
 
@@ -253,6 +201,7 @@ export default function GerenciarColaboradorPage() {
               email: data.email,
               telefone: data.telefone,
               cpf: data.cpf,
+              dataNascimento: data.dataNascimento,
               cidade: data.cidade,
               cargo: data.cargo,
               status: data.ativo ? 'ativo' : 'pendente',
@@ -276,8 +225,19 @@ export default function GerenciarColaboradorPage() {
       : `O convite para ${row.email} será removido.`
     const ok = await confirmDeleteRecord('Remover colaborador?', subtitulo)
     if (!ok) return
-    setColaboradores((prev) => prev.filter((c) => c.id !== row.id))
-    toastSuccess('Colaborador removido.')
+    try {
+      await deleteUsuarioPorId(row.id)
+      if (editingId === row.id) fecharEditar()
+      const data = await getColaboradores()
+      setColaboradores(data)
+      toastSuccess('Colaborador removido.')
+    } catch (e: unknown) {
+      toastError(
+        e instanceof Error
+          ? e.message
+          : 'Não foi possível remover o colaborador.',
+      )
+    }
   }
 
   const filtrados = useMemo(() => {
@@ -368,11 +328,47 @@ export default function GerenciarColaboradorPage() {
       </Box>
 
       <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 }, py: 3 }}>
+        {gmailOAuthStatus != null ? (
+          <Box sx={{ mb: 2.5 }}>
+            {gmailOAuthStatus.connected ? (
+              <Alert severity="success" sx={{ borderRadius: '12px' }}>
+                Gmail autorizado: convites podem ser enviados por e-mail a partir deste servidor.
+              </Alert>
+            ) : gmailOAuthStatus.browserFlowConfigured ? (
+              <Alert
+                severity="warning"
+                sx={{ borderRadius: '12px', alignItems: 'center' }}
+                action={
+                  <Button
+                    color="inherit"
+                    size="small"
+                    variant="outlined"
+                    onClick={() => void iniciarOAuthGmail()}
+                    sx={{ fontWeight: 700, textTransform: 'none', borderColor: 'rgba(0,0,0,0.25)' }}
+                  >
+                    Conectar Gmail
+                  </Button>
+                }
+              >
+                Conceda permissão de envio no Google para que os convites cheguem por e-mail.
+              </Alert>
+            ) : (
+              <Alert severity="info" sx={{ borderRadius: '12px' }}>
+                Para login OAuth no navegador, defina no backend{' '}
+                <strong>servify.gmail.oauth-redirect-uri</strong> igual à rota deste app (ex.:{' '}
+                <strong>http://localhost:5173/oauth/google/callback</strong>) e cadastre a mesma
+                URI nas credenciais OAuth do tipo <strong>aplicativo Web</strong> no Google Cloud.
+              </Alert>
+            )}
+          </Box>
+        ) : null}
+
         <TextField
           fullWidth
           placeholder="Buscar colaboradores..."
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
+          disabled={loading}
           slotProps={{
             input: {
               startAdornment: (
@@ -416,11 +412,10 @@ export default function GerenciarColaboradorPage() {
                   },
                 }}
               >
-                <TableCell width="22%">Nome</TableCell>
-                <TableCell width="28%">Email</TableCell>
-                <TableCell width="20%">Cargo</TableCell>
-                <TableCell width="15%">Status</TableCell>
-                <TableCell width="15%" align="right">
+                <TableCell width="26%">Nome</TableCell>
+                <TableCell width="34%">Email</TableCell>
+                <TableCell width="22%">Perfil</TableCell>
+                <TableCell width="18%" align="right">
                   Ações
                 </TableCell>
               </TableRow>
@@ -459,11 +454,8 @@ export default function GerenciarColaboradorPage() {
                   </TableCell>
                   <TableCell>
                     <Typography sx={{ color: '#64748b', fontSize: '0.9375rem' }}>
-                      {row.cargo}
+                      {labelPerfilColaborador(row.cargo)}
                     </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <StatusBadge status={row.status} />
                   </TableCell>
                   <TableCell align="right">
                     <Box
@@ -493,6 +485,15 @@ export default function GerenciarColaboradorPage() {
                   </TableCell>
                 </TableRow>
               ))}
+              {!loading && filtrados.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} sx={{ py: 4 }}>
+                    <Typography sx={{ color: '#64748b', textAlign: 'center' }}>
+                      Nenhum colaborador encontrado.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -501,15 +502,16 @@ export default function GerenciarColaboradorPage() {
           variant="body2"
           sx={{ mt: 2, color: '#94a3b8', fontSize: '0.875rem' }}
         >
-          {filtrados.length} colaborador
-          {filtrados.length === 1 ? '' : 'es'} encontrado
-          {filtrados.length === 1 ? '' : 's'}
+          {loading
+            ? 'Carregando colaboradores...'
+            : `${filtrados.length} colaborador${
+                filtrados.length === 1 ? '' : 'es'
+              } encontrado${filtrados.length === 1 ? '' : 's'}`}
         </Typography>
       </Container>
 
       <ColaboradorFormModal
         open={conviteOpen}
-        cargos={CARGOS_DISPONIVEIS}
         email={formEmail}
         cargo={formCargo}
         onEmailChange={setFormEmail}
@@ -522,7 +524,6 @@ export default function GerenciarColaboradorPage() {
         open={editOpen}
         tipo="colaborador"
         initial={editInitial}
-        cargos={CARGOS_DISPONIVEIS}
         onClose={fecharEditar}
         onSave={handleSalvarEdicao}
       />

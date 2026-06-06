@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
@@ -32,6 +32,7 @@ import {
   formatCepDisplay,
 } from '../services/viacep'
 import { maskCpf, maskEmailInput, maskPhoneBr } from '../utils/masks'
+import { apiPostJson, mensagemDeErroCapturado } from '../services/api'
 import { toastCadastroErro, toastCadastroSucesso } from '../components/showAlert'
 import './styles/RegisterPage.css'
 
@@ -104,6 +105,7 @@ export default function RegisterPage() {
   const [cepLoading, setCepLoading] = useState(false)
   const [cepHelperText, setCepHelperText] = useState<string | null>(null)
   const cepAbortRef = useRef<AbortController | null>(null)
+  const navigate = useNavigate()
 
   function setField<K extends keyof FormState>(key: K) {
     return (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,12 +199,35 @@ export default function RegisterPage() {
     }
 
     try {
-      await new Promise<void>((resolve) => setTimeout(resolve, 700))
-      // TODO: substituir por POST à API de cadastro e tratar erro HTTP no catch
+      await apiPostJson('/usuarios/cadastro-cliente', {
+        perfilId: 3,
+        cpf: cpfDigits,
+        nome,
+        email,
+        senha: form.senha,
+        telefone: form.telefone.replace(/\D/g, ''),
+        dataNascimento: form.dataNascimento,
+        cep: form.cep.replace(/\D/g, ''),
+        logradouro: form.logradouro,
+        numero: form.numero,
+        complemento: form.complemento,
+        bairro: form.bairro,
+        cidade: form.cidade,
+        uf: form.uf,
+      })
+
       toastCadastroSucesso('Cadastro realizado com sucesso!')
-    } catch {
+      setForm(initialForm)
+
+      setTimeout(() => {
+        navigate('/login')
+      }, 2500)
+    } catch (err) {
       toastCadastroErro(
-        'Não foi possível concluir o cadastro. Tente novamente.',
+        mensagemDeErroCapturado(
+          err,
+          'Não foi possível concluir o cadastro. Tente novamente.',
+        ),
       )
     }
   }
@@ -803,7 +828,7 @@ export default function RegisterPage() {
             Cadastrar Cliente
           </Button>
         </Box>
-        
+
 
         <br />
 

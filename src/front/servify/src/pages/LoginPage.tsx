@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
@@ -12,25 +12,64 @@ import InputAdornment from '@mui/material/InputAdornment'
 import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import LockOutlined from '@mui/icons-material/LockOutlined'
 import { toastError } from '../components/showAlert'
+import {
+  canAccessPrivateRoute,
+  getDefaultAuthenticatedRoute,
+  setSession,
+} from '../auth/session'
+import { mensagemDeErroCapturado } from '../services/api'
+import { loginApi } from '../services/auth'
 import './styles/LoginPage.css'
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const [login, setLogin] = useState('')
+  const location = useLocation()
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    const user = login.trim()
-    if (!user || !password) {
-      toastError('Preencha usuário e senha.')
+    const userEmail = email.trim()
+    if (!userEmail || !password) {
+      toastError('Preencha e-mail e senha.')
       return
     }
-    if (user === 'demo' && password === 'demo') {
-      navigate('/agendamentos', { replace: true })
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+      toastError('Informe um e-mail válido.')
       return
     }
-    toastError('Usuário ou senha inválidos.')
+
+    if (password.length < 6) {
+      toastError('A senha deve ter pelo menos 6 caracteres.')
+      return
+    }
+
+    try {
+      setLoading(true)
+      const user = await loginApi(userEmail, password)
+      setSession({ user })
+
+      const tokenConv = user.conviteToken?.trim()
+      if (user.cadastroPendente && tokenConv) {
+        navigate(`/convite/${encodeURIComponent(tokenConv)}`, { replace: true })
+        return
+      }
+
+      const from = (location.state as { from?: { pathname?: string } } | null)?.from
+      const fromPath = from?.pathname && typeof from.pathname === 'string' ? from.pathname : ''
+      const target = fromPath && canAccessPrivateRoute(user, fromPath)
+        ? fromPath
+        : getDefaultAuthenticatedRoute()
+      navigate(target, { replace: true })
+    } catch (e: unknown) {
+      toastError(
+        mensagemDeErroCapturado(e, 'Não foi possível entrar. Tente novamente.'),
+      )
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -81,12 +120,17 @@ export default function LoginPage() {
                   fullWidth
                   hiddenLabel
                   variant="outlined"
-                  type="text"
-                  autoComplete="username"
-                  placeholder="Digite seu usuário"
-                  value={login}
-                  onChange={(ev) => setLogin(ev.target.value)}
+                  type="email"
+                  autoComplete="email"
+                  placeholder="Digite seu e-mail"
+                  value={email}
+                  onChange={(ev) => setEmail(ev.target.value)}
                   slotProps={{
+                    htmlInput: {
+                      inputMode: 'email',
+                      autoCapitalize: 'off',
+                      spellCheck: false,
+                    },
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
@@ -139,8 +183,9 @@ export default function LoginPage() {
               variant="contained"
               fullWidth
               className="login-submit"
+              disabled={loading}
             >
-              Entrar
+              {loading ? 'Entrando...' : 'Entrar'}
             </Button>
           </Stack>
         </Box>

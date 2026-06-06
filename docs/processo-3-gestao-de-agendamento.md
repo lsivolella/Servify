@@ -21,11 +21,11 @@ A informatização do processo de Gestão de Agendamento traz as seguintes oport
 
 ## Modelagem
 
-![Modelo BPMN do Processo 3](images/bpmn/gestao-de-agendamento/bpmn-gestao-de-agendamento.png "Modelo BPMN do Processo 3.")
+![Modelo BPMN do Processo 3](images/bpmn/gestao-de-agendamento/GestaoAgendamento_V1905.png "Modelo BPMN do Processo 3.")
 
 ### Detalhamento das atividades
  
-#### Acessar a lista de agendamentos
+#### Acessar módulo de agendamentos
  
 | **Campo**               | **Tipo**  | **Restrições**  | **Valor padrão**                  |
 | ----------------------- | --------- | --------------- | --------------------------------- |
@@ -47,13 +47,13 @@ A informatização do processo de Gestão de Agendamento traz as seguintes oport
 
 ## Wireframes
 
-**Lista de agendamentos**
+**Acessar módulo de agendamentos**
 
 ![Lista de agendamentos — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-agendamentos.jpeg "Wireframe: lista de agendamentos (administrador)")
  
 ---
  
-#### Buscar e filtrar agendamentos
+#### Listar agendamentos do perfil de acesso
  
 | **Campo**               | **Tipo**       | **Restrições** | **Valor padrão** |
 | ----------------------- | -------------- | -------------- | ---------------- |
@@ -73,7 +73,7 @@ A informatização do processo de Gestão de Agendamento traz as seguintes oport
 
 ## Wireframes
 
-**Busca e filtros**
+**Listar agendamentos do perfil de acesso**
 
 ![Busca e filtros — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-busca.jpeg "Wireframe: busca e filtros (administrador)")
  

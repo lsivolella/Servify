@@ -12,24 +12,26 @@ import CloseOutlined from '@mui/icons-material/CloseOutlined'
 import EmailOutlined from '@mui/icons-material/EmailOutlined'
 import PersonAddOutlined from '@mui/icons-material/PersonAddOutlined'
 import WorkOutlineOutlined from '@mui/icons-material/WorkOutlineOutlined'
+import {
+  labelPerfilColaborador,
+  PERFIS_COLABORADOR,
+} from '../utils/perfilColaborador'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
 
 type ColaboradorFormModalProps = {
   open: boolean
-  cargos: readonly string[]
   email: string
   cargo: string
   onEmailChange: (value: string) => void
   onCargoChange: (value: string) => void
   onClose: () => void
-  onSubmit: () => void
+  onSubmit: () => void | Promise<void>
 }
 
 export default function ColaboradorFormModal({
   open,
-  cargos,
   email,
   cargo,
   onEmailChange,
@@ -38,12 +40,20 @@ export default function ColaboradorFormModal({
   onSubmit,
 }: ColaboradorFormModalProps) {
   const [erroLocal, setErroLocal] = useState<string | null>(null)
+  const [enviando, setEnviando] = useState(false)
 
   useEffect(() => {
-    if (open) setErroLocal(null)
+    if (!open) {
+      queueMicrotask(() => {
+        setErroLocal(null)
+        setEnviando(false)
+      })
+      return
+    }
+    queueMicrotask(() => setErroLocal(null))
   }, [open])
 
-  function handleFormSubmit(e: FormEvent) {
+  async function handleFormSubmit(e: FormEvent) {
     e.preventDefault()
     const emailTrim = email.trim()
     const cargoTrim = cargo.trim()
@@ -52,11 +62,22 @@ export default function ColaboradorFormModal({
       return
     }
     if (!cargoTrim) {
-      setErroLocal('Selecione um cargo.')
+      setErroLocal('Selecione um perfil.')
       return
     }
     setErroLocal(null)
-    onSubmit()
+    setEnviando(true)
+    try {
+      await Promise.resolve(onSubmit())
+    } catch (err) {
+      setErroLocal(
+        err instanceof Error
+          ? err.message
+          : 'Não foi possível enviar o convite.',
+      )
+    } finally {
+      setEnviando(false)
+    }
   }
 
   return (
@@ -187,7 +208,7 @@ export default function ColaboradorFormModal({
           <Box>
             <Typography
               component="label"
-              htmlFor="colab-cargo"
+              htmlFor="colab-perfil"
               sx={{
                 display: 'block',
                 fontSize: '0.875rem',
@@ -196,10 +217,10 @@ export default function ColaboradorFormModal({
                 mb: 0.75,
               }}
             >
-              Cargo
+              Perfil
             </Typography>
             <TextField
-              id="colab-cargo"
+              id="colab-perfil"
               name="cargo"
               select
               fullWidth
@@ -212,10 +233,10 @@ export default function ColaboradorFormModal({
                   renderValue: (v: unknown) =>
                     v === '' || v == null ? (
                       <Typography component="span" sx={{ color: '#9ca3af' }}>
-                        Selecione o cargo
+                        Selecione o perfil
                       </Typography>
                     ) : (
-                      String(v)
+                      labelPerfilColaborador(String(v))
                     ),
                 },
                 input: {
@@ -234,11 +255,11 @@ export default function ColaboradorFormModal({
               }}
             >
               <MenuItem value="" disabled sx={{ color: '#9ca3af' }}>
-                Selecione o cargo
+                Selecione o perfil
               </MenuItem>
-              {cargos.map((c) => (
-                <MenuItem key={c} value={c}>
-                  {c}
+              {PERFIS_COLABORADOR.map((p) => (
+                <MenuItem key={p.value} value={p.value}>
+                  {p.label}
                 </MenuItem>
               ))}
             </TextField>
@@ -273,6 +294,7 @@ export default function ColaboradorFormModal({
               type="button"
               variant="outlined"
               onClick={onClose}
+              disabled={enviando}
               sx={{
                 borderRadius: '10px',
                 px: 2.5,
@@ -290,6 +312,7 @@ export default function ColaboradorFormModal({
               type="submit"
               variant="contained"
               color="primary"
+              disabled={enviando}
               sx={{
                 borderRadius: '10px',
                 px: 2.5,
@@ -300,7 +323,7 @@ export default function ColaboradorFormModal({
                 '&:hover': { bgcolor: '#162d4a' },
               }}
             >
-              Enviar Convite
+              {enviando ? 'Enviando…' : 'Enviar Convite'}
             </Button>
           </Box>
         </Box>
