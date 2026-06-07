@@ -285,10 +285,12 @@ function buildRevenueByService(rows: DashboardRankingRow[]): DashboardMetric[] {
 }
 
 function buildCommissionByEmployee(rows: DashboardRankingRow[]): DashboardMetric[] {
-  return rows.map((row) => ({
-    label: row.name,
-    value: row.value,
-  }))
+  return [...rows]
+    .sort((a, b) => b.value - a.value)
+    .map((row) => ({
+      label: row.name,
+      value: row.value,
+    }))
 }
 
 function buildChartBuckets(period: DashboardPeriod, range: PeriodRange): DashboardChartPoint[] {

@@ -750,18 +750,43 @@ function HorizontalBarChart({ data }: { data: DashboardMetric[] }) {
   if (!max) return <EmptyState />
 
   return (
-    <Box sx={{ display: 'grid', gap: 2.2, height: 280, alignContent: 'center', pt: 2 }}>
+    <Box
+      sx={{
+        display: 'grid',
+        gap: 1.3,
+        maxHeight: 300,
+        overflowY: 'auto',
+        pr: 0.8,
+        pt: 2,
+        scrollbarWidth: 'thin',
+        scrollbarColor: `${GREEN} #f1f5f9`,
+        '&::-webkit-scrollbar': { width: 8 },
+        '&::-webkit-scrollbar-track': { bgcolor: '#f1f5f9', borderRadius: 999 },
+        '&::-webkit-scrollbar-thumb': { bgcolor: GREEN, borderRadius: 999 },
+      }}
+    >
       {data.map((item) => (
         <Box
           key={item.label}
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '128px 1fr' },
+            gridTemplateColumns: { xs: '1fr', sm: '150px 1fr' },
             gap: 1,
             alignItems: 'center',
           }}
         >
-          <Typography sx={{ color: MUTED, fontSize: '0.82rem', textAlign: { sm: 'right' } }}>
+          <Typography
+            title={item.label}
+            sx={{
+              color: MUTED,
+              fontSize: '0.82rem',
+              fontWeight: 800,
+              textAlign: { sm: 'right' },
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {item.label}
           </Typography>
           <Tooltip title={`${item.label}: ${BRL(item.value)}`} arrow>
@@ -774,7 +799,7 @@ function HorizontalBarChart({ data }: { data: DashboardMetric[] }) {
                 cursor: 'default',
               }}
             >
-              <Box sx={{ height: 22, borderRadius: 999, bgcolor: '#f1f5f9', overflow: 'hidden' }}>
+              <Box sx={{ height: 20, borderRadius: 999, bgcolor: '#f1f5f9', overflow: 'hidden' }}>
                 <Box
                   sx={{
                     width: `${(item.value / max) * 100}%`,
@@ -1499,7 +1524,9 @@ export default function DashboardPage() {
             <Typography sx={{ color: TEXT, fontSize: '0.95rem', fontWeight: 900 }}>
               Comissões por colaborador
             </Typography>
-            <Typography sx={{ color: MUTED, fontSize: '0.78rem' }}>Valor pago no período</Typography>
+            <Typography sx={{ color: MUTED, fontSize: '0.78rem' }}>
+              Todos os colaboradores por maior valor pago
+            </Typography>
             <HorizontalBarChart data={data.commissionByEmployee} />
           </Card>
         </Box>
