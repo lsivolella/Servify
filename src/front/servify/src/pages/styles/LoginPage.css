@@ -48,11 +48,12 @@
   }
 }
 
-/* Sobrescreve estilos globais de h1 do index.css dentro do card */
-.login-card > h1.login-brand.MuiTypography-root {
-  margin: 20px 0 0;
-  font-size: 1.75rem;
-  color: #000000;
+.login-logo {
+  display: block;
+  width: min(300px, 100%);
+  height: auto;
+  margin: 0 auto 18px;
+  object-fit: contain;
 }
 
 /* Espaço abaixo do subtítulo até o alerta / formulário */

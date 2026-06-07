@@ -1,11 +1,15 @@
 package com.servify.backend.service;
 
+import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.servify.backend.constants.AgendaDisponibilidadeConstants;
 import com.servify.backend.constants.PerfilConstants;
 import com.servify.backend.dto.AgendaDisponibilidadeRequestDTO;
 import com.servify.backend.dto.AgendaDisponibilidadeResponseDTO;
@@ -62,11 +66,14 @@ public class AgendaDisponibilidadeService {
         return toResponseDto(agenda);
     }
 
+    @Transactional
     public List<AgendaDisponibilidadeResponseDTO> buscarPorColaborador(Long colaboradorId) {
 
         Usuario colaborador = buscarUsuario(colaboradorId);
 
         validarColaborador(colaborador);
+
+        criarDisponibilidadesPadraoFaltantes(colaborador);
 
         return agendaDisponibilidadeRepository
                 .findByColaborador_Id(colaboradorId)
@@ -136,6 +143,30 @@ public class AgendaDisponibilidadeService {
     private void validarColaborador(Usuario colaborador) {
         if (colaborador.getPerfil().getId() != PerfilConstants.COLABORADOR) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário informado não é um colaborador");
+        }
+    }
+
+    private void criarDisponibilidadesPadraoFaltantes(Usuario colaborador) {
+        Set<DayOfWeek> diasExistentes = agendaDisponibilidadeRepository
+                .findByColaborador_Id(colaborador.getId())
+                .stream()
+                .map(AgendaDisponibilidade::getDiaSemana)
+                .collect(Collectors.toSet());
+
+        for (DayOfWeek dia : DayOfWeek.values()) {
+            if (diasExistentes.contains(dia)) {
+                continue;
+            }
+
+            AgendaDisponibilidade agendaDisponibilidade = new AgendaDisponibilidade();
+            agendaDisponibilidade.setColaborador(colaborador);
+            agendaDisponibilidade.setDiaSemana(dia);
+            agendaDisponibilidade.setDisponivel(
+                    !AgendaDisponibilidadeConstants.DIAS_SEM_DISPONIBILIDADE_PADRAO.contains(dia));
+            agendaDisponibilidade.setHoraInicio(AgendaDisponibilidadeConstants.HORA_INICIO_PADRAO);
+            agendaDisponibilidade.setHoraFim(AgendaDisponibilidadeConstants.HORA_FIM_PADRAO);
+
+            agendaDisponibilidadeRepository.save(agendaDisponibilidade);
         }
     }
 
