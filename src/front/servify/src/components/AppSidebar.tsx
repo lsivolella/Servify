@@ -50,7 +50,6 @@ const NAV_SECTIONS = [
     items: [
       { to: '/servicos', icon: <DesignServicesOutlined />, label: 'Serviços' },
       { to: '/comissao', icon: <PercentOutlined />, label: 'Comissão' },
-      { to: '/relatorio', icon: <AssessmentOutlined />, label: 'Relatório' },
     ],
   },
   {

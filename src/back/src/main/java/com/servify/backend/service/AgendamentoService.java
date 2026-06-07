@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.servify.backend.constants.AgendaDisponibilidadeConstants;
 import com.servify.backend.constants.PerfilConstants;
 import com.servify.backend.dto.AgendamentoRequestDTO;
 import com.servify.backend.dto.AgendamentoResponseDTO;
@@ -478,8 +479,19 @@ public class AgendamentoService {
             DayOfWeek dayOfWeek) {
         return agendaDisponibilidadeRepository
                 .findByColaborador_IdAndDiaSemana(colaborador.getId(), dayOfWeek)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "Agenda de disponibilidade do colaborador não encontrada"));
+                .orElseGet(() -> criarDisponibilidadePadrao(colaborador, dayOfWeek));
+    }
+
+    private AgendaDisponibilidade criarDisponibilidadePadrao(Usuario colaborador, DayOfWeek diaSemana) {
+        AgendaDisponibilidade agendaDisponibilidade = new AgendaDisponibilidade();
+        agendaDisponibilidade.setColaborador(colaborador);
+        agendaDisponibilidade.setDiaSemana(diaSemana);
+        agendaDisponibilidade.setDisponivel(
+                !AgendaDisponibilidadeConstants.DIAS_SEM_DISPONIBILIDADE_PADRAO.contains(diaSemana));
+        agendaDisponibilidade.setHoraInicio(AgendaDisponibilidadeConstants.HORA_INICIO_PADRAO);
+        agendaDisponibilidade.setHoraFim(AgendaDisponibilidadeConstants.HORA_FIM_PADRAO);
+
+        return agendaDisponibilidadeRepository.save(agendaDisponibilidade);
     }
 
     private Agendamento criarAgendamento(AgendamentoRequestDTO dto, Usuario cliente, Usuario colaborador,
