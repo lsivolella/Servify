@@ -245,13 +245,16 @@ public class UsuarioService {
             return;
         }
 
-        if (!agendaDisponibilidadeRepository
+        var diasExistentes = agendaDisponibilidadeRepository
                 .findByColaborador_Id(usuario.getId())
-                .isEmpty()) {
-            return;
-        }
+                .stream()
+                .map(AgendaDisponibilidade::getDiaSemana)
+                .collect(Collectors.toSet());
 
         for (DayOfWeek dia : DayOfWeek.values()) {
+            if (diasExistentes.contains(dia)) {
+                continue;
+            }
 
             AgendaDisponibilidade agendaDisponibilidade = new AgendaDisponibilidade();
             agendaDisponibilidade.setColaborador(usuario);

@@ -2,14 +2,6 @@
 
 O processo de **Gestão de Agendamento** permite que administradores, colaboradores e clientes visualizem e gerenciem agendamentos de serviços, cada um com visibilidade adequada ao seu perfil.
 
-Ao acessar a funcionalidade, o usuário vê um calendário semanal com todos os agendamentos permitidos para seu perfil. A partir dessa tela principal, que chamamos de Gerenciar Agendamentos, ele pode navegar entre semanas, usar a busca para filtrar rapidamente, abrir os detalhes de um compromisso, criar um novo agendamento ou, com base no perfil, editar ou excluir um existente.
-
-**O fluxo:**
-- Ao selecionar um agendamento no calendário, o usuário aciona a atividade Gerenciar Agendamentos, onde vê todas as informações e pode optar por Editar ou Excluir.
-- A opção Criar Agendamento abre um formulário em branco, enquanto Editar Agendamento reaproveita o mesmo formulário, já preenchido.
-- A exclusão sempre passa por uma confirmação simples para evitar remoções acidentais.
-- Em todas as etapas, é possível cancelar a ação e retornar ao calendário.
-
 ## Oportunidades de melhoria
 
 A informatização do processo de Gestão de Agendamento traz as seguintes oportunidades de melhoria:
@@ -21,7 +13,19 @@ A informatização do processo de Gestão de Agendamento traz as seguintes oport
 
 ## Modelagem
 
-![Modelo BPMN do Processo 3](images/bpmn/gestao-de-agendamento/GestaoAgendamento_V1905.png "Modelo BPMN do Processo 3.")
+Em seguida, apresenta-se o modelo do processo de Gestão de Agendamento, descrito no padrão BPMN:
+
+![Modelo BPMN do Processo 3](diagrams/Agendamentos2.png)
+
+## Processo Gestão de Agendamento
+
+O processo de **Gestão de Agendamento** se inicia com o usuário acessando a tela de módulo de agendamentos em que se apresenta um calendário com a relação de todos os agendamentos no sistema. A partir desta tela, o usuário pode buscar um agendamento, adicionar um novo agendamento, selecionar um agendamento existente para edição ou para exclusão conforme opções mostradas a seguir.
+
+- Buscar agendamento: Ele pode utilizar o campo "Buscar agendamentos" para filtrar um nome de serviço no calendário e apagar a digitação do campo para retornar ao status nativo do calendário. 
+- Adicionar agendamento: Ao clicar no botão "Adicionar", abre-se o modal "Novo agendamento", onde ele seleciona o "Serviço", "Cliente", "Colaborador", preenche "Data", "Horário" e "Desconto" e então pode utilizar o botão "Cadastrar" para adicionar o agendamento ou o botão "Cancelar" ou "X" para cancelar a operação. 
+- Visualizar detalhes do agendamento: Ao clicar no card do agendamento no calendário, um modal é aberto com os dados atuais preenchidos para alteração, em que o usuário pode alterar confirmando a ação no botão "Salvar", cancelar a operação no botão "Cancelar" ou "X" ou ainda excluir o agendamento no botão "Excluir".
+
+Após cada uma dessas opções, o fluxo é finalizado.
 
 ### Detalhamento das atividades
  
@@ -29,82 +33,66 @@ A informatização do processo de Gestão de Agendamento traz as seguintes oport
  
 | **Campo**               | **Tipo**  | **Restrições**  | **Valor padrão**                  |
 | ----------------------- | --------- | --------------- | --------------------------------- |
-| Calendário semanal      | Exibição  | somente leitura | semana atual                      |
-| Agendamento (card)      | Exibição  | somente leitura | dados do agendamento preenchidos  |
+| Buscar agendamentoss      | Caixa de texto | vazio | vazio                     |
  
 | **Comandos**            | **Destino**                                      | **Tipo** |
 | ----------------------- | ------------------------------------------------ | -------- |
-| Semana anterior (<)     | Atividade "Acessar a lista de agendamentos"      | padrão   |
-| Próxima semana (>)      | Atividade "Acessar a lista de agendamentos"      | padrão   |
-| Clicar em agendamento   | Atividade "Visualizar detalhes do agendamento"   | padrão   |
-| + Adicionar             | Atividade "Criar agendamento"                    | padrão   |
+| Semana anterior (<)     | Atividade "Acessar módulo de agendamentos"      | padrão   |
+| Próxima semana (>)      | Atividade "Acessar módulo de agendamentos"      | padrão   |
+| Card agendamento   | Atividade "Visualizar detalhes do agendamento"   | padrão   |
+| + Adicionar             | Atividade "Adicionar agendamento"                    | padrão   |
  
 | **Resultado**           | **Destino**                                      |
 | ----------------------- | ------------------------------------------------ |
 | Semana alterada         | Calendário atualizado para a semana selecionada  |
 | Agendamento selecionado | Atividade "Visualizar detalhes do agendamento"   |
-| Novo agendamento        | Atividade "Criar agendamento"                    |
+| Novo agendamento        | Atividade "Adicionar agendamento"                    |
 
 ## Wireframes
 
 **Acessar módulo de agendamentos**
 
 ![Lista de agendamentos — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-agendamentos.jpeg "Wireframe: lista de agendamentos (administrador)")
+
+#### Buscar agendamentos
+
+| **Campo**         | **Tipo**       | **Restrições**                        | **Valor padrão** |
+| ----------------- | -------------- | ------------------------------------- | ---------------- |
+| Buscar agendamentos          | Caixa de texto | vazio  | vazio            |
+
+| **Resultado**             | **Destino**                                      |
+| ------------------------- | ------------------------------------------------ |
+| Agendamento encontrado       | Calendário filtrada pelo termo digitado            |
+| Nenhum resultado          | Calendário vazio                                   |
+| Busca apagada             | Retorno ao calendário completo                     |
  
 ---
  
-#### Listar agendamentos do perfil de acesso
- 
-| **Campo**               | **Tipo**       | **Restrições** | **Valor padrão** |
-| ----------------------- | -------------- | -------------- | ---------------- |
-| Buscar agendamentos     | Caixa de texto | vazio          | vazio            |
- 
-| **Comandos**            | **Destino**                                         | **Tipo** |
-| ----------------------- | --------------------------------------------------- | -------- |
-| Digitar termo de busca  | Atividade "Buscar e filtrar agendamentos"            | padrão   |
-| Editar (lápis)          | Atividade "Editar agendamento"                      | padrão   |
-| Excluir (lixeira)       | Atividade "Excluir agendamento"                     | padrão   |
- 
-| **Resultado**           | **Destino**                                         |
-| ----------------------- | --------------------------------------------------- |
-| Agendamentos encontrados | Listagem filtrada pelo termo digitado              |
-| Nenhum resultado        | Listagem vazia                                      |
-| Busca apagada           | Retorno ao calendário semanal padrão                |
-
-## Wireframes
-
-**Listar agendamentos do perfil de acesso**
-
-![Busca e filtros — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-busca.jpeg "Wireframe: busca e filtros (administrador)")
- 
----
- 
-#### Criar agendamento
+#### Adicionar agendamento
  
 | **Campo**               | **Tipo**       | **Restrições**             | **Valor padrão** |
 | ----------------------- | -------------- | -------------------------- | ---------------- |
-| Nome do serviço         | Caixa de texto | obrigatório                | vazio            |
+| Serviço         | Seleção única | obrigatório                | vazio            |
 | Cliente                 | Seleção única  | obrigatório                | vazio            |
-| Prestador               | Seleção única  | obrigatório                | vazio            |
+| Colaborador               | Seleção única  | obrigatório                | vazio            |
 | Data                    | Data           | obrigatório; formato válido | vazio           |
-| Horário de início       | Hora           | obrigatório; formato válido | vazio           |
-| Duração                 | Caixa de texto | obrigatório                | 1 hora           |
-| Valor                   | Numérico       | obrigatório; valor ≥ 0     | R$ 0,00          |
+| Horário      | Hora           | obrigatório; formato válido | vazio           |
+| Desconto (R$)                   | Numérico       | obrigatório; valor ≥ 0     | R$ 0,00          |
  
 | **Comandos**  | **Destino**                                           | **Tipo** |
 | ------------- | ----------------------------------------------------- | -------- |
-| Adicionar     | Atividade "Acessar a lista de agendamentos"           | padrão   |
-| Cancelar      | Atividade "Acessar a lista de agendamentos"           | cancelar |
+| Cadastrar     | Atividade "Acessar módulo de agendamentos"           | padrão   |
+| Cancelar      | Atividade "Acessar módulo de agendamentos"           | cancelar |
  
 | **Resultado**           | **Destino**                                           |
 | ----------------------- | ----------------------------------------------------- |
-| Agendamento criado      | Toast de sucesso e Atividade "Acessar a lista de agendamentos" |
+| Agendamento criado      | Toast de sucesso e Atividade "Acessar módulo de agendamentos" |
 | Prompt de erro          | "Campo inválido."                                     |
-| Operação cancelada      | Atividade "Acessar a lista de agendamentos"           |
+| Operação cancelada      | Atividade "Acessar módulo de agendamentos"           |
 
 ## Wireframes
 
-**Criação de agendamento**
+**Adicionar Agendamento**
 
 ![Criação de agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-criacao.jpeg "Wireframe: criação de agendamento (administrador)")
  
@@ -112,89 +100,30 @@ A informatização do processo de Gestão de Agendamento traz as seguintes oport
  
 #### Visualizar detalhes do agendamento
  
-| **Campo**               | **Tipo**  | **Restrições**  | **Valor padrão**                  |
-| ----------------------- | --------- | --------------- | --------------------------------- |
-| Serviço                 | Exibição  | somente leitura | dado do agendamento               |
-| Cliente                 | Exibição  | somente leitura | dado do agendamento               |
-| Prestador               | Exibição  | somente leitura | dado do agendamento               |
-| Data                    | Exibição  | somente leitura | dado do agendamento               |
-| Horário                 | Exibição  | somente leitura | dado do agendamento               |
-| Duração                 | Exibição  | somente leitura | dado do agendamento               |
-| Valor                   | Exibição  | somente leitura | dado do agendamento               |
-| Status                  | Exibição  | somente leitura | dado do agendamento               |
+| **Campo**               | **Tipo**       | **Restrições**             | **Valor padrão** |
+| ----------------------- | -------------- | -------------------------- | ---------------- |
+| Serviço         | Seleção única | obrigatório                | dado atual            |
+| Cliente                 | Seleção única  | obrigatório                | dado atual            |
+| Colaborador               | Seleção única  | obrigatório                | dado atual           |
+| Data                    | Data           | obrigatório; formato válido | dado atual         |
+| Horário      | Hora           | obrigatório; formato válido | dado atual         |
+| Desconto (R$)                   | Numérico       | obrigatório; valor ≥ 0     | dado atual        |
  
 | **Comandos**  | **Destino**                                           | **Tipo** |
 | ------------- | ----------------------------------------------------- | -------- |
-| Editar        | Atividade "Editar agendamento"                        | padrão   |
-| Excluir       | Atividade "Excluir agendamento"                       | padrão   |
-| X (fechar)    | Atividade "Acessar a lista de agendamentos"           | cancelar |
+| Salvar        | Atividade "Acessar módulo de agendamentos"                        | padrão   |
+| Excluir       | Atividade "Acessar módulo de agendamentos"                       | destrutivo   |
+| Cancelar    | Atividade "Acessar módulo de agendamentos"           | cancelar |
+| X (fechar)    | Atividade "Acessar módulo de agendamentos"           | cancelar |
  
 | **Resultado**           | **Destino**                                           |
 | ----------------------- | ----------------------------------------------------- |
-| Modal de edição aberto  | Atividade "Editar agendamento"                        |
-| Modal de exclusão aberto | Atividade "Excluir agendamento"                      |
-| Modal fechado           | Atividade "Acessar a lista de agendamentos"           |
+| Agendamento alterado  | Toast de sucesso e Atividade "Acessar módulo de agendamentos"                        |
+| Agendamento excluído | Toast de sucesso e Atividade "Acessar módulo de agendamentos"                      |
+| Operação cancelada           | Atividade "Acessar módulo de agendamentos"           |
 
 ## Wireframes
 
 **Detalhes do agendamento**
 
 ![Detalhes do agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-detalhes.jpeg "Wireframe: detalhes do agendamento (administrador)")
- 
----
- 
-#### Editar agendamento
- 
-| **Campo**               | **Tipo**       | **Restrições**             | **Valor padrão**        |
-| ----------------------- | -------------- | -------------------------- | ----------------------- |
-| Nome do serviço         | Caixa de texto | obrigatório                | atual preenchido        |
-| Cliente                 | Caixa de texto | obrigatório                | atual preenchido        |
-| Prestador               | Caixa de texto | obrigatório                | atual preenchido        |
-| Data                    | Data           | obrigatório; formato válido | atual preenchido       |
-| Horário de início       | Hora           | obrigatório; formato válido | atual preenchido       |
-| Duração                 | Caixa de texto | obrigatório                | atual preenchido        |
-| Valor                   | Numérico       | obrigatório; valor ≥ 0     | atual preenchido        |
- 
-| **Comandos**  | **Destino**                                           | **Tipo** |
-| ------------- | ----------------------------------------------------- | -------- |
-| Salvar        | Atividade "Acessar a lista de agendamentos"           | padrão   |
-| Excluir       | Atividade "Excluir agendamento"                       | padrão   |
-| Cancelar      | Atividade "Acessar a lista de agendamentos"           | cancelar |
-| X (fechar)    | Atividade "Acessar a lista de agendamentos"           | cancelar |
- 
-| **Resultado**           | **Destino**                                           |
-| ----------------------- | ----------------------------------------------------- |
-| Agendamento alterado    | Toast de sucesso e Atividade "Acessar a lista de agendamentos" |
-| Prompt de erro          | "Não foi possível salvar alteração. Tente novamente." |
-| Operação cancelada      | Atividade "Acessar a lista de agendamentos"           |
-
-## Wireframes
-
-**Edição do agendamento**
-
-![Edição do agendamento — administrador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_admin-edicao.jpeg "Wireframe: edição do agendamento (administrador)")
- 
----
-
-#### Excluir / cancelar agendamento
- 
-| **Campo**               | **Tipo**  | **Restrições**  | **Valor padrão**             |
-| ----------------------- | --------- | --------------- | ---------------------------- |
-| Prompt de confirmação   | Exibição  | somente leitura | mensagem de confirmação      |
- 
-| **Comandos**  | **Destino**                                           | **Tipo** |
-| ------------- | ----------------------------------------------------- | -------- |
-| Excluir       | Atividade "Acessar a lista de agendamentos"           | padrão   |
-| Cancelar      | Atividade "Acessar a lista de agendamentos"           | cancelar |
-| X (fechar)    | Atividade "Acessar a lista de agendamentos"           | cancelar |
- 
-| **Resultado**           | **Destino**                                           |
-| ----------------------- | ----------------------------------------------------- |
-| Agendamento excluído    | Toast de sucesso e Atividade "Acessar a lista de agendamentos" |
-| Operação cancelada      | Atividade "Acessar a lista de agendamentos"           |
-
-## Wireframes
-
-**Exclusão / cancelamento**
-
-![Exclusão ou cancelamento — prestador](images/wireframe/gestao-de-agendamento/wireframe_gestao-de-agendamento_prestador-exclusao.jpeg "Wireframe: exclusão ou cancelamento (prestador)")

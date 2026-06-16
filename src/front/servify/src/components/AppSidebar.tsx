@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography'
 import AssessmentOutlined from '@mui/icons-material/AssessmentOutlined'
 import CalendarMonthOutlined from '@mui/icons-material/CalendarMonthOutlined'
 import DesignServicesOutlined from '@mui/icons-material/DesignServicesOutlined'
+import EventAvailableOutlined from '@mui/icons-material/EventAvailableOutlined'
 import GridViewOutlined from '@mui/icons-material/GridViewOutlined'
 import GroupsOutlined from '@mui/icons-material/GroupsOutlined'
 import LogoutOutlined from '@mui/icons-material/LogoutOutlined'
@@ -18,6 +19,7 @@ import PercentOutlined from '@mui/icons-material/PercentOutlined'
 import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import {
   canAccessPrivateRoute,
+  cargoFromUser,
   clearSession,
   formatPerfilAcesso,
   getSession,
@@ -50,7 +52,6 @@ const NAV_SECTIONS = [
     items: [
       { to: '/servicos', icon: <DesignServicesOutlined />, label: 'Serviços' },
       { to: '/comissao', icon: <PercentOutlined />, label: 'Comissão' },
-      { to: '/relatorio', icon: <AssessmentOutlined />, label: 'Relatório' },
     ],
   },
   {
@@ -185,12 +186,40 @@ export default function AppSidebar() {
   const displayName = sessionUser?.nome?.trim() || sessionUser?.email || 'Usuário'
   const perfilLabel = sessionUser ? formatPerfilAcesso(sessionUser) : '—'
   const avatarLetters = initialsFromNome(displayName)
-  const visibleSections = isAdminUser(sessionUser)
-    ? NAV_SECTIONS
-    : NAV_SECTIONS.map((section) => ({
+
+  // Para colaborador: adiciona "Disponibilidade" no menu apontando para o próprio ID
+  const navSections = NAV_SECTIONS.map((section) => {
+    if (
+      section.label === 'Principal' &&
+      !isAdminUser(sessionUser) &&
+      cargoFromUser(sessionUser) === 'colaborador' &&
+      sessionUser?.id
+    ) {
+      return {
         ...section,
-        items: section.items.filter((item) => canAccessPrivateRoute(sessionUser, item.to)),
-      })).filter((section) => section.items.length > 0)
+        items: [
+          ...section.items,
+          {
+            to: `/disponibilidade/${sessionUser.id}`,
+            icon: <EventAvailableOutlined />,
+            label: 'Disponibilidade',
+          },
+        ],
+      }
+    }
+    return section
+  })
+
+  const visibleSections = isAdminUser(sessionUser)
+    ? navSections
+    : navSections
+        .map((section) => ({
+          ...section,
+          items: section.items.filter((item) =>
+            canAccessPrivateRoute(sessionUser, item.to),
+          ),
+        }))
+        .filter((section) => section.items.length > 0)
 
   function handleLogout() {
     clearSession()

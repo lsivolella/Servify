@@ -3,9 +3,10 @@ import AppShell from './layout/AppShell'
 import AgendamentosPage from './pages/AgendamentosPage'
 import ComissaoPage from './pages/ComissaoPage'
 import ClientesPage from './pages/ClientesPage'
+import DashboardPage from './pages/DashboardPage'
+import DisponibilidadePage from './pages/DisponibilidadePage'
 import GerenciarColaboradorPage from './pages/GerenciarColaboradorPage'
 import LoginPage from './pages/LoginPage'
-import PlaceholderPage from './pages/PlaceholderPage'
 import ServicosPage from './pages/ServicosPage'
 import RegisterPage from './pages/RegisterPage'
 import CompletarCadastroConvitePage from './pages/CompletarCadastroConvitePage'
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
           { path: '/agendamentos', element: <AgendamentosPage /> },
           {
             path: '/dashboard',
-            element: <PlaceholderPage title="Dashboard" />,
+            element: <DashboardPage />,
           },
           { path: '/servicos', element: <ServicosPage /> },
           {
@@ -45,12 +46,12 @@ const router = createBrowserRouter([
             element: <ComissaoPage />,
           },
           {
-            path: '/relatorio',
-            element: <PlaceholderPage title="Relatório" />,
-          },
-          {
             path: '/colaboradores',
             element: <GerenciarColaboradorPage />,
+          },
+          {
+            path: '/disponibilidade/:colaboradorId',
+            element: <DisponibilidadePage />,
           },
           { path: '/clientes', element: <ClientesPage /> },
         ],
