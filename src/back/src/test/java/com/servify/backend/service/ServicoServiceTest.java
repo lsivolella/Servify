@@ -3,14 +3,12 @@ package com.servify.backend.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
 import com.servify.backend.dto.ServicoRequestDTO;
 import com.servify.backend.dto.ServicoResponseDTO;
 import com.servify.backend.entity.Servico;
@@ -76,7 +73,7 @@ public class ServicoServiceTest {
         Servico servicoInterno = servicoCaptor.getValue();
         assertEquals("Corte de Cabelo Masculino", servicoInterno.getNome());
         assertEquals("scissors", servicoInterno.getIcone());
-        
+
         assertNotNull(response);
         assertEquals(1L, response.getId());
         assertEquals("Corte de Cabelo Masculino", response.getNome());
@@ -89,8 +86,7 @@ public class ServicoServiceTest {
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
-                () -> service.criar(dto)
-        );
+                () -> service.criar(dto));
 
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
         assertEquals("Ícone inválido.", exception.getReason());
@@ -115,8 +111,7 @@ public class ServicoServiceTest {
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
-                () -> service.buscarPorId(1L)
-        );
+                () -> service.buscarPorId(1L));
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
         assertEquals("Serviço não encontrado.", exception.getReason());
@@ -179,9 +174,9 @@ public class ServicoServiceTest {
         when(servicoRepository.existsById(1L)).thenReturn(false);
 
         ResponseStatusException exception = assertThrows(
-            ResponseStatusException.class,
-            () -> service.excluir(1L));
-    
+                ResponseStatusException.class,
+                () -> service.excluir(1L));
+
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
         assertEquals("Serviço não encontrado.", exception.getReason());
         verify(servicoRepository, never()).deleteById(1L);

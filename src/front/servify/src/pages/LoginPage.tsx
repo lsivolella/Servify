@@ -11,8 +11,13 @@ import Stack from '@mui/material/Stack'
 import InputAdornment from '@mui/material/InputAdornment'
 import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import LockOutlined from '@mui/icons-material/LockOutlined'
+import logoCompleta from '../assets/logo-completa.png'
 import { toastError } from '../components/showAlert'
-import { setSession } from '../auth/session'
+import {
+  canAccessPrivateRoute,
+  getDefaultAuthenticatedRoute,
+  setSession,
+} from '../auth/session'
 import { mensagemDeErroCapturado } from '../services/api'
 import { loginApi } from '../services/auth'
 import './styles/LoginPage.css'
@@ -54,7 +59,10 @@ export default function LoginPage() {
       }
 
       const from = (location.state as { from?: { pathname?: string } } | null)?.from
-      const target = from?.pathname && typeof from.pathname === 'string' ? from.pathname : '/agendamentos'
+      const fromPath = from?.pathname && typeof from.pathname === 'string' ? from.pathname : ''
+      const target = fromPath && canAccessPrivateRoute(user, fromPath)
+        ? fromPath
+        : getDefaultAuthenticatedRoute()
       navigate(target, { replace: true })
     } catch (e: unknown) {
       toastError(
@@ -68,25 +76,12 @@ export default function LoginPage() {
   return (
     <Box className="login-page">
       <Card className="login-card" elevation={0} variant="outlined">
-        <Typography
-          className="login-brand"
-          variant="h5"
-          component="h1"
-          align="center"
-        >
-          Serviffy
-        </Typography>
-        <Typography
-          className="login-subtitle"
-          variant="body2"
-          component="p"
-          align="center"
-          color="text.primary"
-        >
-          Acesse sua conta para continuar
-        </Typography>
-
-        <br />
+        <Box
+          component="img"
+          src={logoCompleta}
+          alt="Servify - Gestão de serviços inteligente"
+          className="login-logo"
+        />
 
         <Box
           component="form"

@@ -11,16 +11,20 @@ import Typography from '@mui/material/Typography'
 import AssessmentOutlined from '@mui/icons-material/AssessmentOutlined'
 import CalendarMonthOutlined from '@mui/icons-material/CalendarMonthOutlined'
 import DesignServicesOutlined from '@mui/icons-material/DesignServicesOutlined'
+import EventAvailableOutlined from '@mui/icons-material/EventAvailableOutlined'
 import GridViewOutlined from '@mui/icons-material/GridViewOutlined'
 import GroupsOutlined from '@mui/icons-material/GroupsOutlined'
 import LogoutOutlined from '@mui/icons-material/LogoutOutlined'
 import PercentOutlined from '@mui/icons-material/PercentOutlined'
 import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import {
+  canAccessPrivateRoute,
+  cargoFromUser,
   clearSession,
   formatPerfilAcesso,
   getSession,
   initialsFromNome,
+  isAdminUser,
 } from '../auth/session'
 import { useSidebarLayout } from '../context/SidebarLayoutContext'
 
@@ -30,6 +34,34 @@ const SECTION = '#708090'
 
 const EXPANDED_W = 280
 const COLLAPSED_W = 76
+
+const NAV_SECTIONS = [
+  {
+    label: 'Principal',
+    items: [
+      {
+        to: '/agendamentos',
+        icon: <CalendarMonthOutlined />,
+        label: 'Agendamentos',
+      },
+      { to: '/dashboard', icon: <GridViewOutlined />, label: 'Dashboard' },
+    ],
+  },
+  {
+    label: 'Operacional',
+    items: [
+      { to: '/servicos', icon: <DesignServicesOutlined />, label: 'Serviços' },
+      { to: '/comissao', icon: <PercentOutlined />, label: 'Comissão' },
+    ],
+  },
+  {
+    label: 'Gestão',
+    items: [
+      { to: '/colaboradores', icon: <GroupsOutlined />, label: 'Colaboradores' },
+      { to: '/clientes', icon: <PersonOutlined />, label: 'Clientes' },
+    ],
+  },
+] as const
 
 function navButtonSx(collapsed: boolean) {
   return {
@@ -155,6 +187,40 @@ export default function AppSidebar() {
   const perfilLabel = sessionUser ? formatPerfilAcesso(sessionUser) : '—'
   const avatarLetters = initialsFromNome(displayName)
 
+  // Para colaborador: adiciona "Disponibilidade" no menu apontando para o próprio ID
+  const navSections = NAV_SECTIONS.map((section) => {
+    if (
+      section.label === 'Principal' &&
+      !isAdminUser(sessionUser) &&
+      cargoFromUser(sessionUser) === 'colaborador' &&
+      sessionUser?.id
+    ) {
+      return {
+        ...section,
+        items: [
+          ...section.items,
+          {
+            to: `/disponibilidade/${sessionUser.id}`,
+            icon: <EventAvailableOutlined />,
+            label: 'Disponibilidade',
+          },
+        ],
+      }
+    }
+    return section
+  })
+
+  const visibleSections = isAdminUser(sessionUser)
+    ? navSections
+    : navSections
+        .map((section) => ({
+          ...section,
+          items: section.items.filter((item) =>
+            canAccessPrivateRoute(sessionUser, item.to),
+          ),
+        }))
+        .filter((section) => section.items.length > 0)
+
   function handleLogout() {
     clearSession()
     navigate('/login', { replace: true })
@@ -167,6 +233,12 @@ export default function AppSidebar() {
       sx={{
         width: collapsed ? COLLAPSED_W : EXPANDED_W,
         flexShrink: 0,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        height: '100vh',
+        maxHeight: '100vh',
         minHeight: '100vh',
         bgcolor: BG,
         display: 'flex',
@@ -179,53 +251,20 @@ export default function AppSidebar() {
       }}
     >
       <Box sx={{ flex: 1, overflow: 'auto', overflowX: 'hidden' }}>
-        <SectionLabel collapsed={collapsed}>Principal</SectionLabel>
-        <NavRow
-          to="/agendamentos"
-          icon={<CalendarMonthOutlined />}
-          label="Agendamentos"
-          collapsed={collapsed}
-        />
-        <NavRow
-          to="/dashboard"
-          icon={<GridViewOutlined />}
-          label="Dashboard"
-          collapsed={collapsed}
-        />
-
-        <SectionLabel collapsed={collapsed}>Operacional</SectionLabel>
-        <NavRow
-          to="/servicos"
-          icon={<DesignServicesOutlined />}
-          label="Serviços"
-          collapsed={collapsed}
-        />
-        <NavRow
-          to="/comissao"
-          icon={<PercentOutlined />}
-          label="Comissão"
-          collapsed={collapsed}
-        />
-        <NavRow
-          to="/relatorio"
-          icon={<AssessmentOutlined />}
-          label="Relatório"
-          collapsed={collapsed}
-        />
-
-        <SectionLabel collapsed={collapsed}>Gestão</SectionLabel>
-        <NavRow
-          to="/colaboradores"
-          icon={<GroupsOutlined />}
-          label="Colaboradores"
-          collapsed={collapsed}
-        />
-        <NavRow
-          to="/clientes"
-          icon={<PersonOutlined />}
-          label="Clientes"
-          collapsed={collapsed}
-        />
+        {visibleSections.map((section) => (
+          <Box key={section.label}>
+            <SectionLabel collapsed={collapsed}>{section.label}</SectionLabel>
+            {section.items.map((item) => (
+              <NavRow
+                key={item.to}
+                to={item.to}
+                icon={item.icon}
+                label={item.label}
+                collapsed={collapsed}
+              />
+            ))}
+          </Box>
+        ))}
       </Box>
 
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.08)', my: 2 }} />

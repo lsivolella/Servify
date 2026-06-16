@@ -1,6 +1,7 @@
 package com.servify.backend.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UsuarioResponseDTO {
 
@@ -20,6 +21,7 @@ public class UsuarioResponseDTO {
     private String cidade;
     private String uf;
     private boolean cadastroPendente;
+    private LocalDateTime dataCriacao;
 
     public UsuarioResponseDTO() {
     }
@@ -150,5 +152,13 @@ public class UsuarioResponseDTO {
 
     public void setCadastroPendente(boolean cadastroPendente) {
         this.cadastroPendente = cadastroPendente;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDateTime dataCadastro) {
+        this.dataCriacao = dataCadastro;
     }
 }

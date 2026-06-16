@@ -1,6 +1,7 @@
 package com.servify.backend.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class Usuario {
@@ -59,9 +61,15 @@ public class Usuario {
     @Column(nullable = false, length = 2)
     private String uf;
 
-    /** {@code true} para pré-cadastro via convite (login com senha provisória até concluir o cadastro). */
+    /**
+     * {@code true} para pré-cadastro via convite (login com senha provisória até
+     * concluir o cadastro).
+     */
     @Column(name = "cadastro_pendente", nullable = false)
     private boolean cadastroPendente = false;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime dataCriacao;
 
     public Usuario() {
     }
@@ -192,5 +200,14 @@ public class Usuario {
 
     public void setCadastroPendente(boolean cadastroPendente) {
         this.cadastroPendente = cadastroPendente;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.dataCriacao = LocalDateTime.now();
     }
 }

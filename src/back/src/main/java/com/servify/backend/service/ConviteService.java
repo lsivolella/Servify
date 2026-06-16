@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.servify.backend.constants.PerfilConstants;
 import com.servify.backend.dto.CompletarConviteCadastroDTO;
 import com.servify.backend.dto.ConviteRequestDTO;
 import com.servify.backend.dto.ConviteResponseDTO;
@@ -35,8 +36,11 @@ public class ConviteService {
     private final GmailMailSender gmailMailSender;
 
     private static final int EXPIRATION_HOURS = 24;
-    /** Senha provisória fixa (texto plano no e-mail; armazenada com BCrypt em convite e em usuário). */
-    private static final String SENHA_PROVISORIA_CONVITE = "12345";
+    /**
+     * Senha provisória fixa (texto plano no e-mail; armazenada com BCrypt em
+     * convite e em usuário).
+     */
+    private static final String SENHA_PROVISORIA_CONVITE = "123456";
 
     public ConviteService(ConviteRepository conviteRepository,
             UsuarioRepository usuarioRepository,
@@ -53,7 +57,7 @@ public class ConviteService {
     }
 
     public ConviteResponseDTO criar(ConviteRequestDTO dto) {
-        if (dto.getPerfilId() == 3) {
+        if (dto.getPerfilId() == PerfilConstants.CLIENTE) {
             throw new RuntimeException(
                     "Convites só podem ser enviados para administradores ou colaboradores");
         }
@@ -61,7 +65,7 @@ public class ConviteService {
         Usuario usuarioExistente = usuarioRepository.findByEmailIgnoreCase(dto.getEmail())
                 .orElse(null);
 
-        if (usuarioExistente != null && usuarioExistente.getPerfil().getId() != 1) {
+        if (usuarioExistente != null && usuarioExistente.getPerfil().getId() != PerfilConstants.ADMIN) {
             throw new RuntimeException(
                     "Já existe um usuário cadastrado como admin/colaborador com este email");
         }
@@ -128,7 +132,7 @@ public class ConviteService {
         Convite convite = conviteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Convite não encontrado"));
 
-        if (dto.getPerfilId() == 3) {
+        if (dto.getPerfilId() == PerfilConstants.CLIENTE) {
             throw new RuntimeException(
                     "Convites só podem ser enviados para administradores ou colaboradores");
         }
@@ -160,7 +164,8 @@ public class ConviteService {
 
     /**
      * Conclui o cadastro do convidado: valida e-mail e senha provisória do convite,
-     * atualiza o usuário pré-cadastrado (quando existir) ou cria o usuário (convites antigos),
+     * atualiza o usuário pré-cadastrado (quando existir) ou cria o usuário
+     * (convites antigos),
      * e marca o convite como {@link ConviteStatus#USADO}.
      */
     public UsuarioResponseDTO completarCadastro(String token, CompletarConviteCadastroDTO dto) {
