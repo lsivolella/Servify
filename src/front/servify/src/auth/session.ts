@@ -18,7 +18,7 @@ const STORAGE_KEY = 'servify.session'
 const DEFAULT_AUTHENTICATED_ROUTE = '/agendamentos'
 const ROUTES_BY_CARGO: Record<string, string[] | null> = {
   adm: null,
-  colaborador: ['/agendamentos', '/dashboard'],
+  colaborador: ['/agendamentos', '/dashboard', '/disponibilidade'],
   cliente: ['/agendamentos'],
 }
 

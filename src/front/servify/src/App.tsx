@@ -4,6 +4,7 @@ import AgendamentosPage from './pages/AgendamentosPage'
 import ComissaoPage from './pages/ComissaoPage'
 import ClientesPage from './pages/ClientesPage'
 import DashboardPage from './pages/DashboardPage'
+import DisponibilidadePage from './pages/DisponibilidadePage'
 import GerenciarColaboradorPage from './pages/GerenciarColaboradorPage'
 import LoginPage from './pages/LoginPage'
 import ServicosPage from './pages/ServicosPage'
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
           {
             path: '/colaboradores',
             element: <GerenciarColaboradorPage />,
+          },
+          {
+            path: '/disponibilidade/:colaboradorId',
+            element: <DisponibilidadePage />,
           },
           { path: '/clientes', element: <ClientesPage /> },
         ],
