@@ -468,14 +468,18 @@ export default function GerenciarColaboradorPage() {
                         gap: 0.5,
                       }}
                     >
-                      <IconButton
-                        aria-label="Ver disponibilidade"
-                        size="small"
-                        sx={{ color: '#16a34a' }}
-                        onClick={() => navigate(`/disponibilidade/${row.id}`)}
-                      >
-                        <EventAvailableOutlined fontSize="small" />
-                      </IconButton>
+                      
+                      {row.cargo === 'colaborador' && (
+                        <IconButton
+                          aria-label="Ver disponibilidade"
+                          size="small"
+                          sx={{ color: '#16a34a' }}
+                          onClick={() => navigate(`/disponibilidade/${row.id}`)}
+                        >
+                          <EventAvailableOutlined fontSize="small" />
+                        </IconButton>
+                      )}
+                      
                       <IconButton
                         aria-label="Editar colaborador"
                         size="small"
