@@ -209,8 +209,6 @@ export default function DisponibilidadePage() {
   return (
     <Box
       sx={{
-        ml: `${sidebarW}px`,
-        transition: 'margin-left 0.22s ease',
         minHeight: '100vh',
         bgcolor: PAGE_BG,
       }}
