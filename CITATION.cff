@@ -14,16 +14,16 @@ authors:
     given-names: Vinicius
   - name-suffix: Professora
     affiliation: PUC Minas
-    family-names: Marcia Gomes de Amaral
-    given-names: Cleia
+    family-names: Gomes de Amaral
+    given-names: Cleia Marcia
   - name-suffix: Professora
     affiliation: PUC Minas
-    family-names: Gabriela Ribeiro de Souza
-    given-names: Joana
+    family-names: Ribeiro de Souza
+    given-names: Joana Gabriela
 keywords:
   - services
   - management
 repository-code: https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2026-1-ti2-1381100-grupo3-servify
 license: CC-BY-4.0
 version: 1.0.0
-date-released:
+date-released: 206-06-30
