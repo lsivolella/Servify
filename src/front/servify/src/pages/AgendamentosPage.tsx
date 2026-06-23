@@ -166,7 +166,7 @@ export default function AgendamentosPage() {
   const [servicos, setServicos] = useState<Servico[]>([])
   const [loading, setLoading] = useState(true)
   const [formOpen, setFormOpen] = useState(false)
-  const [formMode, setFormMode] = useState<'create' | 'edit'>('create')
+  const [formMode, setFormMode] = useState<'create' | 'edit' | 'view'>('create')
   const [selected, setSelected] = useState<Agendamento | undefined>()
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [excluindo, setExcluindo] = useState(false)
@@ -191,14 +191,13 @@ export default function AgendamentosPage() {
           getAgendamentos({
             inicio: `${toIsoDate(semanaInicio)}T00:00:00`,
             fim: `${toIsoDate(semanaFim)}T23:59:59`,
-            status: 'AGENDADO',
           }),
           getClientes(),
           getColaboradores(),
           getServicos(),
         ])
 
-      setAgendamentos(agendaData)
+      setAgendamentos(agendaData.filter(a => a.status !== 'CANCELADO'))
       setClientes(clientesData.filter((cliente) => cliente.ativo))
       setColaboradores(
         colaboradoresData.filter((colaborador) => colaborador.status === 'ativo'),
@@ -251,9 +250,9 @@ export default function AgendamentosPage() {
     setFormOpen(true)
   }
 
-  function abrirEditar(agendamento: Agendamento) {
+  function abrirAgendamento(agendamento: Agendamento) {
     setGrupoSelecionado(null)
-    setFormMode('edit')
+    setFormMode(agendamento.status === 'AGENDADO' ? 'edit' : 'view')
     setSelected(agendamento)
     setFormOpen(true)
   }
@@ -581,185 +580,185 @@ export default function AgendamentosPage() {
                         )
 
                         return (
-                        <Box
-                          key={grupo.map((item) => item.id).join('-')}
-                          role="button"
-                          tabIndex={0}
-                          onClick={() =>
-                            isGrupo ? abrirGrupoAgendamentos(grupo) : abrirEditar(agendamento)
-                          }
-                          onKeyDown={(event) => {
-                            if (event.key === 'Enter' || event.key === ' ') {
-                              if (isGrupo) {
-                                abrirGrupoAgendamentos(grupo)
-                              } else {
-                                abrirEditar(agendamento)
-                              }
+                          <Box
+                            key={grupo.map((item) => item.id).join('-')}
+                            role="button"
+                            tabIndex={0}
+                            onClick={() =>
+                              isGrupo ? abrirGrupoAgendamentos(grupo) : abrirAgendamento(agendamento)
                             }
-                          }}
-                          sx={{
-                            position: 'absolute',
-                            top:
-                              (minutosDesdeInicio(agendamento.horarioInicio) / 60) *
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter' || event.key === ' ') {
+                                if (isGrupo) {
+                                  abrirGrupoAgendamentos(grupo)
+                                } else {
+                                  abrirAgendamento(agendamento)
+                                }
+                              }
+                            }}
+                            sx={{
+                              position: 'absolute',
+                              top:
+                                (minutosDesdeInicio(agendamento.horarioInicio) / 60) *
                                 SLOT_HEIGHT +
-                              8,
-                            left: 8,
-                            right: 8,
-                            height: Math.max(
-                              42,
-                              (duracaoVisual / 60) * SLOT_HEIGHT - 12,
-                            ),
-                            bgcolor: tema.bg || EVENT_BG,
-                            background:
-                              `linear-gradient(135deg, ${tema.bg || EVENT_BG} 0%, #ffffff 100%)`,
-                            border: `1px solid ${tema.border || EVENT_BORDER}`,
-                            borderRadius: '14px',
-                            p: 1.15,
-                            overflow: 'hidden',
-                            cursor: 'pointer',
-                            boxShadow: '0 6px 18px rgba(15, 23, 42, 0.08)',
-                            transformOrigin: 'center',
-                            transition:
-                              'transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease',
-                            '&:hover': {
-                              borderColor: tema.accent,
-                              boxShadow: `0 14px 28px ${tema.accent}33`,
-                              transform: 'scale(1.035)',
-                              zIndex: 2,
-                            },
-                            '&:focus-visible': {
-                              outline: `3px solid ${tema.accent}33`,
-                              outlineOffset: 2,
-                              transform: 'scale(1.035)',
-                              zIndex: 2,
-                            },
-                          }}
-                        >
-                          {isGrupo ? (
-                            <>
-                              <Typography
-                                sx={{
-                                  color: NAVY,
-                                  fontWeight: 800,
-                                  fontSize: '0.75rem',
-                                  lineHeight: 1.15,
-                                  whiteSpace: 'normal',
-                                  wordBreak: 'normal',
-                                  overflowWrap: 'normal',
-                                }}
-                              >
-                                {grupo.length} agendamentos
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  display: 'inline-flex',
-                                  width: 'fit-content',
-                                  bgcolor: tema.pill,
-                                  color: tema.accent,
-                                  borderRadius: '999px',
-                                  px: 0.7,
-                                  py: 0.2,
-                                  fontSize: '0.625rem',
-                                  fontWeight: 800,
-                                  lineHeight: 1.15,
-                                  mt: 0.5,
-                                  whiteSpace: 'normal',
-                                  wordBreak: 'normal',
-                                  overflowWrap: 'normal',
-                                }}
-                              >
-                                Ver detalhes
-                              </Typography>
-                            </>
-                          ) : (
-                            <>
-                              <Typography
-                                sx={{
-                                  color: NAVY,
-                                  fontWeight: 700,
-                                  fontSize: '0.75rem',
-                                  lineHeight: 1.2,
-                                  whiteSpace: 'nowrap',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                }}
-                                title={agendamento.servicoNome}
-                              >
-                                {agendamento.servicoNome}
-                              </Typography>
-                              <Box
-                                component="span"
-                                sx={{
-                                  display: 'inline-flex',
-                                  mt: 0.4,
-                                  bgcolor: tema.pill,
-                                  color: tema.accent,
-                                  borderRadius: '999px',
-                                  px: 0.75,
-                                  py: 0.15,
-                                  fontSize: '0.625rem',
-                                  fontWeight: 800,
-                                  lineHeight: 1.45,
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                {formatMoedaBrlFromNumber(valorServico)}
-                              </Box>
-                              <Typography
-                                sx={{
-                                  color: '#475569',
-                                  fontSize: '0.6875rem',
-                                  lineHeight: 1.25,
-                                  mt: 0.35,
-                                  whiteSpace: 'nowrap',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                }}
-                                title={agendamento.clienteNome}
-                              >
-                                {agendamento.clienteNome}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  color: '#475569',
-                                  fontSize: '0.6875rem',
-                                  lineHeight: 1.25,
-                                  whiteSpace: 'nowrap',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                }}
-                                title={agendamento.colaboradorNome}
-                              >
-                                Prestador: {agendamento.colaboradorNome}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  color: NAVY,
-                                  fontSize: '0.6875rem',
-                                  fontWeight: 800,
-                                  lineHeight: 1.25,
-                                }}
-                              >
-                                {agendamento.horarioInicio} -{' '}
-                                {horarioFimAgendamento(
-                                  agendamento.horarioInicio,
-                                  agendamento.duracaoMinutos,
-                                )}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  color: '#475569',
-                                  fontSize: '0.6875rem',
-                                  fontWeight: 600,
-                                  lineHeight: 1.25,
-                                }}
-                              >
-                                Duração: {formatarDuracao(agendamento.duracaoMinutos)}
-                              </Typography>
-                            </>
-                          )}
-                        </Box>
-                      )
+                                8,
+                              left: 8,
+                              right: 8,
+                              height: Math.max(
+                                42,
+                                (duracaoVisual / 60) * SLOT_HEIGHT - 12,
+                              ),
+                              bgcolor: tema.bg || EVENT_BG,
+                              background:
+                                `linear-gradient(135deg, ${tema.bg || EVENT_BG} 0%, #ffffff 100%)`,
+                              border: `1px solid ${tema.border || EVENT_BORDER}`,
+                              borderRadius: '14px',
+                              p: 1.15,
+                              overflow: 'hidden',
+                              cursor: 'pointer',
+                              boxShadow: '0 6px 18px rgba(15, 23, 42, 0.08)',
+                              transformOrigin: 'center',
+                              transition:
+                                'transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease',
+                              '&:hover': {
+                                borderColor: tema.accent,
+                                boxShadow: `0 14px 28px ${tema.accent}33`,
+                                transform: 'scale(1.035)',
+                                zIndex: 2,
+                              },
+                              '&:focus-visible': {
+                                outline: `3px solid ${tema.accent}33`,
+                                outlineOffset: 2,
+                                transform: 'scale(1.035)',
+                                zIndex: 2,
+                              },
+                            }}
+                          >
+                            {isGrupo ? (
+                              <>
+                                <Typography
+                                  sx={{
+                                    color: NAVY,
+                                    fontWeight: 800,
+                                    fontSize: '0.75rem',
+                                    lineHeight: 1.15,
+                                    whiteSpace: 'normal',
+                                    wordBreak: 'normal',
+                                    overflowWrap: 'normal',
+                                  }}
+                                >
+                                  {grupo.length} agendamentos
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    display: 'inline-flex',
+                                    width: 'fit-content',
+                                    bgcolor: tema.pill,
+                                    color: tema.accent,
+                                    borderRadius: '999px',
+                                    px: 0.7,
+                                    py: 0.2,
+                                    fontSize: '0.625rem',
+                                    fontWeight: 800,
+                                    lineHeight: 1.15,
+                                    mt: 0.5,
+                                    whiteSpace: 'normal',
+                                    wordBreak: 'normal',
+                                    overflowWrap: 'normal',
+                                  }}
+                                >
+                                  Ver detalhes
+                                </Typography>
+                              </>
+                            ) : (
+                              <>
+                                <Typography
+                                  sx={{
+                                    color: NAVY,
+                                    fontWeight: 700,
+                                    fontSize: '0.75rem',
+                                    lineHeight: 1.2,
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                  }}
+                                  title={agendamento.servicoNome}
+                                >
+                                  {agendamento.servicoNome}
+                                </Typography>
+                                <Box
+                                  component="span"
+                                  sx={{
+                                    display: 'inline-flex',
+                                    mt: 0.4,
+                                    bgcolor: tema.pill,
+                                    color: tema.accent,
+                                    borderRadius: '999px',
+                                    px: 0.75,
+                                    py: 0.15,
+                                    fontSize: '0.625rem',
+                                    fontWeight: 800,
+                                    lineHeight: 1.45,
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  {formatMoedaBrlFromNumber(valorServico)}
+                                </Box>
+                                <Typography
+                                  sx={{
+                                    color: '#475569',
+                                    fontSize: '0.6875rem',
+                                    lineHeight: 1.25,
+                                    mt: 0.35,
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                  }}
+                                  title={agendamento.clienteNome}
+                                >
+                                  {agendamento.clienteNome}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    color: '#475569',
+                                    fontSize: '0.6875rem',
+                                    lineHeight: 1.25,
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                  }}
+                                  title={agendamento.colaboradorNome}
+                                >
+                                  Prestador: {agendamento.colaboradorNome}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    color: NAVY,
+                                    fontSize: '0.6875rem',
+                                    fontWeight: 800,
+                                    lineHeight: 1.25,
+                                  }}
+                                >
+                                  {agendamento.horarioInicio} -{' '}
+                                  {horarioFimAgendamento(
+                                    agendamento.horarioInicio,
+                                    agendamento.duracaoMinutos,
+                                  )}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    color: '#475569',
+                                    fontSize: '0.6875rem',
+                                    fontWeight: 600,
+                                    lineHeight: 1.25,
+                                  }}
+                                >
+                                  Duração: {formatarDuracao(agendamento.duracaoMinutos)}
+                                </Typography>
+                              </>
+                            )}
+                          </Box>
+                        )
                       })}
                   </Box>
                 ))}
@@ -921,7 +920,7 @@ export default function AgendamentosPage() {
                       variant="outlined"
                       size="small"
                       startIcon={<EditOutlined />}
-                      onClick={() => abrirEditar(agendamento)}
+                      onClick={() => abrirAgendamento(agendamento)}
                       sx={{
                         borderRadius: '10px',
                         textTransform: 'none',

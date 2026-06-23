@@ -158,7 +158,7 @@ function getPreviousRange(range: PeriodRange): PeriodRange {
 }
 
 function usableAppointments(appointments: Agendamento[]): Agendamento[] {
-  return appointments.filter((appointment) => appointment.status !== 'CANCELADO')
+  return appointments.filter((appointment) => appointment.status === 'CONCLUIDO')
 }
 
 function finalValue(appointment: Agendamento): number {
@@ -363,8 +363,8 @@ function buildInsights(current: AggregatedMetrics): DashboardInsight[] {
       icon: 'crown',
       text: topService
         ? `${topService.name} foi o serviço mais rentável, representando ${Math.round(
-            (topService.value / Math.max(current.revenue, 1)) * 100,
-          )}% do faturamento total.`
+          (topService.value / Math.max(current.revenue, 1)) * 100,
+        )}% do faturamento total.`
         : 'Ainda não há serviços realizados no período selecionado.',
     },
     {

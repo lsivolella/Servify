@@ -50,7 +50,7 @@ const EMPTY_VALUES: AgendamentoFormValues = {
 
 type AgendamentoFormModalProps = {
   open: boolean
-  mode: 'create' | 'edit'
+  mode: 'create' | 'edit' | 'view'
   initial?: Agendamento
   clientes: Cliente[]
   colaboradores: Colaborador[]
@@ -142,10 +142,22 @@ export default function AgendamentoFormModal({
   const [enviando, setEnviando] = useState(false)
 
   const isEdit = mode === 'edit'
-  const titulo = isEdit ? 'Editar Agendamento' : 'Novo Agendamento'
-  const subtitulo = isEdit
-    ? 'Modifique as informações do agendamento'
-    : 'Cadastre um novo agendamento'
+  const isView = mode === 'view'
+
+  const somenteLeitura = isView
+
+  const titulo = isView
+    ? 'Detalhes do agendamento'
+    : isEdit
+      ? 'Editar agendamento'
+      : 'Novo agendamento'
+
+  const subtitulo = isView
+    ? 'Informações do atendimento realizado'
+    : isEdit
+      ? 'Modifique as informações do agendamento'
+      : 'Cadastre um novo agendamento'
+
   const labelSubmit = isEdit ? 'Salvar' : 'Adicionar'
 
   const servicoSelecionado = useMemo(
@@ -226,7 +238,7 @@ export default function AgendamentoFormModal({
           <IconButton
             aria-label="Fechar"
             onClick={onClose}
-            disabled={enviando}
+            disabled={enviando || somenteLeitura}
             sx={{ position: 'absolute', top: 12, right: 12, color: '#64748b' }}
           >
             <CloseOutlined />
@@ -291,7 +303,7 @@ export default function AgendamentoFormModal({
             label="Nome do serviço"
             value={values.servicoId}
             onChange={(e) => updateValue('servicoId', e.target.value)}
-            disabled={enviando}
+            disabled={enviando || somenteLeitura}
             slotProps={{
               input: {
                 startAdornment: (
@@ -317,9 +329,10 @@ export default function AgendamentoFormModal({
             label="Cliente"
             value={values.clienteId}
             onChange={(e) => updateValue('clienteId', e.target.value)}
-            disabled={enviando}
+            disabled={enviando || somenteLeitura}
             slotProps={{
               input: {
+                readOnly: somenteLeitura,
                 startAdornment: (
                   <InputAdornment position="start">
                     <PersonOutlineOutlined sx={{ color: '#94a3b8' }} />
@@ -343,7 +356,7 @@ export default function AgendamentoFormModal({
             label="Prestador"
             value={values.colaboradorId}
             onChange={(e) => updateValue('colaboradorId', e.target.value)}
-            disabled={enviando}
+            disabled={enviando || somenteLeitura}
             slotProps={{
               input: {
                 startAdornment: (
@@ -383,7 +396,7 @@ export default function AgendamentoFormModal({
                   newValue?.isValid() ? newValue.format('YYYY-MM-DD') : '',
                 )
               }}
-              disabled={enviando}
+              disabled={enviando || somenteLeitura}
               slotProps={{
                 popper: {
                   placement: 'bottom-start',
@@ -420,7 +433,7 @@ export default function AgendamentoFormModal({
               onChange={(newValue) => {
                 updateValue('horarioInicio', dayjsToTimeString(newValue))
               }}
-              disabled={enviando}
+              disabled={enviando || somenteLeitura}
               slotProps={{
                 toolbar: { hidden: true },
                 layout: {
@@ -503,7 +516,7 @@ export default function AgendamentoFormModal({
               fullWidth
               variant="contained"
               onClick={onRequestDelete}
-              disabled={enviando}
+              disabled={enviando || somenteLeitura}
               sx={{
                 mb: 1.5,
                 borderRadius: '10px',
@@ -535,21 +548,23 @@ export default function AgendamentoFormModal({
             >
               Cancelar
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={enviando}
-              sx={{
-                borderRadius: '10px',
-                px: 3.5,
-                fontWeight: 700,
-                textTransform: 'none',
-                bgcolor: NAVY,
-                '&:hover': { bgcolor: '#162d4a' },
-              }}
-            >
-              {enviando ? 'Salvando...' : labelSubmit}
-            </Button>
+            {!isView && (
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={enviando}
+                sx={{
+                  borderRadius: '10px',
+                  px: 3.5,
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  bgcolor: NAVY,
+                  '&:hover': { bgcolor: '#162d4a' },
+                }}
+              >
+                {enviando ? 'Salvando...' : labelSubmit}
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>
