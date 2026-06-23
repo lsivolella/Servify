@@ -131,19 +131,19 @@ function Card({
           '0 1px 2px rgba(15, 23, 42, 0.04), 0 10px 24px rgba(15, 23, 42, 0.04)',
         ...(onClick
           ? {
-              cursor: 'pointer',
-              transition: 'transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease',
-              '&:hover': {
-                transform: 'translateY(-2px)',
-                borderColor: '#bfdbfe',
-                boxShadow:
-                  '0 4px 10px rgba(15, 23, 42, 0.06), 0 16px 32px rgba(37, 99, 235, 0.10)',
-              },
-              '&:focus-visible': {
-                outline: `3px solid ${BLUE}33`,
-                outlineOffset: 3,
-              },
-            }
+            cursor: 'pointer',
+            transition: 'transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              borderColor: '#bfdbfe',
+              boxShadow:
+                '0 4px 10px rgba(15, 23, 42, 0.06), 0 16px 32px rgba(37, 99, 235, 0.10)',
+            },
+            '&:focus-visible': {
+              outline: `3px solid ${BLUE}33`,
+              outlineOffset: 3,
+            },
+          }
           : {}),
         ...sx,
       }}
@@ -557,35 +557,35 @@ function DonutChart({
       <Box sx={{ position: 'relative', width: 225, height: 225 }}>
         {total ? (
           <svg viewBox="0 0 42 42" width="225" height="225" role="img">
-          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f1f5f9" strokeWidth="8" />
-          {visibleData.map((item) => {
-            const percent = (item.value / total) * 100
-            const segment = (
-              <Tooltip
-                key={item.label}
-                title={`${item.label}: ${BRL(item.value)} (${percent.toFixed(1).replace('.', ',')}%)`}
-                arrow
-                followCursor
-              >
-                <circle
-                  cx="21"
-                  cy="21"
-                  r="15.915"
-                  fill="transparent"
-                  stroke={item.color ?? BLUE}
-                  strokeWidth="8"
-                  strokeDasharray={`${percent} ${100 - percent}`}
-                  strokeDashoffset={25 - offset}
-                  aria-label={`${item.label}: ${BRL(item.value)} (${percent.toFixed(1).replace('.', ',')}%)`}
-                  style={{ cursor: 'default', pointerEvents: 'stroke' }}
-                />
-              </Tooltip>
-            )
-            offset += percent
-            return segment
-          })}
-          <circle cx="21" cy="21" r="10" fill="#ffffff" />
-        </svg>
+            <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f1f5f9" strokeWidth="8" />
+            {visibleData.map((item) => {
+              const percent = (item.value / total) * 100
+              const segment = (
+                <Tooltip
+                  key={item.label}
+                  title={`${item.label}: ${BRL(item.value)} (${percent.toFixed(1).replace('.', ',')}%)`}
+                  arrow
+                  followCursor
+                >
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.915"
+                    fill="transparent"
+                    stroke={item.color ?? BLUE}
+                    strokeWidth="8"
+                    strokeDasharray={`${percent} ${100 - percent}`}
+                    strokeDashoffset={25 - offset}
+                    aria-label={`${item.label}: ${BRL(item.value)} (${percent.toFixed(1).replace('.', ',')}%)`}
+                    style={{ cursor: 'default', pointerEvents: 'stroke' }}
+                  />
+                </Tooltip>
+              )
+              offset += percent
+              return segment
+            })}
+            <circle cx="21" cy="21" r="10" fill="#ffffff" />
+          </svg>
         ) : (
           <EmptyState text="Selecione uma legenda para visualizar o gráfico." />
         )}
@@ -594,39 +594,39 @@ function DonutChart({
         {data.map((item) => {
           const hidden = hiddenLabels.includes(item.label)
           return (
-          <Tooltip
-            key={item.label}
-            title={`${item.label}: ${BRL(item.value)}. Clique para ${hidden ? 'mostrar' : 'ocultar'}.`}
-            arrow
-          >
-            <Box
-              onClick={() => onToggleLabel(item.label)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(event) => {
-                if (event.key !== 'Enter' && event.key !== ' ') return
-                event.preventDefault()
-                onToggleLabel(item.label)
-              }}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 0.5,
-                opacity: hidden ? 0.42 : 1,
-                cursor: 'pointer',
-                borderRadius: 999,
-                px: 0.7,
-                py: 0.35,
-                '&:hover': { bgcolor: '#f8fafc' },
-                '&:focus-visible': { outline: `2px solid ${BLUE}55`, outlineOffset: 2 },
-              }}
+            <Tooltip
+              key={item.label}
+              title={`${item.label}: ${BRL(item.value)}. Clique para ${hidden ? 'mostrar' : 'ocultar'}.`}
+              arrow
             >
-              <Box sx={{ width: 8, height: 8, borderRadius: 99, bgcolor: item.color ?? BLUE }} />
-              <Typography sx={{ color: MUTED, fontSize: '0.72rem' }}>
-                {item.label} ({BRL(item.value)})
-              </Typography>
-            </Box>
-          </Tooltip>
+              <Box
+                onClick={() => onToggleLabel(item.label)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  if (event.key !== 'Enter' && event.key !== ' ') return
+                  event.preventDefault()
+                  onToggleLabel(item.label)
+                }}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.5,
+                  opacity: hidden ? 0.42 : 1,
+                  cursor: 'pointer',
+                  borderRadius: 999,
+                  px: 0.7,
+                  py: 0.35,
+                  '&:hover': { bgcolor: '#f8fafc' },
+                  '&:focus-visible': { outline: `2px solid ${BLUE}55`, outlineOffset: 2 },
+                }}
+              >
+                <Box sx={{ width: 8, height: 8, borderRadius: 99, bgcolor: item.color ?? BLUE }} />
+                <Typography sx={{ color: MUTED, fontSize: '0.72rem' }}>
+                  {item.label} ({BRL(item.value)})
+                </Typography>
+              </Box>
+            </Tooltip>
           )
         })}
       </Box>
@@ -1308,7 +1308,7 @@ export default function DashboardPage() {
         <Dialog
           open={Boolean(selectedKpi)}
           onClose={() => setSelectedKpi(null)}
-          maxWidth="xs"
+          maxWidth="md"
           fullWidth
           slotProps={{
             paper: {
