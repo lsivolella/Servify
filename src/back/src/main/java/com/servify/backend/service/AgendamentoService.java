@@ -98,6 +98,7 @@ public class AgendamentoService {
         return toResponseDto(agendamentoRepository.save(agendamento));
     }
 
+    @Transactional
     public List<AgendamentoResponseDTO> listar(
             LocalDateTime inicio,
             LocalDateTime fim,
@@ -113,7 +114,10 @@ public class AgendamentoService {
         Integer perfilIdAcesso = resolverPerfilIdAcesso(usuarioLogadoPerfilId, usuarioLogadoCargo);
         validarContextoAcesso(usuarioLogadoId, perfilIdAcesso);
 
-        return agendamentoRepository.findAll()
+        List<Agendamento> agendamentos = agendamentoRepository.findAll();
+        atualizarStatusAgendamentosPassados(agendamentos);
+
+        return agendamentos
                 .stream()
 
                 .filter(a -> podeAcessarAgendamento(a, usuarioLogadoId, perfilIdAcesso))
@@ -541,6 +545,29 @@ public class AgendamentoService {
 
         agendamento.setDesconto(
                 dto.desconto());
+    }
+
+    private void atualizarStatusAgendamentosPassados(List<Agendamento> agendamentos) {
+        LocalDateTime agora = LocalDateTime.now();
+
+        List<Agendamento> aAtualizar = agendamentos.stream()
+                .filter(a -> a.getAgendamentoStatus() == AgendamentoStatus.AGENDADO
+                        || a.getAgendamentoStatus() == AgendamentoStatus.EM_ANDAMENTO)
+                .filter(a -> a.getDataHora().isBefore(agora))
+                .peek(a -> {
+                    LocalDateTime fim = a.getDataHora().plusMinutes(a.getDuracaoMinutos());
+                    if (fim.isAfter(agora)) {
+                        a.setAgendamentoStatus(AgendamentoStatus.EM_ANDAMENTO);
+                    } else {
+                        a.setAgendamentoStatus(AgendamentoStatus.CONCLUIDO);
+                    }
+                })
+                .toList();
+
+        if (aAtualizar.isEmpty())
+            return;
+
+        agendamentoRepository.saveAll(aAtualizar);
     }
 
     private AgendamentoResponseDTO toResponseDto(Agendamento agendamento) {
