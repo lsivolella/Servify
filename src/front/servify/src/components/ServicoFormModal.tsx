@@ -15,6 +15,7 @@ import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker'
 import { renderMultiSectionDigitalClockTimeView } from '@mui/x-date-pickers/timeViewRenderers'
 import dayjs, { type Dayjs } from 'dayjs'
 import type { ServicoFormPayload } from '../services/servicos'
+import ConfirmarAcaoModal from './ConfirmarAcaoModal'
 import { maskMoedaBrl, parseMoedaBrl } from '../utils/masks'
 import {
   ICONE_PADRAO_SERVICO,
@@ -22,6 +23,10 @@ import {
   ServicoIcone,
   type ServicoIconeKey,
 } from '../utils/servicoIcones'
+import {
+  mensagemInativarServico,
+  mensagemReativarServico,
+} from '../constants/ServicoMensagens'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -100,6 +105,8 @@ export default function ServicoFormModal({
   const [values, setValues] = useState<ServicoFormValues>(EMPTY_VALUES)
   const [erroLocal, setErroLocal] = useState<string | null>(null)
   const [enviando, setEnviando] = useState(false)
+  const [confirmarInativarOpen, setConfirmarInativarOpen] = useState(false)
+  const [confirmarReativarOpen, setConfirmarReativarOpen] = useState(false)
 
   const isEdit = mode === 'edit'
   const titulo = isEdit ? 'Editar Serviço' : 'Adicionar Serviço'
@@ -144,353 +151,393 @@ export default function ServicoFormModal({
   }
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="sm"
-      fullWidth
-      scroll="body"
-      slotProps={{
-        backdrop: {
-          sx: {
-            backdropFilter: 'blur(8px)',
-            bgcolor: 'rgba(15, 23, 42, 0.48)',
+    <>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        maxWidth="sm"
+        fullWidth
+        scroll="body"
+        slotProps={{
+          backdrop: {
+            sx: {
+              backdropFilter: 'blur(8px)',
+              bgcolor: 'rgba(15, 23, 42, 0.48)',
+            },
           },
-        },
-        paper: {
-          sx: {
-            borderRadius: '16px',
-            overflow: 'hidden',
-            boxShadow:
-              '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.03)',
+          paper: {
+            sx: {
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow:
+                '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0,0,0,0.03)',
+            },
           },
-        },
-      }}
-    >
-      <Box component="form" onSubmit={handleFormSubmit} sx={{ bgcolor: '#ffffff' }}>
-        <Box sx={{ position: 'relative', px: { xs: 2.5, sm: 3 }, pt: 3, pb: 2 }}>
-          <IconButton
-            aria-label="Fechar"
-            onClick={onClose}
-            sx={{ position: 'absolute', top: 12, right: 12, color: '#64748b' }}
-          >
-            <CloseOutlined />
-          </IconButton>
-
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', pr: 4 }}>
-            <Box
-              sx={{
-                width: 48,
-                height: 48,
-                borderRadius: '50%',  
-                bgcolor: '#e0e7ff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
+        }}
+      >
+        <Box component="form" onSubmit={handleFormSubmit} sx={{ bgcolor: '#ffffff' }}>
+          <Box sx={{ position: 'relative', px: { xs: 2.5, sm: 3 }, pt: 3, pb: 2 }}>
+            <IconButton
+              aria-label="Fechar"
+              onClick={onClose}
+              sx={{ position: 'absolute', top: 12, right: 12, color: '#64748b' }}
             >
-              <LocalOfferOutlined sx={{ color: NAVY, fontSize: 26 }} />
-            </Box>
-            <Box sx={{ minWidth: 0, pt: 0.25 }}>
-              <Typography
-                variant="h6"
-                component="h2"
+              <CloseOutlined />
+            </IconButton>
+
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', pr: 4 }}>
+              <Box
                 sx={{
-                  fontWeight: 700,
-                  color: NAVY,
-                  fontSize: '1.125rem',
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.3,
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  bgcolor: '#e0e7ff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
                 }}
               >
-                {titulo}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: '#64748b', mt: 0.5, fontSize: '0.875rem' }}
-              >
-                {subtitulo}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            px: { xs: 2.5, sm: 3 },
-            pb: 2.5,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2.25,
-          }}
-        >
-          <Campo
-            label="Nome do serviço"
-            id="servico-nome"
-            value={values.nome}
-            onChange={(v) => setValues((s) => ({ ...s, nome: v }))}
-            placeholder="Ex: Corte Masculino"
-            startIcon={<LocalOfferOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />}
-          />
-
-          <Campo
-            label="Valor (R$)"
-            id="servico-valor"
-            value={values.valor}
-            onChange={(v) => setValues((s) => ({ ...s, valor: maskMoedaBrl(v) }))}
-            placeholder="0,00"
-            inputMode="numeric"
-            startIcon={<AttachMoneyOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />}
-          />
-
-          <Box>
-            <Typography
-              component="label"
-              htmlFor="servico-duracao"
-              sx={{
-                display: 'block',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                color: '#475569',
-                mb: 0.75,
-              }}
-            >
-              Duração
-            </Typography>
-            <DesktopTimePicker
-              format="HH:mm"
-              ampm={false}
-              views={['hours', 'minutes']}
-              openTo="hours"
-              timeSteps={{ hours: 1, minutes: 5 }}
-              viewRenderers={{
-                hours: renderMultiSectionDigitalClockTimeView,
-                minutes: renderMultiSectionDigitalClockTimeView,
-              }}
-              value={
-                values.duracaoMinutos
-                  ? minutosParaDayjs(Number(values.duracaoMinutos))
-                  : null
-              }
-              onChange={(newValue) => {
-                const minutos = dayjsParaMinutos(newValue)
-                setValues((s) => ({
-                  ...s,
-                  duracaoMinutos: minutos > 0 ? String(minutos) : '',
-                }))
-              }}
-              slotProps={{
-                toolbar: { hidden: true },
-                layout: {
-                  sx: {
-                    '& .MuiMultiSectionDigitalClock-root': {
-                      maxHeight: 280,
-                    },
-                    '& .MuiMenuItem-root.Mui-selected': {
-                      bgcolor: '#e0e7ff',
-                      color: NAVY,
-                      fontWeight: 700,
-                      '&:hover': { bgcolor: '#c7d2fe' },
-                    },
-                  },
-                },
-                popper: {
-                  placement: 'bottom-start',
-                  sx: { zIndex: (theme) => theme.zIndex.modal + 1 },
-                },
-                textField: {
-                  id: 'servico-duracao',
-                  name: 'duracaoMinutos',
-                  fullWidth: true,
-                  variant: 'outlined',
-                  slotProps: {
-                    htmlInput: { placeholder: '00:30' },
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccessTimeOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
-                        </InputAdornment>
-                      ),
-                    },
-                  },
-                  sx: {
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '10px',
-                      '& fieldset': { borderColor: BORDER },
-                    },
-                  },
-                },
-              }}
-            />
-          </Box>
-
-          <Box>
-            <Typography
-              component="label"
-              sx={{
-                display: 'block',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                color: '#475569',
-                mb: 0.75,
-              }}
-            >
-              Ícone do serviço
-            </Typography>
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(7, 1fr)',
-                gap: 1,
-              }}
-            >
-              {SERVICO_ICONES.map(({ key }) => {
-                const selected = values.icone === key
-                return (
-                  <IconButton
-                    key={key}
-                    type="button"
-                    aria-label={`Ícone ${key}`}
-                    aria-pressed={selected}
-                    onClick={() => setValues((s) => ({ ...s, icone: key }))}
-                    sx={{
-                      border: `2px solid ${selected ? '#2563eb' : BORDER}`,
-                      borderRadius: '10px',
-                      bgcolor: selected ? '#eff6ff' : '#ffffff',
-                      width: '100%',
-                      aspectRatio: '1',
-                    }}
-                  >
-                    <ServicoIcone icone={key} />
-                  </IconButton>
-                )
-              })}
+                <LocalOfferOutlined sx={{ color: NAVY, fontSize: 26 }} />
+              </Box>
+              <Box sx={{ minWidth: 0, pt: 0.25 }}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  sx={{
+                    fontWeight: 700,
+                    color: NAVY,
+                    fontSize: '1.125rem',
+                    letterSpacing: '-0.02em',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {titulo}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: '#64748b', mt: 0.5, fontSize: '0.875rem' }}
+                >
+                  {subtitulo}
+                </Typography>
+              </Box>
             </Box>
           </Box>
 
-          <Box>
-            <Typography
-              component="label"
-              sx={{
-                display: 'block',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                color: '#475569',
-                mb: 0.75,
-              }}
-            >
-              Status
-            </Typography>
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-              <Button
-                type="button"
-                variant="outlined"
-                onClick={() => setValues((s) => ({ ...s, ativo: true }))}
-                sx={{
-                  py: 1.5,
-                  borderRadius: '10px',
-                  fontWeight: 700,
-                  textTransform: 'none',
-                  borderWidth: 2,
-                  borderColor: values.ativo ? '#22c55e' : BORDER,
-                  bgcolor: values.ativo ? '#f0fdf4' : '#ffffff',
-                  color: values.ativo ? '#166534' : '#64748b',
-                  '&:hover': {
-                    borderColor: values.ativo ? '#22c55e' : '#cbd5e1',
-                    bgcolor: values.ativo ? '#f0fdf4' : '#f8fafc',
-                  },
-                }}
-              >
-                Ativo
-              </Button>
-              <Button
-                type="button"
-                variant="outlined"
-                onClick={() => setValues((s) => ({ ...s, ativo: false }))}
-                sx={{
-                  py: 1.5,
-                  borderRadius: '10px',
-                  fontWeight: 700,
-                  textTransform: 'none',
-                  borderWidth: 2,
-                  borderColor: !values.ativo ? '#94a3b8' : BORDER,
-                  bgcolor: !values.ativo ? '#f1f5f9' : '#ffffff',
-                  color: !values.ativo ? '#475569' : '#64748b',
-                  '&:hover': {
-                    borderColor: !values.ativo ? '#94a3b8' : '#cbd5e1',
-                    bgcolor: !values.ativo ? '#f1f5f9' : '#f8fafc',
-                  },
-                }}
-              >
-                Inativo
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            px: { xs: 2.5, sm: 3 },
-            pb: 3,
-            pt: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1.5,
-          }}
-        >
-          {erroLocal ? (
-            <Alert severity="error" onClose={() => setErroLocal(null)}>
-              {erroLocal}
-            </Alert>
-          ) : null}
           <Box
             sx={{
+              px: { xs: 2.5, sm: 3 },
+              pb: 2.5,
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 2,
-              flexWrap: 'wrap',
+              flexDirection: 'column',
+              gap: 2.25,
             }}
           >
-            <Button
-              type="button"
-              variant="outlined"
-              onClick={onClose}
-              disabled={enviando}
+            <Campo
+              label="Nome do serviço"
+              id="servico-nome"
+              value={values.nome}
+              onChange={(v) => setValues((s) => ({ ...s, nome: v }))}
+              placeholder="Ex: Corte Masculino"
+              startIcon={<LocalOfferOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />}
+            />
+
+            <Campo
+              label="Valor (R$)"
+              id="servico-valor"
+              value={values.valor}
+              onChange={(v) => setValues((s) => ({ ...s, valor: maskMoedaBrl(v) }))}
+              placeholder="0,00"
+              inputMode="numeric"
+              startIcon={<AttachMoneyOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />}
+            />
+
+            <Box>
+              <Typography
+                component="label"
+                htmlFor="servico-duracao"
+                sx={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  color: '#475569',
+                  mb: 0.75,
+                }}
+              >
+                Duração
+              </Typography>
+              <DesktopTimePicker
+                format="HH:mm"
+                ampm={false}
+                views={['hours', 'minutes']}
+                openTo="hours"
+                timeSteps={{ hours: 1, minutes: 5 }}
+                viewRenderers={{
+                  hours: renderMultiSectionDigitalClockTimeView,
+                  minutes: renderMultiSectionDigitalClockTimeView,
+                }}
+                value={
+                  values.duracaoMinutos
+                    ? minutosParaDayjs(Number(values.duracaoMinutos))
+                    : null
+                }
+                onChange={(newValue) => {
+                  const minutos = dayjsParaMinutos(newValue)
+                  setValues((s) => ({
+                    ...s,
+                    duracaoMinutos: minutos > 0 ? String(minutos) : '',
+                  }))
+                }}
+                slotProps={{
+                  toolbar: { hidden: true },
+                  layout: {
+                    sx: {
+                      '& .MuiMultiSectionDigitalClock-root': {
+                        maxHeight: 280,
+                      },
+                      '& .MuiMenuItem-root.Mui-selected': {
+                        bgcolor: '#e0e7ff',
+                        color: NAVY,
+                        fontWeight: 700,
+                        '&:hover': { bgcolor: '#c7d2fe' },
+                      },
+                    },
+                  },
+                  popper: {
+                    placement: 'bottom-start',
+                    sx: { zIndex: (theme) => theme.zIndex.modal + 1 },
+                  },
+                  textField: {
+                    id: 'servico-duracao',
+                    name: 'duracaoMinutos',
+                    fullWidth: true,
+                    variant: 'outlined',
+                    slotProps: {
+                      htmlInput: { placeholder: '00:30' },
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AccessTimeOutlined sx={{ color: '#9ca3af', fontSize: 22 }} />
+                          </InputAdornment>
+                        ),
+                      },
+                    },
+                    sx: {
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '10px',
+                        '& fieldset': { borderColor: BORDER },
+                      },
+                    },
+                  },
+                }}
+              />
+            </Box>
+
+            <Box>
+              <Typography
+                component="label"
+                sx={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  color: '#475569',
+                  mb: 0.75,
+                }}
+              >
+                Ícone do serviço
+              </Typography>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(7, 1fr)',
+                  gap: 1,
+                }}
+              >
+                {SERVICO_ICONES.map(({ key }) => {
+                  const selected = values.icone === key
+                  return (
+                    <IconButton
+                      key={key}
+                      type="button"
+                      aria-label={`Ícone ${key}`}
+                      aria-pressed={selected}
+                      onClick={() => setValues((s) => ({ ...s, icone: key }))}
+                      sx={{
+                        border: `2px solid ${selected ? '#2563eb' : BORDER}`,
+                        borderRadius: '10px',
+                        bgcolor: selected ? '#eff6ff' : '#ffffff',
+                        width: '100%',
+                        aspectRatio: '1',
+                      }}
+                    >
+                      <ServicoIcone icone={key} />
+                    </IconButton>
+                  )
+                })}
+              </Box>
+            </Box>
+
+            <Box>
+              <Typography
+                component="label"
+                sx={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  color: '#475569',
+                  mb: 0.75,
+                }}
+              >
+                Status
+              </Typography>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  onClick={() => {
+                    if (!values.ativo) {
+                      setConfirmarReativarOpen(true)
+                    }
+                  }}
+                  sx={{
+                    py: 1.5,
+                    borderRadius: '10px',
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    borderWidth: 2,
+                    borderColor: values.ativo ? '#22c55e' : BORDER,
+                    bgcolor: values.ativo ? '#f0fdf4' : '#ffffff',
+                    color: values.ativo ? '#166534' : '#64748b',
+                    '&:hover': {
+                      borderColor: values.ativo ? '#22c55e' : '#cbd5e1',
+                      bgcolor: values.ativo ? '#f0fdf4' : '#f8fafc',
+                    },
+                  }}
+                >
+                  Ativo
+                </Button>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  onClick={() => {
+                    if (values.ativo) {
+                      setConfirmarInativarOpen(true)
+                    } else {
+                      setValues((s) => ({ ...s, ativo: false }))
+                    }
+                  }}
+                  sx={{
+                    py: 1.5,
+                    borderRadius: '10px',
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    borderWidth: 2,
+                    borderColor: !values.ativo ? '#94a3b8' : BORDER,
+                    bgcolor: !values.ativo ? '#f1f5f9' : '#ffffff',
+                    color: !values.ativo ? '#475569' : '#64748b',
+                    '&:hover': {
+                      borderColor: !values.ativo ? '#94a3b8' : '#cbd5e1',
+                      bgcolor: !values.ativo ? '#f1f5f9' : '#f8fafc',
+                    },
+                  }}
+                >
+                  Inativo
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              px: { xs: 2.5, sm: 3 },
+              pb: 3,
+              pt: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 1.5,
+            }}
+          >
+            {erroLocal ? (
+              <Alert severity="error" onClose={() => setErroLocal(null)}>
+                {erroLocal}
+              </Alert>
+            ) : null}
+            <Box
               sx={{
-                borderRadius: '10px',
-                px: 2.5,
-                py: 1,
-                fontWeight: 600,
-                textTransform: 'none',
-                color: '#475569',
-                borderColor: BORDER,
-                '&:hover': { borderColor: '#cbd5e1' },
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 2,
+                flexWrap: 'wrap',
               }}
             >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={enviando}
-              sx={{
-                borderRadius: '10px',
-                px: 2.5,
-                py: 1,
-                fontWeight: 700,
-                textTransform: 'none',
-                bgcolor: NAVY,
-                '&:hover': { bgcolor: '#162d4a' },
-              }}
-            >
-              {enviando ? 'Salvando…' : labelSubmit}
-            </Button>
+              <Button
+                type="button"
+                variant="outlined"
+                onClick={onClose}
+                disabled={enviando}
+                sx={{
+                  borderRadius: '10px',
+                  px: 2.5,
+                  py: 1,
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  color: '#475569',
+                  borderColor: BORDER,
+                  '&:hover': { borderColor: '#cbd5e1' },
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={enviando}
+                sx={{
+                  borderRadius: '10px',
+                  px: 2.5,
+                  py: 1,
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  bgcolor: NAVY,
+                  '&:hover': { bgcolor: '#162d4a' },
+                }}
+              >
+                {enviando ? 'Salvando…' : labelSubmit}
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </Dialog>
+      </Dialog>
+
+      <ConfirmarAcaoModal
+        open={confirmarInativarOpen}
+        titulo="Inativar serviço"
+        mensagem={mensagemInativarServico(values.nome)}
+        labelConfirmar="Inativar"
+        corConfirmar="#f59e0b"
+        corConfirmarHover="#d97706"
+        onConfirm={() => {
+          setValues((s) => ({ ...s, ativo: false }))
+          setConfirmarInativarOpen(false)
+        }}
+        onClose={() => setConfirmarInativarOpen(false)}
+      />
+
+      <ConfirmarAcaoModal
+        open={confirmarReativarOpen}
+        titulo="Reativar serviço"
+        mensagem={mensagemReativarServico(values.nome)}
+        labelConfirmar="Reativar"
+        corConfirmar="#22c55e"
+        corConfirmarHover="#16a34a"
+        onConfirm={() => {
+          setValues((s) => ({ ...s, ativo: true }))
+          setConfirmarReativarOpen(false)
+        }}
+        onClose={() => setConfirmarReativarOpen(false)}
+      />
+    </>
   )
 }
 

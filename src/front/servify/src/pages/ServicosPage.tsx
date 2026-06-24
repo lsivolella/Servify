@@ -33,9 +33,12 @@ import {
 } from '../components/showAlert'
 import { mensagemDeErroCapturado } from '../services/api'
 import {
+  mensagemInativarServico,
+  mensagemReativarServico,
+} from '../constants/ServicoMensagens'
+import {
   atualizarServico,
   criarServico,
-  deleteServicoPorId,
   formatarValorBrl,
   getServicos,
   type Servico,
@@ -455,21 +458,9 @@ export default function ServicosPage() {
         open={inativarOpen}
         titulo={inativarTarget?.ativo ? 'Inativar serviço' : 'Reativar serviço'}
         mensagem={
-          inativarTarget?.ativo ? (
-            <>
-              Deseja inativar <strong>{inativarTarget?.nome}</strong>?
-              <br /><br />
-              Agendamentos existentes para esse serviço serão mantidos e devem ser cancelados individualmente, se necessário.
-              <br /><br />
-              Não será possível realizar novos agendamentos para esse serviço enquanto ele estiver inativo.
-            </>
-          ) : (
-            <>
-              Deseja reativar <strong>{inativarTarget?.nome}</strong>?
-              <br /><br />
-              O serviço voltará a estar disponível para novos agendamentos.
-            </>
-          )
+          inativarTarget?.ativo
+            ? mensagemInativarServico(inativarTarget?.nome ?? '')
+            : mensagemReativarServico(inativarTarget?.nome ?? '')
         }
         labelConfirmar={inativarTarget?.ativo ? 'Inativar' : 'Reativar'}
         corConfirmar={inativarTarget?.ativo ? '#f59e0b' : '#22c55e'}
