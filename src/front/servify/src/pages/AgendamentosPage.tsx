@@ -17,6 +17,7 @@ import ChevronRight from '@mui/icons-material/ChevronRight'
 import CloseOutlined from '@mui/icons-material/CloseOutlined'
 import DeleteOutlineOutlined from '@mui/icons-material/DeleteOutlineOutlined'
 import EditOutlined from '@mui/icons-material/EditOutlined'
+import InfoOutlined from '@mui/icons-material/InfoOutlined'
 import Search from '@mui/icons-material/Search'
 import { useSidebarLayout } from '../context/SidebarLayoutContext'
 import {
@@ -919,7 +920,7 @@ export default function AgendamentosPage() {
                       type="button"
                       variant="outlined"
                       size="small"
-                      startIcon={<EditOutlined />}
+                      startIcon={agendamento.status === 'AGENDADO' ? <EditOutlined /> : <InfoOutlined />}
                       onClick={() => abrirAgendamento(agendamento)}
                       sx={{
                         borderRadius: '10px',
@@ -929,24 +930,26 @@ export default function AgendamentosPage() {
                         borderColor: tema.border,
                       }}
                     >
-                      Editar
+                      {agendamento.status === 'AGENDADO' ? 'Editar' : 'Visualizar'}
                     </Button>
-                    <Button
-                      type="button"
-                      variant="outlined"
-                      size="small"
-                      startIcon={<DeleteOutlineOutlined />}
-                      onClick={() => solicitarExclusaoAgendamento(agendamento)}
-                      sx={{
-                        borderRadius: '10px',
-                        textTransform: 'none',
-                        fontWeight: 700,
-                        color: '#dc2626',
-                        borderColor: '#fecaca',
-                      }}
-                    >
-                      Excluir
-                    </Button>
+                    {agendamento.status === 'AGENDADO' && (
+                      <Button
+                        type="button"
+                        variant="outlined"
+                        size="small"
+                        startIcon={<DeleteOutlineOutlined />}
+                        onClick={() => solicitarExclusaoAgendamento(agendamento)}
+                        sx={{
+                          borderRadius: '10px',
+                          textTransform: 'none',
+                          fontWeight: 700,
+                          color: '#dc2626',
+                          borderColor: '#fecaca',
+                        }}
+                      >
+                        Excluir
+                      </Button>
+                    )}
                   </Box>
                 </Box>
               )

@@ -238,7 +238,7 @@ export default function AgendamentoFormModal({
           <IconButton
             aria-label="Fechar"
             onClick={onClose}
-            disabled={enviando || somenteLeitura}
+            disabled={enviando}
             sx={{ position: 'absolute', top: 12, right: 12, color: '#64748b' }}
           >
             <CloseOutlined />
