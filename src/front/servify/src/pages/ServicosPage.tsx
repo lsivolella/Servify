@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ConfirmarExclusaoServicoModal from '../components/ConfirmarExclusaoServicoModal'
 import ServicoFormModal, {
   type ServicoFormValues,
 } from '../components/ServicoFormModal'
@@ -19,11 +18,13 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Add from '@mui/icons-material/Add'
 import ArrowBackOutlined from '@mui/icons-material/ArrowBackOutlined'
-import DeleteOutlineOutlined from '@mui/icons-material/DeleteOutlineOutlined'
 import EditOutlined from '@mui/icons-material/EditOutlined'
 import LocalOfferOutlined from '@mui/icons-material/LocalOfferOutlined'
 import Search from '@mui/icons-material/Search'
 import ViewSidebarOutlined from '@mui/icons-material/ViewSidebarOutlined'
+import ConfirmarAcaoModal from '../components/ConfirmarAcaoModal'
+import VisibilityOffOutlined from '@mui/icons-material/VisibilityOffOutlined'
+import VisibilityOutlined from '@mui/icons-material/VisibilityOutlined'
 import { useSidebarLayout } from '../context/SidebarLayoutContext'
 import {
   toastCadastroSucesso,
@@ -69,9 +70,9 @@ export default function ServicosPage() {
   const [formInitial, setFormInitial] = useState<ServicoFormValues | undefined>()
   const [editingId, setEditingId] = useState<string | null>(null)
 
-  const [deleteOpen, setDeleteOpen] = useState(false)
-  const [deleteTarget, setDeleteTarget] = useState<Servico | null>(null)
-  const [excluindo, setExcluindo] = useState(false)
+  const [inativarOpen, setInativarOpen] = useState(false)
+  const [inativarTarget, setInativarTarget] = useState<Servico | null>(null)
+  const [alterandoAtivo, setAlterandoAtivo] = useState(false)
 
   const carregarServicos = useCallback(async () => {
     const data = await getServicos()
@@ -120,14 +121,14 @@ export default function ServicosPage() {
     setEditingId(null)
   }
 
-  function abrirExcluir(row: Servico) {
-    setDeleteTarget(row)
-    setDeleteOpen(true)
+  function solicitarAlterarAtivo(row: Servico) {
+    setInativarTarget(row)
+    setInativarOpen(true)
   }
 
-  function fecharExcluir() {
-    setDeleteOpen(false)
-    setDeleteTarget(null)
+  function fecharAlterarAtivo() {
+    setInativarOpen(false)
+    setInativarTarget(null)
   }
 
   async function handleSalvarForm(payload: ServicoFormPayload) {
@@ -150,21 +151,30 @@ export default function ServicosPage() {
     }
   }
 
-  async function handleConfirmarExclusao() {
-    if (!deleteTarget) return
-    setExcluindo(true)
+  async function handleConfirmarAlterarAtivo() {
+    if (!inativarTarget) return
+    setAlterandoAtivo(true)
     try {
-      await deleteServicoPorId(deleteTarget.id)
-      if (editingId === deleteTarget.id) fecharForm()
+      await atualizarServico(inativarTarget.id, {
+        nome: inativarTarget.nome,
+        valor: inativarTarget.valor,
+        duracaoMinutos: inativarTarget.duracaoMinutos,
+        icone: inativarTarget.icone,
+        ativo: !inativarTarget.ativo,
+      })
       await carregarServicos()
-      fecharExcluir()
-      toastSuccess('Serviço excluído com sucesso.')
+      fecharAlterarAtivo()
+      toastSuccess(
+        inativarTarget.ativo
+          ? 'Serviço inativado com sucesso.'
+          : 'Serviço reativado com sucesso.',
+      )
     } catch (e: unknown) {
       toastError(
-        mensagemDeErroCapturado(e, 'Não foi possível excluir o serviço.'),
+        mensagemDeErroCapturado(e, 'Não foi possível alterar o status do serviço.'),
       )
     } finally {
-      setExcluindo(false)
+      setAlterandoAtivo(false)
     }
   }
 
@@ -396,12 +406,15 @@ export default function ServicosPage() {
                         <EditOutlined fontSize="small" />
                       </IconButton>
                       <IconButton
-                        aria-label="Excluir serviço"
+                        aria-label={row.ativo ? 'Inativar serviço' : 'Reativar serviço'}
                         size="small"
-                        sx={{ color: '#ef4444' }}
-                        onClick={() => abrirExcluir(row)}
+                        sx={{ color: row.ativo ? '#166534' : '#64748b' }}
+                        onClick={() => solicitarAlterarAtivo(row)}
                       >
-                        <DeleteOutlineOutlined fontSize="small" />
+                        {row.ativo
+                          ? <VisibilityOutlined fontSize="small" />
+                          : <VisibilityOffOutlined fontSize="small" />
+                        }
                       </IconButton>
                     </Box>
                   </TableCell>
@@ -438,12 +451,32 @@ export default function ServicosPage() {
         onSubmit={handleSalvarForm}
       />
 
-      <ConfirmarExclusaoServicoModal
-        open={deleteOpen}
-        nomeServico={deleteTarget?.nome ?? ''}
-        onClose={fecharExcluir}
-        onConfirm={handleConfirmarExclusao}
-        excluindo={excluindo}
+      <ConfirmarAcaoModal
+        open={inativarOpen}
+        titulo={inativarTarget?.ativo ? 'Inativar serviço' : 'Reativar serviço'}
+        mensagem={
+          inativarTarget?.ativo ? (
+            <>
+              Deseja inativar <strong>{inativarTarget?.nome}</strong>?
+              <br /><br />
+              Agendamentos existentes para esse serviço serão mantidos e devem ser cancelados individualmente, se necessário.
+              <br /><br />
+              Não será possível realizar novos agendamentos para esse serviço enquanto ele estiver inativo.
+            </>
+          ) : (
+            <>
+              Deseja reativar <strong>{inativarTarget?.nome}</strong>?
+              <br /><br />
+              O serviço voltará a estar disponível para novos agendamentos.
+            </>
+          )
+        }
+        labelConfirmar={inativarTarget?.ativo ? 'Inativar' : 'Reativar'}
+        corConfirmar={inativarTarget?.ativo ? '#f59e0b' : '#22c55e'}
+        corConfirmarHover={inativarTarget?.ativo ? '#d97706' : '#16a34a'}
+        carregando={alterandoAtivo}
+        onConfirm={handleConfirmarAlterarAtivo}
+        onClose={fecharAlterarAtivo}
       />
     </Box>
   )
