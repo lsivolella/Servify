@@ -1,8 +1,23 @@
-# Blueprint Render — backend Spring Boot (Docker) + banco Neon (externo)
-# Obrigatório no painel Environment (uma das opções abaixo):
+# Blueprint Render — front (Docker/nginx) + API Spring Boot (Docker) + banco Neon (externo)
+#
+# Backend — obrigatório no painel Environment (uma das opções):
 #   A) DATABASE_URL=postgresql://user:pass@host/db?sslmode=require
 #   B) PGHOST + PGDATABASE + PGUSER + PGPASSWORD (+ PGSSLMODE=require)
+#
+# Após o deploy, alinhe as URLs entre os serviços:
+#   servify-front  → VITE_API_BASE_URL=https://<servify-api>.onrender.com
+#   servify-api    → FRONTEND_BASE_URL=https://<servify-front>.onrender.com
+#   servify-api    → CORS_ALLOWED_ORIGIN_PATTERNS=https://<servify-front>.onrender.com
 services:
+  - type: web
+    name: servify-front
+    runtime: docker
+    rootDir: src/front/servify
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: VITE_API_BASE_URL
+        sync: false
+
   - type: web
     name: servify-api
     runtime: docker

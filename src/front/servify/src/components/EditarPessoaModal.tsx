@@ -458,7 +458,6 @@ export default function EditarPessoaModal({
                       fullWidth: true,
                       size: 'small',
                       variant: 'outlined',
-                      placeholder: 'DD/MM/AAAA',
                       slotProps: {
                         input: {
                           startAdornment: (
@@ -541,7 +540,6 @@ export default function EditarPessoaModal({
                     fullWidth: true,
                     size: 'small',
                     variant: 'outlined',
-                    placeholder: 'DD/MM/AAAA',
                     slotProps: {
                       input: {
                         startAdornment: (
