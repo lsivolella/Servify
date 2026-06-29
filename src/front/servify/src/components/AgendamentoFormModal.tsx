@@ -99,7 +99,7 @@ function dayjsToTimeString(value: Dayjs | null): string {
 }
 
 function agendamentoToValues(agendamento?: Agendamento): AgendamentoFormValues {
-  if (!agendamento) return EMPTY_VALUES
+  if (!agendamento) return { ...EMPTY_VALUES }
   return {
     servicoId: agendamento.servicoId,
     clienteId: agendamento.clienteId,
@@ -175,7 +175,7 @@ export default function AgendamentoFormModal({
   useEffect(() => {
     if (!open) {
       queueMicrotask(() => {
-        setValues(EMPTY_VALUES)
+        setValues({ ...EMPTY_VALUES })
         setErroLocal(null)
         setEnviando(false)
       })

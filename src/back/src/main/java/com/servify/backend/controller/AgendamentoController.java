@@ -32,8 +32,14 @@ public class AgendamentoController {
     }
 
     @PostMapping
-    public AgendamentoResponseDTO criar(@Valid @RequestBody AgendamentoRequestDTO dto) {
-        return service.criar(dto);
+    public AgendamentoResponseDTO criar(
+            @Valid @RequestBody AgendamentoRequestDTO dto,
+            @RequestParam Long usuarioLogadoId,
+            @RequestParam Integer usuarioLogadoPerfilId) {
+        return service.criar(
+                dto,
+                usuarioLogadoId,
+                usuarioLogadoPerfilId);
     }
 
     @GetMapping
@@ -66,9 +72,16 @@ public class AgendamentoController {
     }
 
     @PutMapping("/{id}")
-    public AgendamentoResponseDTO editar(@PathVariable Long id,
-            @Valid @RequestBody AgendamentoRequestDTO dto) {
-        return service.atualizar(id, dto);
+    public AgendamentoResponseDTO editar(
+            @PathVariable Long id,
+            @Valid @RequestBody AgendamentoRequestDTO dto,
+            @RequestParam Long usuarioLogadoId,
+            @RequestParam Integer usuarioLogadoPerfilId) {
+        return service.atualizar(
+                id,
+                dto,
+                usuarioLogadoId,
+                usuarioLogadoPerfilId);
     }
 
     @DeleteMapping("/{id}")

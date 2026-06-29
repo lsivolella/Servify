@@ -53,7 +53,16 @@ public class AgendamentoService {
     }
 
     @Transactional
-    public AgendamentoResponseDTO criar(AgendamentoRequestDTO dto) {
+    public AgendamentoResponseDTO criar(
+            AgendamentoRequestDTO dto,
+            Long usuarioLogadoId,
+            Integer usuarioLogadoPerfilId) {
+
+        validarPermissaoCliente(
+                dto.clienteId(),
+                usuarioLogadoId,
+                usuarioLogadoPerfilId);
+
         Usuario cliente = buscarUsuario(dto.clienteId());
 
         Usuario colaborador = buscarUsuario(dto.colaboradorId());
@@ -152,7 +161,17 @@ public class AgendamentoService {
     }
 
     @Transactional
-    public AgendamentoResponseDTO atualizar(Long id, AgendamentoRequestDTO dto) {
+    public AgendamentoResponseDTO atualizar(
+            Long id,
+            AgendamentoRequestDTO dto,
+            Long usuarioLogadoId,
+            Integer usuarioLogadoPerfilId) {
+
+        validarPermissaoCliente(
+                dto.clienteId(),
+                usuarioLogadoId,
+                usuarioLogadoPerfilId);
+
         Agendamento agendamento = buscarAgendamento(id);
 
         Usuario cliente = buscarUsuario(dto.clienteId());
@@ -217,6 +236,20 @@ public class AgendamentoService {
     }
 
     // #region Validações
+    private void validarPermissaoCliente(
+            Long clienteId,
+            Long usuarioLogadoId,
+            Integer usuarioLogadoPerfilId) {
+
+        if (usuarioLogadoPerfilId == PerfilConstants.CLIENTE
+                && !clienteId.equals(usuarioLogadoId)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Clientes só podem agendar serviços para si mesmos.");
+        }
+    }
+
     private void validarCliente(Usuario cliente) {
         if (cliente.isCadastroPendente()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente com cadastro pendente");
