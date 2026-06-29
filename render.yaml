@@ -1,0 +1,20 @@
+# Blueprint Render — backend Spring Boot (Docker) + banco Neon (externo)
+# No painel: Runtime = Docker, Root Directory = src/back
+services:
+  - type: web
+    name: servify-api
+    runtime: docker
+    rootDir: src/back
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /v3/api-docs
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_BASE_URL
+        sync: false
+      - key: CORS_ALLOWED_ORIGIN_PATTERNS
+        sync: false
+      - key: SERVIFY_GMAIL_ENABLED
+        value: "false"
