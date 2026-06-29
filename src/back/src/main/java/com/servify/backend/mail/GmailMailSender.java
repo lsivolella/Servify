@@ -70,7 +70,7 @@ public class GmailMailSender {
     public String buildBrowserAuthorizationUrl() throws IOException {
         if (!isBrowserFlowConfigured()) {
             throw new GmailMailException(
-                    "Defina servify.gmail.oauth-redirect-uri com a URL do callback no front (ex.: http://localhost:5173/oauth/google/callback).");
+                    "Defina servify.gmail.oauth-redirect-uri com a URL do callback no front (ex.: https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com/oauth/google/callback).");
         }
         try (Reader reader = new InputStreamReader(Files.newInputStream(credentialsPath), StandardCharsets.UTF_8)) {
             GoogleClientSecrets secrets = GoogleClientSecrets.load(JSON_FACTORY, reader);

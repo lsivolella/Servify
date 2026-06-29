@@ -31,6 +31,7 @@ import {
   toastError,
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
+import { getGoogleOAuthCallbackUrl } from '../config/appUrl'
 import { labelPerfilColaborador, perfilIdParaConvite } from '../utils/perfilColaborador'
 import {
   deleteUsuarioPorId,
@@ -359,7 +360,7 @@ export default function GerenciarColaboradorPage() {
               <Alert severity="info" sx={{ borderRadius: '12px' }}>
                 Para login OAuth no navegador, defina no backend{' '}
                 <strong>servify.gmail.oauth-redirect-uri</strong> igual à rota deste app (ex.:{' '}
-                <strong>http://localhost:5173/oauth/google/callback</strong>) e cadastre a mesma
+                <strong>{getGoogleOAuthCallbackUrl()}</strong>) e cadastre a mesma
                 URI nas credenciais OAuth do tipo <strong>aplicativo Web</strong> no Google Cloud.
               </Alert>
             )}

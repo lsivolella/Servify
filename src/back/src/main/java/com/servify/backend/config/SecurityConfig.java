@@ -61,6 +61,7 @@ public class SecurityConfig {
 		// Vite com --host (rede local)
 		patterns.add("http://192.168.*:*");
 		patterns.add("http://10.*:*");
+		patterns.add("https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com");
 		if (extraAllowedOriginPatterns != null && !extraAllowedOriginPatterns.isBlank()) {
 			Arrays.stream(extraAllowedOriginPatterns.split(","))
 					.map(String::trim)
