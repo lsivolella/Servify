@@ -3,7 +3,7 @@ export const PRODUCTION_FRONTEND_URL =
   'https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com'
 
 /** URL pública da API em produção (Render). */
-export const PRODUCTION_API_URL = 'https://servify-api.onrender.com'
+export const PRODUCTION_API_URL = 'https://backend-shbt.onrender.com'
 
 export function getFrontendBaseUrl(): string {
   const fromEnv = import.meta.env.VITE_APP_BASE_URL

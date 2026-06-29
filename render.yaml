@@ -7,7 +7,7 @@ services:
     dockerfilePath: ./Dockerfile
     envVars:
       - key: VITE_API_BASE_URL
-        value: https://servify-api.onrender.com
+        value: https://backend-shbt.onrender.com
       - key: VITE_APP_BASE_URL
         value: https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com
 
