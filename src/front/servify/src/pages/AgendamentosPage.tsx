@@ -44,7 +44,7 @@ const BORDER = '#e2e8f0'
 const PAGE_BG = '#f8fafc'
 const EVENT_BG = '#eff6ff'
 const EVENT_BORDER = '#bfdbfe'
-const SLOT_HEIGHT = 76
+const SLOT_HEIGHT = 88
 const START_HOUR = 8
 const END_HOUR = 22
 const horarios = Array.from(
@@ -580,6 +580,12 @@ export default function AgendamentosPage() {
                           ...grupo.map((item) => item.duracaoMinutos),
                         )
 
+                        const cardHeight = Math.max(
+                          56,
+                          (duracaoVisual / 60) * SLOT_HEIGHT - 12,
+                        )
+                        const isCompact = cardHeight < 80
+
                         return (
                           <Box
                             key={grupo.map((item) => item.id).join('-')}
@@ -605,10 +611,7 @@ export default function AgendamentosPage() {
                                 8,
                               left: 8,
                               right: 8,
-                              height: Math.max(
-                                42,
-                                (duracaoVisual / 60) * SLOT_HEIGHT - 12,
-                              ),
+                              height: cardHeight,
                               bgcolor: tema.bg || EVENT_BG,
                               background:
                                 `linear-gradient(135deg, ${tema.bg || EVENT_BG} 0%, #ffffff 100%)`,
@@ -719,19 +722,21 @@ export default function AgendamentosPage() {
                                 >
                                   {agendamento.clienteNome}
                                 </Typography>
-                                <Typography
-                                  sx={{
-                                    color: '#475569',
-                                    fontSize: '0.6875rem',
-                                    lineHeight: 1.25,
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                  }}
-                                  title={agendamento.colaboradorNome}
-                                >
-                                  Prestador: {agendamento.colaboradorNome}
-                                </Typography>
+                                {!isCompact && (
+                                  <Typography
+                                    sx={{
+                                      color: '#475569',
+                                      fontSize: '0.6875rem',
+                                      lineHeight: 1.25,
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                    }}
+                                    title={agendamento.colaboradorNome}
+                                  >
+                                    Prestador: {agendamento.colaboradorNome}
+                                  </Typography>
+                                )}
                                 <Typography
                                   sx={{
                                     color: NAVY,
@@ -746,16 +751,18 @@ export default function AgendamentosPage() {
                                     agendamento.duracaoMinutos,
                                   )}
                                 </Typography>
-                                <Typography
-                                  sx={{
-                                    color: '#475569',
-                                    fontSize: '0.6875rem',
-                                    fontWeight: 600,
-                                    lineHeight: 1.25,
-                                  }}
-                                >
-                                  Duração: {formatarDuracao(agendamento.duracaoMinutos)}
-                                </Typography>
+                                {!isCompact && (
+                                  <Typography
+                                    sx={{
+                                      color: '#475569',
+                                      fontSize: '0.6875rem',
+                                      fontWeight: 600,
+                                      lineHeight: 1.25,
+                                    }}
+                                  >
+                                    Duração: {formatarDuracao(agendamento.duracaoMinutos)}
+                                  </Typography>
+                                )}
                               </>
                             )}
                           </Box>
