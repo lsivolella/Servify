@@ -13,36 +13,64 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
 /**
- * Converte {@code DATABASE_URL} (formato Render/Heroku: {@code postgres://...}) em propriedades
- * JDBC do Spring, quando {@code SPRING_DATASOURCE_URL} não estiver definida.
+ * Configura o datasource a partir de variáveis de ambiente de nuvem ({@code DATABASE_URL},
+ * {@code PGHOST}/{@code PGUSER}/…}), sobrescrevendo o fallback local do {@code application.properties}.
  */
 public class DatabaseEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
 	private static final String SPRING_DATASOURCE_URL = "spring.datasource.url";
 	private static final String SPRING_DATASOURCE_USERNAME = "spring.datasource.username";
 	private static final String SPRING_DATASOURCE_PASSWORD = "spring.datasource.password";
+	private static final String PROPERTY_SOURCE_NAME = "cloudDatabaseConfig";
 
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-		if (environment.getProperty(SPRING_DATASOURCE_URL) != null) {
+		if (isSet(System.getenv("SPRING_DATASOURCE_URL"))) {
 			return;
 		}
 
-		String databaseUrl = environment.getProperty("DATABASE_URL");
-		if (databaseUrl == null || databaseUrl.isBlank()) {
+		Map<String, Object> props = null;
+
+		String databaseUrl = firstNonBlank(System.getenv("DATABASE_URL"), environment.getProperty("DATABASE_URL"));
+		if (isSet(databaseUrl)) {
+			try {
+				props = fromDatabaseUrl(databaseUrl.trim());
+			} catch (Exception ex) {
+				throw new IllegalStateException("Não foi possível interpretar DATABASE_URL para JDBC", ex);
+			}
+		} else {
+			props = fromPgVariables(environment);
+		}
+
+		if (props == null || props.isEmpty()) {
 			return;
 		}
 
-		try {
-			Map<String, Object> props = toSpringDataSourceProperties(databaseUrl.trim());
-			environment.getPropertySources().addFirst(
-					new MapPropertySource("renderDatabaseUrl", props));
-		} catch (Exception ex) {
-			throw new IllegalStateException("Não foi possível interpretar DATABASE_URL para JDBC", ex);
-		}
+		environment.getPropertySources().addFirst(new MapPropertySource(PROPERTY_SOURCE_NAME, props));
 	}
 
-	private static Map<String, Object> toSpringDataSourceProperties(String databaseUrl) throws Exception {
+	private static Map<String, Object> fromPgVariables(ConfigurableEnvironment environment) {
+		String host = firstNonBlank(System.getenv("PGHOST"), environment.getProperty("PGHOST"));
+		String database = firstNonBlank(System.getenv("PGDATABASE"), environment.getProperty("PGDATABASE"));
+		String user = firstNonBlank(System.getenv("PGUSER"), environment.getProperty("PGUSER"));
+		String password = firstNonBlank(System.getenv("PGPASSWORD"), environment.getProperty("PGPASSWORD"));
+		if (!isSet(host) || !isSet(database) || !isSet(user) || !isSet(password)) {
+			return null;
+		}
+
+		String port = firstNonBlank(System.getenv("PGPORT"), environment.getProperty("PGPORT"), "5432");
+		String sslmode = firstNonBlank(System.getenv("PGSSLMODE"), environment.getProperty("PGSSLMODE"), "require");
+
+		Map<String, Object> props = new LinkedHashMap<>();
+		props.put(
+				SPRING_DATASOURCE_URL,
+				"jdbc:postgresql://" + host + ":" + port + "/" + database + "?sslmode=" + sslmode);
+		props.put(SPRING_DATASOURCE_USERNAME, user);
+		props.put(SPRING_DATASOURCE_PASSWORD, password);
+		return props;
+	}
+
+	private static Map<String, Object> fromDatabaseUrl(String databaseUrl) throws Exception {
 		String normalized = databaseUrl.replaceFirst("^postgres://", "postgresql://");
 		URI uri = new URI(normalized);
 
@@ -76,6 +104,19 @@ public class DatabaseEnvironmentPostProcessor implements EnvironmentPostProcesso
 		props.put(SPRING_DATASOURCE_USERNAME, username);
 		props.put(SPRING_DATASOURCE_PASSWORD, password);
 		return props;
+	}
+
+	private static boolean isSet(String value) {
+		return value != null && !value.isBlank();
+	}
+
+	private static String firstNonBlank(String... values) {
+		for (String value : values) {
+			if (isSet(value)) {
+				return value;
+			}
+		}
+		return null;
 	}
 
 	private static String urlDecode(String value) {
