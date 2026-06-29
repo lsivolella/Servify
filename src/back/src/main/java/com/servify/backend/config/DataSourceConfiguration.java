@@ -50,6 +50,11 @@ public class DataSourceConfiguration {
 							""));
 		}
 
+		ResolvedDataSource fromPg = DatabaseUrlConverter.fromPgVariables(environment);
+		if (fromPg != null) {
+			return fromPg;
+		}
+
 		String databaseUrl = firstNonBlank(
 				System.getenv("DATABASE_URL"),
 				environment.getProperty("DATABASE_URL"));
@@ -57,15 +62,10 @@ public class DataSourceConfiguration {
 			return DatabaseUrlConverter.fromDatabaseUrl(databaseUrl);
 		}
 
-		ResolvedDataSource fromPg = DatabaseUrlConverter.fromPgVariables(environment);
-		if (fromPg != null) {
-			return fromPg;
-		}
-
 		if (isRenderDeployment()) {
 			throw new IllegalStateException(
-					"Banco não configurado no Render. Defina DATABASE_URL (postgresql://...) "
-							+ "ou PGHOST + PGDATABASE + PGUSER + PGPASSWORD nas Environment Variables.");
+					"Banco não configurado no Render. Defina PGHOST + PGDATABASE + PGUSER + PGPASSWORD "
+							+ "(+ PGSSLMODE=require) ou DATABASE_URL nas Environment Variables.");
 		}
 
 		String localUrl = environment.getProperty(
