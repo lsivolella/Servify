@@ -45,9 +45,6 @@ public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor,
 			if (environment.getPropertySources().contains(PROPERTY_SOURCE_NAME)) {
 				environment.getPropertySources().replace(
 						PROPERTY_SOURCE_NAME, new MapPropertySource(PROPERTY_SOURCE_NAME, toApply));
-			} else if (environment.getPropertySources().contains("systemEnvironment")) {
-				environment.getPropertySources().addAfter(
-						"systemEnvironment", new MapPropertySource(PROPERTY_SOURCE_NAME, toApply));
 			} else {
 				environment.getPropertySources().addFirst(new MapPropertySource(PROPERTY_SOURCE_NAME, toApply));
 			}
@@ -90,6 +87,7 @@ public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor,
 
 	@Override
 	public int getOrder() {
-		return Ordered.HIGHEST_PRECEDENCE;
+		// Depois do application.properties; antes do DatabaseEnvironmentPostProcessor.
+		return Ordered.LOWEST_PRECEDENCE - 1;
 	}
 }

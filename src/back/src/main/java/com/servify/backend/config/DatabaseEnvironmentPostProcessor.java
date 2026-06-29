@@ -13,8 +13,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
 /**
- * Configura o datasource a partir de variáveis de ambiente de nuvem ({@code DATABASE_URL},
- * {@code PGHOST}/{@code PGUSER}/…}), sobrescrevendo o fallback local do {@code application.properties}.
+ * Configura o datasource a partir de variáveis de ambiente ({@code DATABASE_URL},
+ * {@code PGHOST}/…). Executa após o {@code application.properties} para não ser sobrescrito.
  */
 public class DatabaseEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
@@ -29,24 +29,32 @@ public class DatabaseEnvironmentPostProcessor implements EnvironmentPostProcesso
 			return;
 		}
 
-		Map<String, Object> props = null;
-
-		String databaseUrl = firstNonBlank(System.getenv("DATABASE_URL"), environment.getProperty("DATABASE_URL"));
-		if (isSet(databaseUrl)) {
-			try {
-				props = fromDatabaseUrl(databaseUrl.trim());
-			} catch (Exception ex) {
-				throw new IllegalStateException("Não foi possível interpretar DATABASE_URL para JDBC", ex);
-			}
-		} else {
-			props = fromPgVariables(environment);
-		}
-
+		Map<String, Object> props = resolveDataSourceProperties(environment);
 		if (props == null || props.isEmpty()) {
+			if (isRenderDeployment()) {
+				throw new IllegalStateException(
+						"Banco não configurado no Render. Defina DATABASE_URL "
+								+ "(postgresql://...) ou PGHOST + PGDATABASE + PGUSER + PGPASSWORD "
+								+ "nas Environment Variables do serviço.");
+			}
 			return;
 		}
 
 		environment.getPropertySources().addFirst(new MapPropertySource(PROPERTY_SOURCE_NAME, props));
+	}
+
+	private static Map<String, Object> resolveDataSourceProperties(ConfigurableEnvironment environment) {
+		String databaseUrl = firstNonBlank(
+				System.getenv("DATABASE_URL"),
+				environment.getProperty("DATABASE_URL"));
+		if (isSet(databaseUrl)) {
+			try {
+				return fromDatabaseUrl(databaseUrl.trim());
+			} catch (Exception ex) {
+				throw new IllegalStateException("Não foi possível interpretar DATABASE_URL para JDBC", ex);
+			}
+		}
+		return fromPgVariables(environment);
 	}
 
 	private static Map<String, Object> fromPgVariables(ConfigurableEnvironment environment) {
@@ -70,7 +78,7 @@ public class DatabaseEnvironmentPostProcessor implements EnvironmentPostProcesso
 		return props;
 	}
 
-	private static Map<String, Object> fromDatabaseUrl(String databaseUrl) throws Exception {
+	static Map<String, Object> fromDatabaseUrl(String databaseUrl) throws Exception {
 		String normalized = databaseUrl.replaceFirst("^postgres://", "postgresql://");
 		URI uri = new URI(normalized);
 
@@ -106,6 +114,10 @@ public class DatabaseEnvironmentPostProcessor implements EnvironmentPostProcesso
 		return props;
 	}
 
+	private static boolean isRenderDeployment() {
+		return isSet(System.getenv("RENDER"));
+	}
+
 	private static boolean isSet(String value) {
 		return value != null && !value.isBlank();
 	}
@@ -125,6 +137,7 @@ public class DatabaseEnvironmentPostProcessor implements EnvironmentPostProcesso
 
 	@Override
 	public int getOrder() {
-		return Ordered.HIGHEST_PRECEDENCE + 10;
+		// Depois do application.properties — senão o fallback localhost:5432 ganha.
+		return Ordered.LOWEST_PRECEDENCE;
 	}
 }
