@@ -26,7 +26,7 @@ A informatização do processo de Gestão de Comissão traz as seguintes oportun
 
 Em seguida, apresenta-se o modelo do processo de Gestão de Comissão, descrito no padrão BPMN:
 
-![Modelo BPMN do Processo 4](images/bpmn/gestao-de-comissao/Comissao.png)
+![Modelo BPMN do Processo 4](images/bpmn/gestao-de-comissao/gestao-de-comissao.png)
 
 ## Processo Gestão de Comissão
 
@@ -61,7 +61,7 @@ O processo de **Gestão de Comissão** tem como objetivo permitir que o administ
 
 #### Acessar tela de Comissão
 
-![Tela Subprocesso - Gerenciar comissões](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_gerenciar_comissoes.jpg)
+![Tela Subprocesso - Gerenciar comissões](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_gerenciar_comissoes.png)
 
 ### Detalhamento das atividades
 
@@ -80,7 +80,7 @@ O processo de **Gestão de Comissão** tem como objetivo permitir que o administ
 
 #### Listar comissões
 
-![Tela Subprocesso - Buscar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_busca_comissao.jpg)
+![Tela Subprocesso - Buscar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_busca_comissao.png)
 
 ---
 
@@ -110,7 +110,7 @@ O processo de **Gestão de Comissão** tem como objetivo permitir que o administ
 
 #### Editar Comissão
 
-![Tela Subprocesso - Editar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_editar_comissao.jpg)
+![Tela Subprocesso - Editar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_editar_comissao.png)
 
 ---
 
@@ -131,4 +131,4 @@ O processo de **Gestão de Comissão** tem como objetivo permitir que o administ
 
 #### Confirmar pagamento
 
-![Tela Subprocesso - Confirmar pagamento da comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_confirmar_pagamento_comissao.jpg)
+![Tela Subprocesso - Confirmar pagamento da comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_confirmar_pagamento_comissao.png)
