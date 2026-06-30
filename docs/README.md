@@ -214,7 +214,7 @@ Como oportunidades de melhoria, a proposta contribui para a redução de erros o
 
 [PROCESSO 4 - Gestão de Comissão](processo-4-gestao-de-comissao.md "Detalhamento do Processo 4.")
 
-[PROCESSO 5 - Gestão de Relatório](processo-4-gestao-de-relatório.md "Detalhamento do Processo 5.")
+[PROCESSO 5 - Gestão de Relatório](processo-5-gestao-de-relatorio.md "Detalhamento do Processo 5.")
 
 ## 4. Projeto da solução
 
