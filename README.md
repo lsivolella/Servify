@@ -28,6 +28,18 @@ O sistema segue uma arquitetura cliente-servidor, onde o frontend consome APIs R
 
 Link de acesso do deploy da ferramenta: https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com/
 
+Para testar acesso cliente (ou crie um novo usuário de cliente):
+E-mail: valentina.santos@email.com
+Senha: 123456
+
+Para testar acesso colaborador:
+E-mail: patricia.mendes@servify.com
+Senha: 123456
+
+Para testar acesso administrador:
+E-mail: admin@servify.com
+Senha: 123456
+
 ---
 
 ### 2. Pré-requisitos

@@ -34,77 +34,64 @@ O processo de **Gestão de Comissão** tem como objetivo permitir que o administ
 
 - Listar comissões: Ele pode utilizar o campo "Buscar comissões" digitando um nome de funcionário na lista para retonar a listagem filtrada e apagar a digitação do campo para retornar retornar à listagem completa.
 - Editar comissão: Ao clicar no ícone de lápis (na coluna Ações), um modal é aberto com os dados atuais preenchidos para alteração, em que o usuário pode alterar os campos desejados e clicar em "Salvar"para confirmar as alterações ou cancelar a operação no botão "Cancelar" ou "X" para fechar o modal sem salvar.
-  
+
 ### Detalhamento das atividades
 
-#### Acessar tela de Comissão
+#### Listar comissões
 
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**             |
-| ------------------- | -------- | --------------- | ---------------------------- |
-| Buscar comissões    | Caixa de texto | vazio     | vazio                        |
+| **Campo**        | **Tipo**       | **Restrições** | **Valor padrão** |
+| ---------------- | -------------- | -------------- | ---------------- |
+| Buscar comissões | Caixa de texto | vazio          | vazio            |
 
+| **Comandos**            | **Destino**                 | **Tipo** |
+| ----------------------- | --------------------------- | -------- |
+| Editar Comissão (lápis) | Atividade "Editar comissão" | padrão   |
+| Reduzir (quadro)  | Tela reduzida                     | padrão   |
 
-| **Comandos**              | **Destino**                                      | **Tipo** |
-| ------------------------- | ------------------------------------------------ | -------- |
-| Editar Comissão (lápis)            | Atividade "Editar comissão"             | padrão   |
-
-
-| **Resultado**             | **Destino**                                      |
-| ------------------------- | ------------------------------------------------ |
-| Comissão encontrada       | Listagem filtrada pelo termo digitado            |
-| Modal de edição aberto    | Atividade "Editar comissão"                      |
+| **Resultado**          | **Destino**                           |
+| ---------------------- | ------------------------------------- |
+| Comissão encontrada    | Listagem filtrada pelo termo digitado |
+| Nenhum resultado       | Listagem vazia                        |
+| Busca apagada          | Retorno à listagem completa           |
+| Modal de edição aberto | Atividade "Editar comissão"           |
+| Tela reduzida          | Atividade "Listar comissões" | padrão |
 
 ## Wireframe
 
 #### Acessar tela de Comissão
 
-![Tela Subprocesso - Gerenciar comissões](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_gerenciar_comissoes.png)
+![Tela Subprocesso - Gerenciar comissões](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_gerenciar_comissoes.jpg)
 
-### Detalhamento das atividades
+---
 
-#### Listar comissões
-
-| **Campo**           | **Tipo** | **Restrições**  | **Valor padrão**             |
-| ------------------- | -------- | --------------- | ---------------------------- |
-| Buscar comissões    | Caixa de texto | vazio     | vazio                        |
-
-
-| **Resultado**             | **Destino**                                      |
-| ------------------------- | ------------------------------------------------ |
-| Comissão encontrada       | Listagem filtrada pelo termo digitado            |
-| Nenhum resultado          | Listagem vazia                                   |
-| Busca apagada             | Retorno à listagem completa                      |
-
-#### Listar comissões
-
-![Tela Subprocesso - Buscar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_busca_comissao.png)
+![Tela Subprocesso - Buscar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_busca_comissao.jpg)
 
 ---
 
 #### Editar Comissão
 
-| **Campo**                   | **Tipo**       | **Restrições**              | **Valor padrão**   |
-| --------------------------- | -------------- | --------------------------- | ------------------ |
-| Nome do funcionário         | Caixa de texto | obrigatório                 | atual preenchido   |
-| Nome do serviço             | Caixa de texto | obrigatório                 | atual preenchido   |
-| Valor do serviço (R$)       | Numérico       | obrigatório; valor ≥ 0      | atual preenchido   |
-| Percentual de comissão (%)  | Numérico       | obrigatório; valor entre 0 e 100 | atual preenchido |
-| Data                        | Data           | obrigatório; formato válido | atual preenchido   |
+| **Campo**    | **Tipo** | **Restrições**                   | **Valor padrão** |
+| ------------ | -------- | -------------------------------- | ---------------- |
+| Comissão (%) | Numérico | obrigatório; valor entre 0 e 100 | atual preenchido |
 
-| **Comandos** | **Destino**                                           | **Tipo** |
-| ------------ | ----------------------------------------------------- | -------- |
-| Salvar       | Atividade "Acessar tela de Comissão"              | padrão   |
-| Cancelar     | Atividade "Acessar tela de Comissão"              | cancelar |
-| X (fechar)   | Atividade "Acessar tela de Comissão"              | cancelar |
+| **Comandos** | **Destino**                          | **Tipo** |
+| ------------ | ------------------------------------ | -------- |
+| Salvar       | Atividade "Listar comissões" | padrão   |
+| Cancelar     | Atividade "Listar comissões" | cancelar |
+| X (fechar)   | Atividade "Listar comissões" | cancelar |
 
-| **Resultado**          | **Destino**                                                        |
-| ---------------------- | ------------------------------------------------------------------ |
-| Comissão alterada      | Toast de sucesso e Atividade "Acessar tela de Comissão"        |
-| Prompt de erro         | "Não foi possível salvar alteração. Tente novamente."              |
-| Operação cancelada     | Atividade "Acessar tela de Comissão"                           |
+| **Resultado**      | **Destino**                                             |
+| ------------------ | ------------------------------------------------------- |
+| Comissão alterada  | Toast de sucesso e Atividade "Listar comissões" |
+| Prompt de erro     | "Não foi possível salvar alteração. Tente novamente."   |
+| Operação cancelada | Atividade "Listar comissões"                    |
 
 ## Wireframe
 
 #### Editar Comissão
 
-![Tela Subprocesso - Editar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_editar_comissao.png)
+![Tela Subprocesso - Editar comissão](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_editar_comissao.jpg)
+
+---
+
+![Tela Comissão atualizada com sucesso](images/wireframe/gestao-de-comissao/wireframe_gestao-de-comissoes_comissao_atualizada_sucesso.jpg)
