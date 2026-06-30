@@ -20,6 +20,8 @@ USER servify
 COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 
 ENV PORT=8080
+ENV SPRING_PROFILES_ACTIVE=seed
+
 EXPOSE 8080
 
-CMD ["sh", "-c", "java -jar app.jar"]
+CMD ["sh", "-c", "java -jar app.jar --spring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
