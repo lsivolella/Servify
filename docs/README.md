@@ -82,7 +82,6 @@ Desenvolver uma solução Web para automação da gestão operacional e financei
 - Criar mecanismo de cálculo automático de comissões mensais por colaborador;
 - Definir níveis de acesso diferenciados (Administrador e Colaborador), garantindo segurança das informações;
 - Desenvolver relatórios gerenciais que apoiem a tomada de decisão.
-- Desenvolver uma tela de Dúvidas com um chat interativo integrado a uma IA, permitindo que o usuário converse de forma natural e receba respostas baseadas na base de dados do sistema.
 
 ---
 
@@ -214,23 +213,21 @@ Como oportunidades de melhoria, a proposta contribui para a redução de erros o
 
 [PROCESSO 4 - Gestão de Comissão](processo-4-gestao-de-comissao.md "Detalhamento do Processo 4.")
 
-[PROCESSO 5 - Gestão de Relatório](processo-5-gestao-de-relatorio.md "Detalhamento do Processo 5.")
-
 ## 4. Projeto da solução
 
-_O documento a seguir apresenta o detalhamento do projeto da solução. São apresentadas duas seções que descrevem, respectivamente: modelo relacional e tecnologias._
+O documento a seguir apresenta o detalhamento do projeto da solução. São apresentadas duas seções que descrevem, respectivamente: modelo relacional e tecnologias.
 
 [Projeto da solução](solution-design.md "Detalhamento do projeto da solução: modelo relacional e tecnologias.")
 
 ## 5. Indicadores de desempenho
 
-_O documento a seguir apresenta os indicadores de desempenho dos processos._
+O documento a seguir apresenta os indicadores de desempenho dos processos.
 
 [Indicadores de desempenho dos processos](performance-indicators.md)
 
 ## 6. Interface do sistema
 
-_A sessão a seguir apresenta a descrição do produto de software desenvolvido._
+A sessão a seguir apresenta a descrição do produto de software desenvolvido.
 
 [Documentação da interface do sistema](interface.md)
 

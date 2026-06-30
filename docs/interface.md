@@ -178,7 +178,7 @@ Tela de listagem de comissões com menu reduzido (no quadro):
 
 Tela Dashboard Parte 1:
 
-![Tela Gestão de relatório 1](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorio.jpg)
+![Tela Gestão de relatório 1](images/wireframe/gestao-de-relatorio/wireframe_gestao-de-relatorio.JPG)
 
 Tela Dashboard Parte 2:
 
