@@ -46,13 +46,13 @@ Senha: 123456
 
 #### Frontend
 
-- Node.js (versão xx ou superior)
+- Node.js 20.19 ou superior (exigência do Vite 8)
 - npm
 
 #### Backend
 
-- Java (JDK xx ou superior recomendado)
-- Maven ou Gradle
+- Java (JDK 17 ou superior)
+- Maven (ou o wrapper `mvnw` incluído em `src/back`)
 
 ---
 
@@ -67,7 +67,7 @@ Senha: 123456
 ### 4. Executando o Backend
 
 ```bash
-cd src/back/src
+cd src/back
 mvn spring-boot:run
 ```
 

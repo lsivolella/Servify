@@ -1,1 +1,19 @@
 src/back/src/main/resources/application-local.properties
+
+# Eclipse workspace metadata
+.metadata/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# Logs
+*.log
