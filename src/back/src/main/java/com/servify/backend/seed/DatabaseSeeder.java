@@ -157,6 +157,11 @@ public class DatabaseSeeder {
             AgendaDisponibilidadeRepository agendaDisponibilidadeRepository,
             AgendamentoRepository agendamentoRepository) {
 
+            if (usuarioRepository.count() > 0) {
+                System.out.println("Banco já populado. Seed ignorado.");
+                return;
+            }
+        
         return args -> {
 
             System.out.println("[SEED] Iniciando limpeza do banco...");

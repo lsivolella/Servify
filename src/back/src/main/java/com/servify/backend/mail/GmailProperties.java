@@ -19,7 +19,7 @@ public class GmailProperties {
     private String tokensDirectory = "tokens";
     /**
      * URL exata do front para onde o Google redireciona após o login (ex.:
-     * {@code http://localhost:5173/oauth/google/callback}). Deve ser igual à
+     * {@code https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com/oauth/google/callback}). Deve ser igual à
      * “URI de redirecionamento autorizada” no cliente OAuth (tipo Web) do Google Cloud.
      * Se vazio, o backend usa o fluxo “Desktop” com servidor local na porta 8888.
      */
@@ -27,9 +27,9 @@ public class GmailProperties {
 
     /**
      * URL base do front (sem barra final), usada no e-mail de convite para o link
-     * {@code /convite/{token}}. Ex.: {@code http://localhost:5173}
+     * {@code /convite/{token}}.
      */
-    private String frontendBaseUrl = "http://localhost:5173";
+    private String frontendBaseUrl = "https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com";
 
     public boolean isEnabled() {
         return enabled;

@@ -73,6 +73,8 @@ mvn spring-boot:run
 
 A aplicação será iniciada em: http://localhost:8080
 
+Produção (API): https://servify-api.onrender.com
+
 ### 5. Executando o Frontend
 
 ```bash
@@ -82,6 +84,8 @@ npm run dev
 ```
 
 A aplicação estará disponível em: http://localhost:5173
+
+Produção (front): https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com
 
 ## Histórico de versões
 

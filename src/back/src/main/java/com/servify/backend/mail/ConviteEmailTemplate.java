@@ -9,7 +9,7 @@ public final class ConviteEmailTemplate {
     }
 
     /**
-     * @param urlCompletarCadastro URL absoluta para a tela de completar cadastro (ex.: {@code http://localhost:5173/convite/uuid}); vazio omite o bloco do link
+     * @param urlCompletarCadastro URL absoluta para a tela de completar cadastro (ex.: {@code https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com/convite/uuid}); vazio omite o bloco do link
      */
     public static String build(String urlCompletarCadastro, String token, String senhaProvisoria, int horasValidadeConvite) {
         String safeToken = escapeHtml(token);

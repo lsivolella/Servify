@@ -26,7 +26,7 @@ import {
 } from '../components/showAlert'
 import type { EditarPessoaValues } from '../types/editarPessoa'
 import { getClientes, deleteClientePorId, type Cliente } from '../services/clientes'
-import { mensagemDeErroCapturado } from '../services/api'
+import { apiPutJson, mensagemDeErroCapturado } from '../services/api'
 
 const NAVY = '#1e3a5f'
 const BORDER = '#e2e8f0'
@@ -148,38 +148,20 @@ export default function ClientesPage() {
     })()
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/usuarios/${editingId}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            perfilId: 3,
-            nome,
-            email,
-            telefone: data.telefone.replace(/\D/g, ''),
-            dataNascimento: dataNasc,
-            cep: data.cep.replace(/\D/g, ''),
-            logradouro: data.logradouro,
-            numero: data.numero,
-            complemento: data.complemento,
-            bairro: data.bairro,
-            cidade: cidadeApi,
-            uf: data.uf,
-          }),
-        },
-      )
-
-      if (!response.ok) {
-        //throw new Error('Erro ao atualizar cliente')
-        const errorText = await response.text()
-
-        console.error('Erro backend:', errorText)
-
-        throw new Error(errorText)
-      }
+      await apiPutJson(`usuarios/${editingId}`, {
+        perfilId: 3,
+        nome,
+        email,
+        telefone: data.telefone.replace(/\D/g, ''),
+        dataNascimento: dataNasc,
+        cep: data.cep.replace(/\D/g, ''),
+        logradouro: data.logradouro,
+        numero: data.numero,
+        complemento: data.complemento,
+        bairro: data.bairro,
+        cidade: cidadeApi,
+        uf: data.uf,
+      })
 
       setClientes((prev) =>
         prev.map((c) =>
@@ -206,8 +188,10 @@ export default function ClientesPage() {
 
       fecharEditar()
       toastCadastroSucesso('Cliente atualizado com sucesso.')
-    } catch {
-      toastError('Não foi possível atualizar o cliente.')
+    } catch (e: unknown) {
+      toastError(
+        mensagemDeErroCapturado(e, 'Não foi possível atualizar o cliente.'),
+      )
     }
   }
 

@@ -1,23 +1,23 @@
+import { PRODUCTION_API_URL } from '../config/appUrl'
+
 export type ApiError = Error & { status?: number }
 
 /**
  * URL base da API.
- * - Produção: use `VITE_API_BASE_URL` (ex.: mesma origem ou CDN da API).
- * - Desenvolvimento: se não houver env, usa `http://localhost:8080` para o
- *   navegador chamar a API diretamente (aparece como :8080 no DevTools).
- *   O backend precisa liberar CORS para `http://localhost:5173` (ou a porta do Vite).
- * - Para forçar proxy do Vite (URL relativa, aparece :5173 no DevTools), crie
- *   `.env.development` com `VITE_API_BASE_URL=` (vazio).
+ * - Produção: `VITE_API_BASE_URL` ou {@link PRODUCTION_API_URL}.
+ * - Desenvolvimento: se não houver env, usa `http://localhost:8080`.
  */
 function resolveApiBaseUrl(): string {
   const raw = import.meta.env.VITE_API_BASE_URL
   if (raw !== undefined) {
-    return String(raw).trim().replace(/\/+$/, '')
+    const trimmed = String(raw).trim().replace(/\/+$/, '')
+    if (trimmed) return trimmed
+    if (import.meta.env.DEV) return ''
   }
   if (import.meta.env.DEV) {
     return 'http://localhost:8080'
   }
-  return ''
+  return PRODUCTION_API_URL
 }
 
 const API_BASE_URL = resolveApiBaseUrl()

@@ -176,9 +176,28 @@ export async function getAgendamentos(
 export async function criarAgendamento(
   payload: AgendamentoFormPayload,
 ): Promise<Agendamento> {
-  const raw = await apiPostJson<unknown>('/agendamentos', toApiPayload(payload))
+  const sessionUser = getSession()?.user
+
+  if (!sessionUser) {
+    throw new Error('Usuário não antenticado.')
+  }
+
+  const qs = new URLSearchParams({
+    usuarioLogadoId: String(sessionUser.id),
+    usuarioLogadoPerfilId: String(sessionUser.perfilId),
+  })
+
+  const raw = await apiPostJson<unknown>(
+    `/agendamentos?${qs.toString()}`,
+    toApiPayload(payload),
+  )
+
   const agendamento = agendamentoFromApi(raw)
-  if (!agendamento) throw new Error('Resposta inválida ao cadastrar agendamento.')
+
+  if (!agendamento) {
+    throw new Error('Resposta inválida ao cadastrar agendamento.')
+  }
+
   return agendamento
 }
 
@@ -187,15 +206,31 @@ export async function atualizarAgendamento(
   payload: AgendamentoFormPayload,
 ): Promise<Agendamento> {
   const agendamentoId = id.trim()
+
   if (!/^\d+$/.test(agendamentoId)) {
     throw new Error('Identificador inválido para atualização.')
   }
+
+  const sessionUser = getSession()?.user
+
+  if (!sessionUser) {
+    throw new Error('Usuário não autenticado.')
+  }
+
+  const qs = new URLSearchParams({
+    usuarioLogadoId: String(sessionUser.id),
+    usuarioLogadoPerfilId: String(sessionUser.perfilId),
+  })
+
   const raw = await apiPutJson<unknown>(
-    `/agendamentos/${agendamentoId}`,
+    `/agendamentos/${agendamentoId}?${qs.toString()}`,
     toApiPayload(payload),
   )
+
   const agendamento = agendamentoFromApi(raw)
+
   if (!agendamento) throw new Error('Resposta inválida ao atualizar agendamento.')
+
   return agendamento
 }
 

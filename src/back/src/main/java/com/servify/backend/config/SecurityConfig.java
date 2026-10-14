@@ -1,8 +1,10 @@
 package com.servify.backend.config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -40,6 +42,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
+	@Value("${servify.cors.allowed-origin-patterns:}")
+	private String extraAllowedOriginPatterns;
+
 	/**
 	 * CORS global: o Spring Security só repassa os headers se {@code .cors()} estiver
 	 * ativo; sem isso, o navegador bloqueia chamadas do Vite ({@code localhost:5173})
@@ -56,6 +61,13 @@ public class SecurityConfig {
 		// Vite com --host (rede local)
 		patterns.add("http://192.168.*:*");
 		patterns.add("http://10.*:*");
+		patterns.add("https://plf-es-2026-1-ti2-1381100-grupo3-servify.onrender.com");
+		if (extraAllowedOriginPatterns != null && !extraAllowedOriginPatterns.isBlank()) {
+			Arrays.stream(extraAllowedOriginPatterns.split(","))
+					.map(String::trim)
+					.filter(pattern -> !pattern.isEmpty())
+					.forEach(patterns::add);
+		}
 		config.setAllowedOriginPatterns(patterns);
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
 		config.setAllowedHeaders(List.of("*"));
